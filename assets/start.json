@@ -2,15 +2,7 @@
   "name": "GrandParent",
   "children": [
     {
-      "name": "Parent 1",
-      "children": [
-        {
-          "name": "Child 1"
-        },
-        {
-          "name": "Child 2"
-        }
-      ]
+      "name": "Parent 1"
     },
     {
       "name": "Parent 2",

@@ -5,10 +5,14 @@ from panda3d.core import TextNode
 
 class Node():
 
-  def __init__(self, loader, nodePath):
+  def __init__(self, text, loader, nodePath):
     # self.showBase = showBase
-    self.addModel(loader, nodePath)
-    self.addText(nodePath)
+
+    self.mainNode = NodePath("Node")
+    self.mainNode.reparentTo(nodePath)
+
+    self.addModel(loader, self.mainNode)
+    self.addText(text, self.mainNode)
 
   def addModel(self, loader, nodePath):
     self.model = loader.loadModel("../models/capsule") 
@@ -16,9 +20,9 @@ class Node():
     self.model.setScale(4, 4, scale)
     self.model.reparentTo(nodePath)
 
-  def addText(self, nodePath):
+  def addText(self, text, nodePath):
     self.text = TextNode("Node 1") # This should be different for every instance?
-    self.text.setText("Nickan")
+    self.text.setText(text)
     self.text.setTextColor(0, 0, 1, 1)
     self.text.setAlign(TextNode.A_center)
     
