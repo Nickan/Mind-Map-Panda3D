@@ -13,7 +13,7 @@
 # from direct.task.Task import Task
 
 from scenes.states.state import State
-from scenes.states.scrollingMapState import ScrollingMapState
+
 from scenes.states.staticMapState import StaticMapState
 
 
@@ -27,6 +27,9 @@ class Map():
 
   def __init__(self, showBase):
     self.showBase = showBase
+
+    self.initCamera()
+    self.initNode()
 
     self.state = StaticMapState()
     self.state.enter(self)

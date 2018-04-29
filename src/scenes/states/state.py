@@ -3,10 +3,10 @@
 class State():
 
   def __init__(self):
-    print("init")
+    print("State init")
 
   def enter(self):
-    print("enter State")
+    print("State enter State")
 
   def exit(self):
-    print("exit State")
+    print("State exit State")
