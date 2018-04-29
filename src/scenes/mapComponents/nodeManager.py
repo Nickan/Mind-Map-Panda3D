@@ -9,7 +9,7 @@ class NodeManager():
     self.nodes = []
 
 
-  def addNode(self, loader, mapNode, pos = Vec3(4, 0, 1)):
+  def addNode(self, loader, mapNode, pos = Vec3()):
     newNode = Node(loader, mapNode)
     newNode.model.setPos(pos)
 

@@ -22,7 +22,7 @@ class CameraManager():
     self.plane = Plane(Vec3(0, 0, 1), Point3(0, 0, z))
 
   def setDefaultSettings(self):
-    self.showBase.camera.setPos(0, 0, -25)
+    self.showBase.camera.setPos(0, 0, -100)
     self.camPos = self.showBase.camera.getPos()
     self.showBase.camera.setHpr(0, 90, 0)
 

@@ -26,7 +26,6 @@ class Map():
 
   def initNodeManager(self):
     self.nodeManager = NodeManager()
-
     self.nodeManager.addNode(self.showBase.loader, self.mapNode)
 
   
