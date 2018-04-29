@@ -5,17 +5,23 @@ from scenes.states.staticMapState import StaticMapState
 
 from panda3d.core import NodePath
 
+
+
 class Map():
 
-  def __init__(self, showBase):
+  def __init__(self, showBase, jsonData):
     self.showBase = showBase
+    self.jsonData = jsonData
 
     self.initCamera()
 
     self.initMapNode(showBase)
-    self.initNodeManager()
+    self.initNodeManager(jsonData)
     self.state = StaticMapState()
     self.state.enter(self)
+
+
+  
 
   def initCamera(self):
     self.cameraManager = CameraManager(self.showBase)
@@ -24,9 +30,9 @@ class Map():
     self.mapNode = NodePath("Map")
     self.mapNode.reparentTo(self.showBase.render)
 
-  def initNodeManager(self):
+  def initNodeManager(self, jsonData):
     self.nodeManager = NodeManager()
-    self.nodeManager.addNode(self.showBase.loader, self.mapNode)
+    self.nodeManager.loadJson(self.showBase.loader, self.mapNode, jsonData)
 
   
 

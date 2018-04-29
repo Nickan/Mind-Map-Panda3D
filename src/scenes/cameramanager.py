@@ -12,7 +12,6 @@ class CameraManager():
     self.showBase = showBase
     self.showBase.disableMouse()
     self.setDefaultSettings()
-    self.showValues()
     self.initMouseToWorldCoordConversion()
     self.initMouseRayCollision()
     self.savedCollisionPoint = Vec3(0, 0, 0)
@@ -34,7 +33,6 @@ class CameraManager():
     curPos.z += 1
 
     camera.setPos(curPos)
-    self.showValues()
 
   def zoomOut(self):
     camera = self.showBase.camera
@@ -42,7 +40,6 @@ class CameraManager():
     curPos.z += -1
 
     camera.setPos(curPos)
-    self.showValues()
 
 
   def mouse1Down(self):
@@ -121,14 +118,7 @@ class CameraManager():
     camera = self.showBase.camera
     nearPoint = render.getRelativePoint(camera, self.pickerRay.getOrigin())
 
-    nearVec = render.getRelativeVector(
-                    camera, self.pickerRay.getDirection())
-
-    # print("self.pickerRay.getDirection()) " + str(self.pickerRay.getDirection()) )
-
     return mpos, nearPoint
-
-  
 
 
   def showValues(self):

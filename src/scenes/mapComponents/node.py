@@ -27,5 +27,3 @@ class Node():
     self.text3d.setPos(0, 0, -0.7)
     self.text3d.setHpr(0, 90, 0)
     self.text3d.setTwoSided(True)
-
-  
