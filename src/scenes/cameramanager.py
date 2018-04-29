@@ -4,8 +4,6 @@ from panda3d.core import LPoint3, LVector3, BitMask32
 
 
 from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
-
-
 from direct.task.Task import Task
 
 class CameraManager():
