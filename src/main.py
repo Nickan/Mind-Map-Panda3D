@@ -16,6 +16,8 @@ class Epiphany(ShowBase):
   def loadJson(self, onLoadJsonFn):
     jsonPath =  path.abspath(path.join(__file__ ,"../../assets/start.json"))
     jsonData = json.load(open(jsonPath))
+
+    # Utils.init(jsonData.get("lastIdAssigned"))
     onLoadJsonFn(jsonData)
 
 
