@@ -9,12 +9,12 @@ class ScrollingMapState(State):
     State.__init__(self)
 
   def enter(self, map):
-    print("enter ScrollingMapState")
+    # print("enter ScrollingMapState")
     self.map = map
     self.setupControls(map)
 
   def exit(self, map):
-    print("exit ScrollingMapState")
+    # print("exit ScrollingMapState")
     map.showBase.ignoreAll()
     map.showBase.taskMgr.remove("mouseMove")
 
@@ -36,7 +36,7 @@ class ScrollingMapState(State):
 
 
   def mouse1Up(self):
-    print("mouse1Up")
+    # print("mouse1Up")
     self.map.state.exit(self.map)
 
   def mouse1Down(self):

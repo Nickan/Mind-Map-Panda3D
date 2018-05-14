@@ -11,15 +11,33 @@ from utils.utils import Utils
 
 
 class NodeManager():
-  DEPTH_DIST = 10
-  BREADTH_DIST = 6
+  DEPTH_DIST = 5
+  BREADTH_DIST = 15
 
   def __init__(self):
     self.init = []
+    self.nodes = []
+    self.tree = ReingoldTilford()
 
   def loadJson(self, loader, mapNode, jsonData):
     nodeList = Utils.convertToNodes(jsonData)
-    Utils.showNodes(nodeList)
+    # Utils.showNodes(nodeList)
+    coords = self.tree.getCoordinates(nodeList)
+    # Utils.showNodes(nodeList)
+    self.render(loader, mapNode, nodeList)
+
+  def render(self, loader, mapNode, nodeList):
+    for key in nodeList:
+      nodeData = nodeList[key]
+      x = nodeData.get("x") * NodeManager.BREADTH_DIST
+      y = nodeData.get("y") * NodeManager.DEPTH_DIST
+      z = 1
+
+      pos = Vec3(x, y, z)
+
+      name = nodeData.get('name') + " x " + str(x) + " y " + str(y)
+      self.addNode(name, loader, mapNode, pos)
+
 
   
   def createChildren(self, parent, children, loader,

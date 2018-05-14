@@ -1,6 +1,6 @@
 from state import State
 
-from scenes.states.scrollingMapState import ScrollingMapState
+from scrollingMapState import ScrollingMapState
 
 import sys
 
@@ -10,11 +10,11 @@ class StaticMapState(State):
     State.__init__(self)
 
   def enter(self, map):
-    print("enter")
+    # print("enter")
     self.setupControls(map)
 
   def exit(self, map):
-    print("exit StaticMapState")
+    # print("exit StaticMapState")
     map.showBase.ignoreAll()
     map.state = ScrollingMapState()
     map.state.enter(map)

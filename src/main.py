@@ -3,7 +3,6 @@ from direct.showbase.ShowBase import ShowBase
 from scenes.map import Map
 
 import json
-
 import os.path as path
 
  

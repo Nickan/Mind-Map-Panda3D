@@ -7,6 +7,7 @@ from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
 from direct.task.Task import Task
 
 class CameraManager():
+  ZOOM_SPEED = 5
 
   def __init__(self, showBase):
     self.showBase = showBase
@@ -30,21 +31,21 @@ class CameraManager():
   def zoomIn(self):
     camera = self.showBase.camera
     curPos = camera.getPos()
-    curPos.z += 1
+    curPos.z += CameraManager.ZOOM_SPEED
 
     camera.setPos(curPos)
 
   def zoomOut(self):
     camera = self.showBase.camera
     curPos = camera.getPos()
-    curPos.z += -1
+    curPos.z += -CameraManager.ZOOM_SPEED
 
     camera.setPos(curPos)
 
 
   def mouse1Down(self):
     self.savedCollisionPoint = self.getMouseCollisionToPlane(self.plane)
-    print("mouse1Down")
+    # print("mouse1Down")
 
 
 

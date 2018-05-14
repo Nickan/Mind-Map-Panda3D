@@ -17,7 +17,7 @@ class Node():
   def addModel(self, loader, nodePath):
     self.model = loader.loadModel("../models/capsule") 
     scale = 1
-    self.model.setScale(4, 4, scale)
+    # self.model.setScale(4, 4, scale)
     self.model.reparentTo(nodePath)
 
   def addText(self, text, nodePath):
@@ -26,8 +26,11 @@ class Node():
     self.text.setTextColor(0, 0, 1, 1)
     self.text.setAlign(TextNode.A_center)
     
+    
     self.text3d = NodePath(self.text)
     self.text3d.reparentTo(nodePath)
     self.text3d.setPos(0, 0, -0.7)
     self.text3d.setHpr(0, 90, 0)
     self.text3d.setTwoSided(True)
+
+    self.text3d.setScale(2, 2, 2)
