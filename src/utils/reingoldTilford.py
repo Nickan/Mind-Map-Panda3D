@@ -85,17 +85,7 @@ class ReingoldTilford():
       node["mod"] = node["x"] - midX
 
 
-
-
   def fixConflictingX(self, node, nodeList):
-    children = node["children"]
-    if self.isLeftMost(node, nodeList) is True or children is None:
-      return False
-   
-    
-    minDist = 1.0
-    shiftValue = 0.0
-
     leftSibling = self.getLeftSibling(node, nodeList)
 
     rightContour = {}
@@ -111,13 +101,26 @@ class ReingoldTilford():
 #     Utils.showDict(leftContour)
 
     startingDepth = node["y"]
-    endingDepth = self.getDepthThatHasSameContourValue(rightContour, leftContour)
+    print("startingDepth " + str(startingDepth))
+    endingDepth = self.getDepthThatHasSameContourValue(rightContour, leftContour) + 1
+    
+    shiftValue = 0.0
     for depth in range(startingDepth, endingDepth):
       rValue = rightContour[depth]
       lValue = leftContour[depth]
       
-      shiftValue = rValue - lValue
-      print("depth " + str(depth) + " shiftValue " + str(shiftValue))
+      minX = rValue + ReingoldTilford.NODE_SIZE
+      if minX < lValue:
+        tmpShiftValue = minX - lValue
+        if tmpShiftValue > shiftValue:
+          shiftValue = tmpShiftValue
+        
+      print("depth " + str(depth) + " rValue " + str(rValue) + " lValue " + str(lValue))
+    
+#     node["x"] += shiftValue
+#     node["mod"] += shiftValue
+        
+    
       
   def checkForConflicts(self, node, nodeList, enableCheckForConflicts):
     children = node["children"]
@@ -171,6 +174,8 @@ class ReingoldTilford():
   def getDepthThatHasSameContourValue(self, rightContour, leftContour):
     rightMax = max(rightContour, key=int)
     leftMax = max(leftContour, key=int)
+    print("rightMax " + str(rightMax))
+    print("leftMax " + str(leftMax))
     return min(rightMax, leftMax)
 
   def getNextSibling(self, node, nodeList):
