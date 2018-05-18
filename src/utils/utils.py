@@ -11,23 +11,6 @@ class Utils():
   def __init__(self):
     print("Init Utils")
   
-#   @staticmethod
-#   def test(jsonData):
-#     
-#     clone = Utils.cloneData(jsonData)
-#     
-#   @staticmethod
-#   def cloneData(jsonData):
-#     clone = {}
-#     for key in jsonData:
-#       value = jsonData[key]
-#       if len(value) > 0:
-#         clone[key] = Utils.copyList(value)
-#       else
-#         clone[key] = value
-        
-        
-  
   @staticmethod
   def convertToNodes(jsonData): # Needed to be able to assign parentId(Proof?)
 #     Utils.test(jsonData)
@@ -44,8 +27,6 @@ class Utils():
       while len(nodeJsonsInCurrentDepth) > 0:
         currentJson = nodeJsonsInCurrentDepth[0]
         nodeJsonsInCurrentDepth.remove(currentJson)
-         
-#         copyJson = Utils.copyJson(currentJson)
  
         id = Utils.getIdOrAssignUnique(currentJson)
         node = Utils.getNode(currentJson, depth)
@@ -60,8 +41,6 @@ class Utils():
             child['parentId'] = id
  
       depth += 1
-             
- 
     return nodeList
 
   @staticmethod
@@ -75,9 +54,7 @@ class Utils():
           nodeJsonSiblings.insert(index, node)
           nodeList[parentId]["children"] = nodeJsonSiblings
           break
-
-    
-
+        
   @staticmethod
   def getNode(nodeJson, y):
     name = nodeJson.get('name')
@@ -87,11 +64,8 @@ class Utils():
     node = { 
       "name": name, "id": nodeId, "parentId": parentId, 
       "children": children, "x": -1.0, "y": y, "mod": 0
-      # x: -1 is indicator that is has to be replaced
     }
-    
     return node
-
 
   @staticmethod
   def showNodes(nodeList):
@@ -100,7 +74,6 @@ class Utils():
       print(node.get('name') 
       + " id " + str(node.get('id')) + " parentId " + str(node.get('parentId'))
       + " x " + str(node.get("x")) + " y " + str(node.get("y")))
-
 
   @staticmethod
   def getIdOrAssignUnique(nodeJson):
