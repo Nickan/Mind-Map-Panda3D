@@ -9,6 +9,9 @@ from utils.utils import Utils
 
 class ReingoldTilfordTest(unittest.TestCase):
   
+  def __init__(self, methodName='runTest'):
+    unittest.TestCase.__init__(self, methodName=methodName)
+  
   def testLocalXRelativeToParentNode(self):
     Utils.LAST_ASSIGNED_ID = 1
     nodeList = Utils.convertToNodes(Utils.getJson("start.json"))
@@ -75,7 +78,6 @@ class ReingoldTilfordTest(unittest.TestCase):
     self.assertTrue(self.verifyNodeName(node, name),  name + " name is wrong")
     self.assertTrue(self.verifyNodeX(node, 1), name + " x is wrong")
   
-  
   def testNodesToCheckForConflictingX(self):
     Utils.LAST_ASSIGNED_ID = 1
     nodeList = Utils.convertToNodes(Utils.getJson("start.json"))
@@ -92,8 +94,6 @@ class ReingoldTilfordTest(unittest.TestCase):
     self.assertTrue(reingold.checkForConflicts(node, nodeList, True), 
                     name + " is not being checked for conflict")
     
-    
-  
   def testContourList(self):
     Utils.LAST_ASSIGNED_ID = 1
     nodeList = Utils.convertToNodes(Utils.getJson("start.json"))
@@ -101,100 +101,65 @@ class ReingoldTilfordTest(unittest.TestCase):
     reingold = ReingoldTilford()
     coords, checkedForConflictIds = reingold.setInitialX(nodeList[1], nodeList)
     
-    name = "3"
-    node = nodeList[int(name)]
+    self.checkContourNode3(reingold, coords)
+    self.checkContourNode4(reingold, coords)
     
-    leftSibling = reingold.getLeftSibling(node, nodeList)
+  def checkContourNode3(self, reingold, coords):
+    name = "3"
+    node = coords[int(name)]
+     
+    leftSibling = reingold.getLeftSibling(node, coords)
     rightContour = {}
     reingold.getRightContour(leftSibling, 0, rightContour)
-    
+     
     depth = 1
     self.assertTrue(rightContour[depth] == 1,  "node " + name + " " + 
                     str(depth) + " depth right contour is wrong ")
-    
+     
     depth = 2
     self.assertTrue(rightContour[depth] == 2, "node " + name + " " + 
                     str(depth) + " depth right contour is wrong ")
-    
+     
     leftContour = {}
     reingold.getLeftContour(node, 0, leftContour)
-    
+     
     depth = 1
     expectedXPlusNodeSize = 2 # Because of this.x + nodeSize (1 + 1) 
     self.assertTrue(leftContour[depth] == expectedXPlusNodeSize, "node " + name + " " + 
                     str(depth) + " depth left contour is wrong ")
-    
+     
     depth = 2
     expectedXPlusMod = 2 # Because of parent.x - this.x (2 - 0)
     self.assertTrue(leftContour[depth] == expectedXPlusMod, "node " + name + " " + 
                     str(depth) + " depth left contour is wrong ")
     
-    
+  def checkContourNode4(self, reingold, coords):
     name = "4"
-    node = nodeList[int(name)]
-    
-    leftSibling = reingold.getLeftSibling(node, nodeList)
+    node = coords[int(name)]
+     
+    leftSibling = reingold.getLeftSibling(node, coords)
     rightContour = {}
     reingold.getRightContour(leftSibling, 0, rightContour)
-    
+     
     depth = 1
     self.assertTrue(rightContour[depth] == 2,  "node " + name + " " + 
                     str(depth) + " depth right contour is wrong ")
-    
+     
     depth = 2
     self.assertTrue(rightContour[depth] == 2, "node " + name + " " + 
                     str(depth) + " depth right contour is wrong ")
-    
+     
     leftContour = {}
     reingold.getLeftContour(node, 0, leftContour)
-    
+     
     depth = 1
-    print("leftContour[depth] " + str(leftContour[depth]))
     expectedXPlusNodeSize = 2 # Because of this.x + nodeSize (1 + 1) 
     self.assertTrue(leftContour[depth] == 3, "node " + name + " " + 
                     str(depth) + " depth left contour is wrong ")
-    
+     
     depth = 2
     self.assertTrue(leftContour[depth] == 2.5, "node " + name + " " + 
                     str(depth) + " depth left contour is wrong ")
-    
-#     name = "4"  # Main node
-#     node = nodeList[int(name)]
-#     self.assertTrue(reingold.checkForConflicts(node, nodeList, True), 
-#                     name + " is not being checked for conflict")
-    
-    
-    
-    
-  
-#   def testFixConflicts(self):
-#     Utils.LAST_ASSIGNED_ID = 1
-#     nodeList = Utils.convertToNodes(Utils.getJson("start.json"))
-#     
-#     reingold = ReingoldTilford()
-#     coords, checkedForConflictIds = reingold.setInitialX(nodeList[1], nodeList, True)
-#     
-#     name = "3"
-#     node = nodeList[int(name)]
-#     self.assertTrue(node["x"] == 3, 
-#                     name + " x is not set properly")
-#     
-#     node = nodeList[int(name)]
-#     self.assertTrue(node["mod"] == 3, 
-#                     name + " mod is not set properly")
-#      
-#     name = "4"
-#     node = nodeList[int(name)]
-#     self.assertTrue(node["x"] == 4, 
-#                     name + " mod is not set properly")
-#     
-#     node = nodeList[int(name)]
-#     self.assertTrue(node["mod"] == 2.5, 
-#                     name + " mod is not set properly")
-    # Expected result?
-    # Node 3 and 4 will be checked
-    # Application of modification is from top to bottom
-    
     
     
   def verifyNodeName(self, node, name):
