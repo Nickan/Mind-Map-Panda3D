@@ -13,7 +13,8 @@ class Epiphany(ShowBase):
     self.loadJson(self.initMap)
 
   def loadJson(self, onLoadJsonFn):
-    jsonPath =  path.abspath(path.join(__file__ ,"../../assets/start.json"))
+    file = "../../assets/setRelativeXToParent.json"
+    jsonPath =  path.abspath(path.join(__file__ ,file))
     jsonData = json.load(open(jsonPath))
 
     # Utils.init(jsonData.get("lastIdAssigned"))

@@ -107,6 +107,28 @@ class Utils():
   def getJson(name):
     jsonPath = path.abspath(path.join(__file__ , "../../../assets/" + name))
     return json.load(open(jsonPath))
+  
+  
+  @staticmethod
+  def getChildren(node, nodeList):
+    childrenIds = node.get("childrenIds")
+    if childrenIds is None:
+      return None
+    
+    children = []
+    for id in childrenIds:
+      children.append(nodeList[str(id)])
+    return children
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 

@@ -20,17 +20,14 @@ class NodeManager():
     self.tree = ReingoldTilford()
 
   def loadJson(self, loader, mapNode, jsonData):
-    nodeList = Utils.convertToNodes(jsonData)
-    # Utils.showNodes(nodeList)
-    coords = self.tree.getCoordinates(nodeList)
-    # Utils.showNodes(nodeList)
-    self.render(loader, mapNode, nodeList)
+    coords = self.tree.getCoordinates(jsonData)
+    self.render(loader, mapNode, jsonData)
 
   def render(self, loader, mapNode, nodeList):
     for key in nodeList:
       nodeData = nodeList[key]
       x = nodeData.get("x") * NodeManager.BREADTH_DIST
-      y = nodeData.get("y") * NodeManager.DEPTH_DIST
+      y = int(nodeData.get("depth")) * NodeManager.DEPTH_DIST
       z = 1
 
       pos = Vec3(x, y, z)
@@ -55,11 +52,7 @@ class NodeManager():
       y = startingBreadth + (breadthDistBetweenChildren * index)
       pos = Vec3(x, y, z)
       self.addNode(child.get('name'), loader, tempParent, pos)
-  
-  
-  
-  
-  
+
   def addNode(self, text, loader, mapNode, pos = Vec3()):
     newNode = Node(text, loader, mapNode)
     newNode.mainNode.setPos(pos)

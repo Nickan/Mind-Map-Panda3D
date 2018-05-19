@@ -9,37 +9,40 @@ class ReingoldTilford():
 
   # Returns points to represent tree
     # 2D jagged list of points?
-  def getCoordinates(self, nodeList):
-    self.firstTraversal(nodeList)
+  def getCoordinates(self, nodeList, enableCheckForConflicts = True):
+    mainNode = nodeList["1"]
+    self.firstTraversal(mainNode, nodeList, enableCheckForConflicts)
+    self.calcFinalPos(mainNode, nodeList, 0)
 
-  def firstTraversal(self, nodeList):
-    mainNode = nodeList.get(1)
-    self.setInitialX(mainNode, nodeList)
-    self.calcFinalPos(mainNode, 0)
+  def firstTraversal(self, mainNode, nodeList, enableCheckForConflicts = False):
+    self.setInitialX(mainNode, nodeList, enableCheckForConflicts)
+    
 
-  def calcFinalPos(self, node, modSum):
+  def calcFinalPos(self, node, nodeList, modSum):
     name = node.get("name")
     node["x"] += modSum
+    if node.has_key("mod") is False:
+      node["mod"] = 0
     modSum += node.get("mod")
 
-    children = node.get("children")
+    children = Utils.getChildren(node, nodeList)
     if children is not None:
       for child in children:
-        self.calcFinalPos(child, modSum)
+        self.calcFinalPos(child, nodeList, modSum)
 
   def setInitialX(self, node, nodeList, enableCheckForConflicts = False):
     self.setInitialXRelativeToChildren(node, nodeList, enableCheckForConflicts)
     self.solveConflictingX(node, nodeList, enableCheckForConflicts)
-    return copy.deepcopy(nodeList), self.checkedConflictedIds
+    return nodeList, self.checkedConflictedIds
   
   
       
   def setInitialXRelativeToChildren(self, node, nodeList, enableCheckForConflicts = False):
-    children = node.get("children")
+    children = Utils.getChildren(node, nodeList)
     if children is not None:
       for child in children:
         self.setInitialX(child, nodeList, enableCheckForConflicts)
-    
+     
     self.setLeafInitialX(children, node, nodeList)
     self.setOneChildNodeInitialX(children, node, nodeList)
     self.setManyChidrenNodeInitialX(children, node, nodeList)
@@ -70,7 +73,8 @@ class ReingoldTilford():
     else:
       leftSibling = self.getLeftSibling(node, nodeList)
       node["x"] = leftSibling.get("x") + ReingoldTilford.NODE_SIZE
-      node["mod"] = node["x"] - node["children"][0]["x"]
+      firstChild = Utils.getChildren(node, nodeList)
+      node["mod"] = node["x"] - firstChild[0]["x"]
         
   def setManyChidrenNodeInitialX(self, children, node, nodeList):
     if Utils.dictLen(children) <= 1:
@@ -89,41 +93,32 @@ class ReingoldTilford():
     leftSibling = self.getLeftSibling(node, nodeList)
 
     rightContour = {}
-    self.getRightContour(leftSibling, 0, rightContour)
-
-#     print("right contour " + str(leftSibling.get("name")))
-#     Utils.showDict(rightContour)
+    self.getRightContour(leftSibling, nodeList, 0, rightContour)
 
     leftContour = {}
-    self.getLeftContour(node, 0, leftContour)
+    self.getLeftContour(node, nodeList, 0, leftContour)
 
-#     print("left " + str(node.get("name")))
-#     Utils.showDict(leftContour)
-
-    startingDepth = node["y"]
-    print("startingDepth " + str(startingDepth))
-    endingDepth = self.getDepthThatHasSameContourValue(rightContour, leftContour) + 1
+    startingDepth = int(node["depth"])
+    endingDepth = int(self.getSameDepthThatHasContourValue(rightContour, leftContour))
     
     shiftValue = 0.0
-    for depth in range(startingDepth, endingDepth):
-      rValue = rightContour[depth]
-      lValue = leftContour[depth]
+    for depth in range(startingDepth, endingDepth + 1):
+      rValue = rightContour[str(depth)]
+      lValue = leftContour[str(depth)]
       
       minX = rValue + ReingoldTilford.NODE_SIZE
-      if minX < lValue:
+      if lValue < minX:
         tmpShiftValue = minX - lValue
+        
         if tmpShiftValue > shiftValue:
           shiftValue = tmpShiftValue
-        
-      print("depth " + str(depth) + " rValue " + str(rValue) + " lValue " + str(lValue))
     
-#     node["x"] += shiftValue
-#     node["mod"] += shiftValue
+    node["x"] += shiftValue
+    node["mod"] += shiftValue
         
-    
       
   def checkForConflicts(self, node, nodeList, enableCheckForConflicts):
-    children = node["children"]
+    children = Utils.getChildren(node, nodeList)
     return (self.isLeftMost(node, nodeList) is False and children is not None
             and enableCheckForConflicts)
     
@@ -171,11 +166,9 @@ class ReingoldTilford():
       #   sibling = self.getNextSibling(sibling, nodeList)
 
   
-  def getDepthThatHasSameContourValue(self, rightContour, leftContour):
+  def getSameDepthThatHasContourValue(self, rightContour, leftContour):
     rightMax = max(rightContour, key=int)
     leftMax = max(leftContour, key=int)
-    print("rightMax " + str(rightMax))
-    print("leftMax " + str(leftMax))
     return min(rightMax, leftMax)
 
   def getNextSibling(self, node, nodeList):
@@ -183,14 +176,15 @@ class ReingoldTilford():
     if parentId is None or nodeList[parentId] is None or self.isRightMost(node, nodeList):
       return None
 
-    children = nodeList[parentId].get("children")
+    parent = nodeList[parentId]
+    children = Utils.getChildren(parent, nodeList)
     return children[children.index(node) + 1]
 
 
   def centerNodesBetween(self, leftNode, rightNode, nodeList):
     parentId = leftNode.get("parentId")
     parent = nodeList[parentId]
-    children = parent.get("children")
+    children = Utils.getChildren(parent, nodeList)
     leftIndex = children.index(rightNode)
     rightIndex = children.index(leftNode)
 
@@ -217,41 +211,46 @@ class ReingoldTilford():
 
 #       self.checkForConflicts(leftNode, nodeList)
 
-  def getLeftContour(self, node, modSum, contour):
-    y = node.get("y")
+  def getLeftContour(self, node, nodeList, modSum, contour):
+    y = node.get("depth")
     x = node.get("x")
     # print("y " + str(y))
     if contour.has_key(y):
       contour[y] = min(contour[y], x + modSum)
     else:
       contour[y] = x + modSum
-      
+    
+    if node.get("mod") is None:
+      node["mod"] = 0
     modSum += node.get("mod")
-    children = node.get("children")
+    children = Utils.getChildren(node, nodeList)
     if children is not None:
       for child in children:
-        self.getLeftContour(child, modSum, contour)
+        self.getLeftContour(child, nodeList, modSum, contour)
 
-  def getRightContour(self, node, modSum, contour):
-    y = node.get("y")
+  def getRightContour(self, node, nodeList, modSum, contour):
+    y = node.get("depth")
     x = node.get("x")
     if contour.has_key(y):
       contour[y] = max(contour[y], x + modSum)
     else:
       contour[y] = x + modSum
-
+    
+    if node.get("mod") is None:
+      node["mod"] = 0
     modSum += node.get("mod")
-    children = node.get("children")
+    children = Utils.getChildren(node, nodeList)
     if children is not None:
       for child in children:
-        self.getRightContour(child, modSum, contour)
+        self.getRightContour(child, nodeList, modSum, contour)
 
   def getLeftMostSibling(self, node, nodeList):
     parentId = node.get("parentId")
     if parentId is None or nodeList[parentId] is None:
       return None
-
-    children = nodeList[parentId].get("children")
+    
+    parent = nodeList[parentId]
+    children = Utils.getChildren(parent, nodeList)
     return children[0]
 
   def isLeftMost(self, node, nodeList):
@@ -259,7 +258,8 @@ class ReingoldTilford():
     if parentId is None or nodeList[parentId] is None:
       return True
 
-    children = nodeList[parentId].get("children")
+    parent = nodeList[parentId]
+    children = Utils.getChildren(parent, nodeList)
 
     return children[0] == node
 
@@ -268,18 +268,19 @@ class ReingoldTilford():
     if parentId is None or nodeList[parentId] is None:
       return True
 
-    children = nodeList[parentId].get("children")
+    parent = nodeList[parentId]
+    children = Utils.getChildren(parent, nodeList)
 
     return children[len(children) - 1] == node
 
   def getLeftSibling(self, node, nodeList):
     parent = nodeList[node.get("parentId")]
-    children = parent.get("children")
+    children = Utils.getChildren(parent, nodeList)
 
     return children[children.index(node) - 1]
   
   def getMidX(self, node, nodeList):
-    children = node.get("children")
+    children = Utils.getChildren(node, nodeList)
     leftMostChild = children[0]
     rightMostChild = children[len(children) - 1]
     leftX = leftMostChild.get("x")
