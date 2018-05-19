@@ -14,6 +14,7 @@ class Epiphany(ShowBase):
 
   def loadJson(self, onLoadJsonFn):
     file = "../../assets/setRelativeXToParent.json"
+#     file = "../../assets/map.json"
     jsonPath =  path.abspath(path.join(__file__ ,file))
     jsonData = json.load(open(jsonPath))
 

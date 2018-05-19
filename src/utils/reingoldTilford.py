@@ -117,7 +117,7 @@ class ReingoldTilford():
       if shiftValue > 0:
         node["x"] += shiftValue
         node["mod"] += shiftValue
-#       self.centerNodesBetween(node, leftSibling, nodeList)
+        self.centerNodesBetween(leftSibling, node, nodeList, shiftValue)
       
       leftSibling = self.getRightSibling(leftSibling, nodeList)
         
@@ -143,12 +143,12 @@ class ReingoldTilford():
     return children[children.index(node) + 1]
 
 
-  def centerNodesBetween(self, leftNode, rightNode, nodeList):
+  def centerNodesBetween(self, leftNode, rightNode, nodeList, shiftValue):
     parentId = leftNode.get("parentId")
     parent = nodeList[parentId]
     children = Utils.getChildren(parent, nodeList)
-    leftIndex = children.index(rightNode)
-    rightIndex = children.index(leftNode)
+    leftIndex = children.index(leftNode)
+    rightIndex = children.index(rightNode)
 
     numNodesBetween = (rightIndex - leftIndex) - 1
 #     print("numNodesBetween " + str(leftIndex))
@@ -156,17 +156,19 @@ class ReingoldTilford():
 #       print("numNodesBetween")
       leftX = leftNode.get("x")
       rightX = rightNode.get("x")
-      distBetweenNodes = (leftX - rightX) / (numNodesBetween + 1)
+      distBetweenNodes = (rightX - leftX) / (numNodesBetween + 1)
 
       count = 1
       startingIndex = leftIndex + 1
-      endingIndex = rightIndex - 1
+      endingIndex = rightIndex
       for index in range(startingIndex, endingIndex):
         middleNode = children[index]
 
-        desiredX = rightX + (distBetweenNodes * count)
+        desiredX = leftX + (distBetweenNodes * count)
         offset = desiredX - middleNode.get("x")
         middleNode["x"] += offset
+        if middleNode.has_key("mod") is False:
+          middleNode["mod"] = 0
         middleNode["mod"] += offset
 
         count += 1
