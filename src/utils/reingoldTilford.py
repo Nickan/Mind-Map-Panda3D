@@ -90,80 +90,42 @@ class ReingoldTilford():
 
 
   def fixConflictingX(self, node, nodeList):
-    leftSibling = self.getLeftSibling(node, nodeList)
-
-    rightContour = {}
-    self.getRightContour(leftSibling, nodeList, 0, rightContour)
-
     leftContour = {}
     self.getLeftContour(node, nodeList, 0, leftContour)
 
     startingDepth = int(node["depth"])
-    endingDepth = int(self.getSameDepthThatHasContourValue(rightContour, leftContour))
+    leftSibling = self.getLeftMostSibling(node, nodeList)
     
-    shiftValue = 0.0
-    for depth in range(startingDepth, endingDepth + 1):
-      rValue = rightContour[str(depth)]
-      lValue = leftContour[str(depth)]
+    while leftSibling is not None and leftSibling != node:
+      rightContour = {}
+      self.getRightContour(leftSibling, nodeList, 0, rightContour)
       
-      minX = rValue + ReingoldTilford.NODE_SIZE
-      if lValue < minX:
-        tmpShiftValue = minX - lValue
+      endingDepth = int(self.getSameDepthThatHasContourValue(rightContour, leftContour))
+      
+      shiftValue = 0.0
+      for depth in range(startingDepth, endingDepth + 1):
+        rValue = rightContour[str(depth)]
+        lValue = leftContour[str(depth)]
         
-        if tmpShiftValue > shiftValue:
-          shiftValue = tmpShiftValue
-    
-    node["x"] += shiftValue
-    node["mod"] += shiftValue
+        minX = rValue + ReingoldTilford.NODE_SIZE
+        if lValue < minX:
+          tmpShiftValue = minX - lValue
+          
+          if tmpShiftValue > shiftValue:
+            shiftValue = tmpShiftValue
+      
+      if shiftValue > 0:
+        node["x"] += shiftValue
+        node["mod"] += shiftValue
+#       self.centerNodesBetween(node, leftSibling, nodeList)
+      
+      leftSibling = self.getRightSibling(leftSibling, nodeList)
         
       
   def checkForConflicts(self, node, nodeList, enableCheckForConflicts):
     children = Utils.getChildren(node, nodeList)
     return (self.isLeftMost(node, nodeList) is False and children is not None
             and enableCheckForConflicts)
-    
-    #Loop from top entry to botton
-    
-#     print("depthToCheck " + str(depthToCheck))
-    
-    #
-      # minDist = 1.0
-      # shiftValue = 0.0
-      # contour = {}
-      # self.getLeftContour(node, 0, contour)
-      # # if node.get("name") == 
-      # # print("node " + str(node.get("name")) + " mod " + str(node.get("mod")))
-      # # print("left contour " + str(node.get("name")))
-      # Utils.showDict(contour)
-      # sibling = self.getLeftMostSibling(node, nodeList)
-      # # print("before right " + str(sibling.get("name")))
-      # while sibling is not None and sibling != node:
-      #   siblingContour = {}
-      #   # print("node " + str(node.get("name")))
-      #   print("sibling " + str(sibling.get("name")))
-      #   self.getRightContour(sibling, 0, siblingContour)
-      #   # print("siblingContour")
-      #   Utils.showDict(siblingContour)
-      #   startingLevel = node.get("y")
-      #   endingLevel = min(max(siblingContour, key=int), max(contour, key=int))
-      #   print("node " + str(node.get("name")) )
-      #   print("startingLevel " + str(startingLevel))
-      #   print("endingLevel " + str(endingLevel))
-      #   for level in range(startingLevel, endingLevel):
-      #     leftContour = contour[level]
-      #     rightContour = siblingContour[level]
-      #     dist = leftContour - rightContour
-      #     print("node " + str(node.get("name")) + " dist " + str(dist) + " level " + str(level))
-      #     print("leftContour " + str(leftContour) + " rightContour " + str(rightContour))
-      #     if (dist + shiftValue) < minDist:
-      #       shiftValue = minDist - dist
-      #   print("shiftValue " + str(shiftValue))
-      #   if shiftValue > 0:
-      #     node["x"] += shiftValue
-      #     node["mod"] += shiftValue
-      #     self.centerNodesBetween(node, sibling, nodeList)
-      #     shiftValue = 0
-      #   sibling = self.getNextSibling(sibling, nodeList)
 
   
   def getSameDepthThatHasContourValue(self, rightContour, leftContour):
@@ -209,7 +171,7 @@ class ReingoldTilford():
 
         count += 1
 
-#       self.checkForConflicts(leftNode, nodeList)
+      self.fixConflictingX(rightNode, nodeList)
 
   def getLeftContour(self, node, nodeList, modSum, contour):
     y = node.get("depth")
@@ -279,6 +241,15 @@ class ReingoldTilford():
 
     return children[children.index(node) - 1]
   
+  def getRightSibling(self, node, nodeList):
+    parent = nodeList[node.get("parentId")]
+    children = Utils.getChildren(parent, nodeList)
+    
+    rightSiblingIndex = children.index(node) + 1
+    if rightSiblingIndex < len(children):
+      return children[rightSiblingIndex]
+    return None
+  
   def getMidX(self, node, nodeList):
     children = Utils.getChildren(node, nodeList)
     leftMostChild = children[0]
@@ -286,14 +257,32 @@ class ReingoldTilford():
     leftX = leftMostChild.get("x")
     rightX = rightMostChild.get("x")
     midX = (leftX + rightX) / 2
-
-    # print("leftName " + str(leftMostChild.get("name")) + " rightName " + str(rightMostChild.get("name")))
-    # print("leftX " + str(leftX) + " rightX " + str(rightX))
-    # print("name " + str(node.get("name")) + " midX " + str(midX))
     return midX
-
-    # for depth, nodes in enumerate(nodeList):
-    #   print("depth: " + str(depth))
-    #   for breadth, node in enumerate(nodes):
-    #     print("breadth " + str(breadth) + " " + node.get('name') 
-    #     + " id " + str(node.get('id')) + " parentId " + str(node.get('parentId')))
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

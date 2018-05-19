@@ -12,7 +12,7 @@ from utils.utils import Utils
 
 class NodeManager():
   DEPTH_DIST = 5
-  BREADTH_DIST = 15
+  BREADTH_DIST = 10
 
   def __init__(self):
     self.init = []
