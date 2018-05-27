@@ -8,6 +8,7 @@ from scenes.mapComponents.node import Node
 
 from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
+from platform import node
 
 
 class NodeManager():
@@ -56,6 +57,24 @@ class NodeManager():
     newNode.mainNode.setPos(pos)
 
     self.nodes.append(newNode)
+    
+  
+  def getNode(self, nodePath):
+    nodePath = nodePath.findNetTag("Node")
+    
+    for node in self.nodes:
+      if nodePath == node.mainNode:
+        return node
+    return None
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
   def showCoords(self, coords):

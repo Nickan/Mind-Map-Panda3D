@@ -33,6 +33,7 @@ class Map():
   def initNodeManager(self, jsonData):
     self.nodeManager = NodeManager()
     self.nodeManager.loadJson(self.showBase.loader, self.mapNode, jsonData)
+    
 
   
 

@@ -16,18 +16,35 @@ class CameraManager():
     self.initMouseToWorldCoordConversion()
     self.initMouseRayCollision()
     self.savedCollisionPoint = Vec3(0, 0, 0)
-
-  def initMouseRayCollision(self):
-    z = 0
-    self.plane = Plane(Vec3(0, 0, 1), Point3(0, 0, z))
-
+  # End
+  
+  """ init helpers """
   def setDefaultSettings(self):
     self.showBase.camera.setPos(0, 0, -100)
     self.camPos = self.showBase.camera.getPos()
     self.showBase.camera.setHpr(0, 90, 0)
 
     self.dragging = False  
+  
+  def initMouseRayCollision(self):
+    z = 0
+    self.plane = Plane(Vec3(0, 0, 1), Point3(0, 0, z))
 
+  def initMouseToWorldCoordConversion(self):
+    self.picker = CollisionTraverser()
+    self.pq = CollisionHandlerQueue()
+
+    self.pickerNode = CollisionNode('mouseRay')
+    self.pickerNP = self.showBase.camera.attachNewNode(self.pickerNode)
+
+    self.pickerNode.setFromCollideMask(BitMask32.bit(1))
+    self.pickerRay = CollisionRay()
+
+    self.pickerNode.addSolid(self.pickerRay)
+    self.picker.addCollider(self.pickerNP, self.pq)
+  
+  
+  """ Events """
   def zoomIn(self):
     camera = self.showBase.camera
     curPos = camera.getPos()
@@ -42,13 +59,22 @@ class CameraManager():
 
     camera.setPos(curPos)
 
-
   def mouse1Down(self):
     self.savedCollisionPoint = self.getMouseCollisionToPlane(self.plane)
     # print("mouse1Down")
+    
+  def mouseMove(self, task):
+    collisionPoint = self.getMouseCollisionToPlane(self.plane)
+    delta = self.getDelta(collisionPoint, self.savedCollisionPoint)
+
+    self.addToCameraPos(delta) # Collision point changes if camera position changes
+
+    collisionPoint = self.getMouseCollisionToPlane(self.plane)
+    self.savedCollisionPoint = collisionPoint
+    return Task.cont
 
 
-
+  """ mouse1Down and mouseMove helpers """
   def getMouseCollisionToPlane(self, plane):
     mouseWatcherNode = self.showBase.mouseWatcherNode
     if mouseWatcherNode.hasMouse():
@@ -66,7 +92,10 @@ class CameraManager():
           render.getRelativePoint(camera, farPoint)):
         return pos3d
     return None
-
+  
+  
+  
+  """ mouseMove helpers """
   def getDelta(self, point1, point2):
     delta = Vec3()
     if point1 is not None:
@@ -74,39 +103,27 @@ class CameraManager():
         delta = point2 - point1
     return delta
 
-  def mouseMove(self, task):
-    collisionPoint = self.getMouseCollisionToPlane(self.plane)
-    delta = self.getDelta(collisionPoint, self.savedCollisionPoint)
-
-    self.addToCameraPos(delta) # Collision point changes if camera position changes
-
-    collisionPoint = self.getMouseCollisionToPlane(self.plane)
-    self.savedCollisionPoint = collisionPoint
-    return Task.cont
-
-
   def addToCameraPos(self, delta):
     camera = self.showBase.camera
     curPos = camera.getPos()
     camera.setPos(curPos + delta)
-
-
     
+  
+  
+  def getClickedNode(self):
+    mouseWatcherNode = self.showBase.mouseWatcherNode
+    if mouseWatcherNode.hasMouse():
+      mpos = mouseWatcherNode.getMouse()
+      
+      self.pickerRay.setFromLens(self.showBase.camNode, mpos.getX(), mpos.getY())
+      
+      self.picker.traverse(self.showBase.render)
+      
+      if self.pq.getNumEntries() > 0:
+        self.pq.sortEntries()
+        return self.pq.getEntry(0).getIntoNodePath()
+    return None
 
-
-  def initMouseToWorldCoordConversion(self):
-    self.picker = CollisionTraverser()
-    self.pq = CollisionHandlerQueue()
-
-    self.pickerNode = CollisionNode('mouseRay')
-    self.pickerNP = self.showBase.camera.attachNewNode(self.pickerNode)
-
-    self.pickerNode.setFromCollideMask(BitMask32.bit(1))
-    self.pickerRay = CollisionRay()
-
-    self.pickerNode.addSolid(self.pickerRay)
-
-    self.picker.addCollider(self.pickerNP, self.pq)
 
 
   def getCoordinates(self):
@@ -128,3 +145,22 @@ class CameraManager():
     print("camera x " + str(self.showBase.camera.getX()))
     print("camera y " + str(self.showBase.camera.getY()))
     print("camera z " + str(self.showBase.camera.getZ()))
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
