@@ -18,7 +18,7 @@ class Node():
     self.addText(text, self.mainNode)
     self.addModel(loader, self.mainNode)
     
-    self.mainNode.setTag("Node", self.text.getText())
+    self.mainNode.setTag("Node", self.textNode.getText())
     self.mainNode.setCollideMask(BitMask32.bit(1))
     
     
@@ -30,13 +30,13 @@ class Node():
     
 
   def addText(self, text, nodePath):
-    self.text = TextNode("Node 1") # This should be different for every instance?
-    self.text.setText(text)
-    self.text.setTextColor(0, 0, 1, 1)
-    self.text.setAlign(TextNode.A_center)
+    self.textNode = TextNode("Node 1") # This should be different for every instance?
+    self.textNode.setText(text)
+    self.textNode.setTextColor(0, 0, 1, 1)
+    self.textNode.setAlign(TextNode.A_center)
     
     
-    self.text3d = NodePath(self.text)
+    self.text3d = NodePath(self.textNode)
     self.text3d.reparentTo(nodePath)
     self.text3d.setPos(0, 0, -2)
     self.text3d.setHpr(0, 90, 0)

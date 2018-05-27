@@ -31,8 +31,8 @@ class NodeManager():
 
       pos = Vec3(x, y, z)
 
-      name = nodeData.get('name') + " x " + str(x) + " y " + str(y)
-      self.addNode(name, loader, mapNode, pos)
+#       name = nodeData.get('name') + " x " + str(x) + " y " + str(y)
+      self.addNode(nodeData.get('name'), loader, mapNode, pos)
 
 
   

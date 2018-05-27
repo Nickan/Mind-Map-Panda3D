@@ -2,6 +2,9 @@ from state import State
 
 import sys
 
+from gui.textinput import TextInput
+
+
 class NodeClicked(State):
   
   def __init__(self):
@@ -11,15 +14,13 @@ class NodeClicked(State):
   def enter(self, map, nodePath):
     self.map = map
     node = self.map.nodeManager.getNode(nodePath)
-    print(node.text.getText())
     self.setupControls()
+    
+    self.createTextInput(node)
   
   def exit(self, map):
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
-    
-    
-    
     
     
   """ enter helper """
@@ -30,11 +31,18 @@ class NodeClicked(State):
     cameraManager = map.cameraManager
 #     map.showBase.accept("wheel_up", self.zoomIn)
 #     map.showBase.accept("wheel_down", self.zoomOut)
-
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
     
+    
+  def createTextInput(self, node):
+    self.node = node
+    textInput = TextInput(self.onEnterText)
+    
+  def onEnterText(self, text):
+    self.node.textNode.setText(text)
   
+  """ Events """
   def mouse1Down(self):
     print("NodeClicked mouse1Down")
     clickedNode = self.map.cameraManager.getClickedNode()
