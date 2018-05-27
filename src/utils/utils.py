@@ -7,6 +7,12 @@ class Utils():
   LAST_ASSIGNED_ID = 1
   
   STARTJSON = None
+  
+  # Node
+  NODE_SCALE = (6, 6, 1)
+  
+  DEPTH_DIST = 20
+  BREADTH_DIST = 30
 
   def __init__(self):
     print("Init Utils")

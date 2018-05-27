@@ -3,21 +3,25 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import NodePath
 from panda3d.core import TextNode
 
+from utils.utils import Utils
+
+
 class Node():
 
   def __init__(self, text, loader, nodePath):
-    # self.showBase = showBase
-
+    self.scale = Utils.NODE_SCALE
+    
     self.mainNode = NodePath("Node")
     self.mainNode.reparentTo(nodePath)
 
     self.addModel(loader, self.mainNode)
     self.addText(text, self.mainNode)
+    
+    
 
   def addModel(self, loader, nodePath):
     self.model = loader.loadModel("../models/capsule") 
-    scale = 1
-    # self.model.setScale(4, 4, scale)
+    self.model.setScale(self.scale)
     self.model.reparentTo(nodePath)
 
   def addText(self, text, nodePath):
@@ -29,8 +33,15 @@ class Node():
     
     self.text3d = NodePath(self.text)
     self.text3d.reparentTo(nodePath)
-    self.text3d.setPos(0, 0, -0.7)
+    self.text3d.setPos(0, 0, -2)
     self.text3d.setHpr(0, 90, 0)
     self.text3d.setTwoSided(True)
 
     self.text3d.setScale(2, 2, 2)
+    
+    
+    
+    
+    
+    
+    
