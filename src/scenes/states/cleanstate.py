@@ -39,7 +39,7 @@ class CleanState(State):
     
     map = self.map
     self.exit()
-    from scenes.states.nodeClicked import NodeClickedState
+    from scenes.states.nodeClickedState import NodeClickedState
     map.state = NodeClickedState(self.map)
     map.state.enter(clickedNode)
     

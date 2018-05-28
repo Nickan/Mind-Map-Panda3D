@@ -2,8 +2,6 @@ from state import State
 
 import sys
 
-from gui.textinput import TextInput
-
 
 class NodeClickedState(State):
   
@@ -13,9 +11,8 @@ class NodeClickedState(State):
     
   def enter(self, nodePath):
     node = self.map.nodeManager.getNode(nodePath)
+    self.selectedNode = node
     self.setupControls()
-    
-    self.createTextInput(node)
   
   def exit(self):
     self.map.showBase.ignoreAll()
@@ -33,13 +30,8 @@ class NodeClickedState(State):
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
     
-    
-  def createTextInput(self, node):
-    self.node = node
-    textInput = TextInput(self.onEnterText)
-    
-  def onEnterText(self, text):
-    self.node.textNode.setText(text)
+    map.showBase.accept("tab", self.onTab)
+  
   
   """ Events """
   def mouse1Down(self):
@@ -47,6 +39,7 @@ class NodeClickedState(State):
     clickedNode = self.map.cameraManager.getClickedNode()
     if clickedNode is not None:
       node = self.map.nodeManager.getNode(clickedNode)
+      self.selectedNode = node
       print(node.textNode.getText())
     else:
       self.goToScrollingState()
@@ -54,6 +47,9 @@ class NodeClickedState(State):
     
   def mouse1Up(self):
     print("NodeClickedState mouse1Up")
+    
+  def onTab(self):
+    self.switchToCreateNode()
     
     
     
@@ -63,4 +59,30 @@ class NodeClickedState(State):
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
+    
+    
+  def switchToCreateNode(self):
+    self.exit()
+    
+    from scenes.states.createNodeState import CreateNodeState
+    self.map.state = CreateNodeState(self.map)
+    self.map.state.enter(self.selectedNode)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   

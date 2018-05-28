@@ -1,7 +1,7 @@
 from scenes.cameramanager import CameraManager
 from scenes.mapComponents.nodeManager import NodeManager
 from scenes.states.state import State
-from scenes.states.cleanstate import CleanState
+from scenes.states.cleanState import CleanState
 
 from panda3d.core import NodePath
 
@@ -15,15 +15,6 @@ class Map():
     
     self.state = CleanState(self)
     self.state.enter()
-
-#     self.initCamera()
-# 
-#     self.initMapNode(showBase)
-#     self.initNodeManager(jsonData)
-#     self.state = StaticMapState()
-#     self.state.enter(self)
-
-
 
   def initCamera(self):
     self.cameraManager = CameraManager(self.showBase)

@@ -58,7 +58,7 @@ class ScrollingMapState(State):
   def switchToClickedNodeState(self, clickedNode):
     self.exit(self.map)
     
-    from scenes.states.nodeClicked import NodeClickedState
+    from scenes.states.nodeClickedState import NodeClickedState
     self.map.state = NodeClickedState(self.map)
     self.map.state.enter(clickedNode)
     
