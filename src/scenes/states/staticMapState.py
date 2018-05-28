@@ -45,7 +45,7 @@ class StaticMapState(State):
       self.switchToClickedNodeState(clickedNode)
     else:
       self.goToScrollingState()
-      self.map.state.mouse1Down()
+      
 
   def mouse1Up(self):
     print("static move up")
@@ -64,6 +64,7 @@ class StaticMapState(State):
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
+    self.map.state.mouse1Down()
     
   
   

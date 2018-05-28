@@ -29,7 +29,7 @@ class CleanState(State):
   def mouse1Down(self):
     clickedNode = self.map.cameraManager.getClickedNode()
     if clickedNode is None:
-      print("Nothing will happen")
+      self.switchToScrollingState()
     else:
       self.switchToNodeClickedState(clickedNode)
       
@@ -42,3 +42,11 @@ class CleanState(State):
     from scenes.states.nodeClicked import NodeClickedState
     map.state = NodeClickedState(self.map)
     map.state.enter(clickedNode)
+    
+  def switchToScrollingState(self):
+    self.map.state.exit()
+    
+    from scenes.states.scrollingMapState import ScrollingMapState
+    self.map.state = ScrollingMapState(self.map)
+    self.map.state.enter()
+    self.map.state.mouse1Down()
