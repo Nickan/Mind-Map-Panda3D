@@ -21,18 +21,10 @@ class CleanState(State):
     self.map.showBase.ignoreAll()
     
     
-    
-    
   """ enter() helpers """
   def initEvents(self):
     map = self.map
-#     map.showBase.accept('escape', sys.exit)
-#     
-#     map.showBase.accept("wheel_up", self.zoomIn)
-#     map.showBase.accept("wheel_down", self.zoomOut)
-
     map.showBase.accept("mouse1", self.mouse1Down)
-#     map.showBase.accept("mouse1-up", self.mouse1Up)
 
   def mouse1Down(self):
     clickedNode = self.map.cameraManager.getClickedNode()

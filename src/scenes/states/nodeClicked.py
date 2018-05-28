@@ -47,7 +47,7 @@ class NodeClickedState(State):
     clickedNode = self.map.cameraManager.getClickedNode()
     if clickedNode is not None:
       node = self.map.nodeManager.getNode(clickedNode)
-      print(node.text.getText())
+      print(node.textNode.getText())
     else:
       self.goToScrollingState()
       self.map.state.mouse1Down()
