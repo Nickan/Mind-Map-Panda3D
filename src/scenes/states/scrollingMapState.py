@@ -5,20 +5,22 @@ import sys
 class ScrollingMapState(State):
   
 
-  def __init__(self):
+  def __init__(self, map):
     State.__init__(self)
-
-  def enter(self, map):
     self.map = map
-    self.setupControls(map)
 
-  def exit(self, map):
+  def enter(self):
+    self.setupControls()
+
+  def exit(self):
     print("exit ScrollingMapState")
+    map = self.map
     map.showBase.ignoreAll()
     map.showBase.taskMgr.remove("mouseMove")
 
 
-  def setupControls(self, map):
+  def setupControls(self):
+    map = self.map
     map.showBase.accept('escape', sys.exit)
 
     cameraManager = map.cameraManager
@@ -33,13 +35,13 @@ class ScrollingMapState(State):
 
   def mouse1Up(self):
     # print("mouse1Up")
-    self.map.state.exit(self.map)
+    self.map.state.exit()
     self.switchToStaticMap(self.map)
     
   def switchToStaticMap(self, map):
     from scenes.states.staticMapState import StaticMapState
-    map.state = StaticMapState()
-    map.state.enter(map)
+    map.state = StaticMapState(map)
+    map.state.enter()
 
   def mouse1Down(self):
     clickedNode = self.map.cameraManager.getClickedNode()
@@ -56,9 +58,9 @@ class ScrollingMapState(State):
   def switchToClickedNodeState(self, clickedNode):
     self.exit(self.map)
     
-    from scenes.states.nodeClicked import NodeClicked
-    self.map.state = NodeClicked()
-    self.map.state.enter(self.map, clickedNode)
+    from scenes.states.nodeClicked import NodeClickedState
+    self.map.state = NodeClickedState(self.map)
+    self.map.state.enter(clickedNode)
     
     
     

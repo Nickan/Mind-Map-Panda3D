@@ -68,15 +68,6 @@ class NodeManager():
     return None
     
     
-    
-    
-    
-    
-    
-    
-    
-
-
   def showCoords(self, coords):
     for depth, coordDepth in enumerate(dummyCoords):
       for coordBreadth in coordDepth:

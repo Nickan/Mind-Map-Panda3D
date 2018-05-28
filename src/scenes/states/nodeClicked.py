@@ -5,20 +5,19 @@ import sys
 from gui.textinput import TextInput
 
 
-class NodeClicked(State):
+class NodeClickedState(State):
   
-  def __init__(self):
+  def __init__(self, map):
     State.__init__(self)
-    
-    
-  def enter(self, map, nodePath):
     self.map = map
+    
+  def enter(self, nodePath):
     node = self.map.nodeManager.getNode(nodePath)
     self.setupControls()
     
     self.createTextInput(node)
   
-  def exit(self, map):
+  def exit(self):
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
     
@@ -44,7 +43,7 @@ class NodeClicked(State):
   
   """ Events """
   def mouse1Down(self):
-    print("NodeClicked mouse1Down")
+    print("NodeClickedState mouse1Down")
     clickedNode = self.map.cameraManager.getClickedNode()
     if clickedNode is not None:
       node = self.map.nodeManager.getNode(clickedNode)
@@ -54,14 +53,14 @@ class NodeClicked(State):
       self.map.state.mouse1Down()
     
   def mouse1Up(self):
-    print("NodeClicked mouse1Up")
+    print("NodeClickedState mouse1Up")
     
     
     
   """ mouse1Down Helper """
   def goToScrollingState(self):
     from scenes.states.scrollingMapState import ScrollingMapState
-    self.map.state.exit(self.map)
-    self.map.state = ScrollingMapState()
-    self.map.state.enter(self.map)
+    self.map.state.exit()
+    self.map.state = ScrollingMapState(self.map)
+    self.map.state.enter()
   
