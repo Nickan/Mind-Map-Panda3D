@@ -12,7 +12,7 @@ class CleanState(State):
     map.initMapNode(map.showBase)
     map.initNodeManager()
     
-    map.nodeManager.addNode("Main", map.showBase.loader, map.mapNode)
+    map.nodeManager.createNode(None, "Main", map.showBase.loader, map.mapNode)
     
     self.initEvents()
     

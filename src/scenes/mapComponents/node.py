@@ -48,6 +48,14 @@ class Node():
   def setClicked(self, isClicked = True):
     if isClicked:
       self.model.setColor(0.9, 0.9, 0.9, 1)
+      
+  
+  def dispose(self):
+    self.mainNode.removeNode()
+#     self.mainNode.dispose()
+#     self.model.dispose()
+#     self.textNode.dispose()
+#     self.text3d.dispose()
     
     
     

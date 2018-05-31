@@ -4,7 +4,7 @@ import os.path as path
 import copy
 
 class Utils():
-  LAST_ASSIGNED_ID = 1
+  LAST_ASSIGNED_ID = 0
   
   STARTJSON = None
   
@@ -85,10 +85,17 @@ class Utils():
   def getIdOrAssignUnique(nodeJson):
     id = nodeJson.get('id')
     if id is None:
+      Utils.LAST_ASSIGNED_ID += 1
       id = Utils.LAST_ASSIGNED_ID
       nodeJson['id'] = id
-      Utils.LAST_ASSIGNED_ID += 1
     return id
+  
+  
+  @staticmethod
+  def getUniqueId():
+    Utils.LAST_ASSIGNED_ID += 1
+    return Utils.LAST_ASSIGNED_ID
+  
 
 
   @staticmethod
@@ -123,7 +130,7 @@ class Utils():
     
     children = []
     for id in childrenIds:
-      children.append(nodeList[str(id)])
+      children.append(nodeList[int(id)])
     return children
   
   

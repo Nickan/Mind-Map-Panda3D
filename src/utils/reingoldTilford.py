@@ -10,7 +10,7 @@ class ReingoldTilford():
   # Returns points to represent tree
     # 2D jagged list of points?
   def getCoordinates(self, nodeList, enableCheckForConflicts = True):
-    mainNode = nodeList["1"]
+    mainNode = nodeList.get(1)
     self.firstTraversal(mainNode, nodeList, enableCheckForConflicts)
     self.calcFinalPos(mainNode, nodeList, 0)
 
@@ -104,8 +104,8 @@ class ReingoldTilford():
       
       shiftValue = 0.0
       for depth in range(startingDepth, endingDepth + 1):
-        rValue = rightContour[str(depth)]
-        lValue = leftContour[str(depth)]
+        rValue = rightContour[depth]
+        lValue = leftContour[depth]
         
         minX = rValue + ReingoldTilford.NODE_SIZE
         if lValue < minX:
