@@ -8,6 +8,8 @@ from panda3d.core import NodePath
 
 
 class Map():
+  
+  FONT_UBUNTU = None
 
   def __init__(self, showBase, jsonData):
     self.showBase = showBase
