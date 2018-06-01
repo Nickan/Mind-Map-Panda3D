@@ -29,6 +29,7 @@ class StaticMapState(State):
 
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
+    map.showBase.accept("mouse2", self.mouse2Down)
   
   """ Events """
   def zoomIn(self):
@@ -46,6 +47,12 @@ class StaticMapState(State):
     else:
       self.goToScrollingState()
       self.map.state.mouse1Down()
+      
+  def mouse2Down(self):
+    print("NodeClickedState mouse2Down")
+    clickedNode = self.map.cameraManager.getClickedNode()
+    if clickedNode is not None:
+      self.switchToEditText(clickedNode)
       
 
   def mouse1Up(self):
@@ -65,6 +72,14 @@ class StaticMapState(State):
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
+    
+  """ mouse2Down Helper """
+  def switchToEditText(self, clickedNode):
+    self.exit()
+    
+    from scenes.states.editTextState import EditTextState
+    self.map.state = EditTextState(self.map)
+    self.map.state.enter(clickedNode, self.map)
     
     
   

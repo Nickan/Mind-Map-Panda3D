@@ -48,6 +48,7 @@ class NodeClickedState(State):
   def mouse1Up(self):
     print("NodeClickedState mouse1Up")
     
+  
   def onTab(self):
     self.switchToCreateNode()
     
@@ -67,6 +68,8 @@ class NodeClickedState(State):
     from scenes.states.createNodeState import CreateNodeState
     self.map.state = CreateNodeState(self.map)
     self.map.state.enter(self.selectedNode)
+    
+  
     
     
     

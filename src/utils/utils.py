@@ -3,6 +3,8 @@ import os.path as path
 
 import copy
 
+from gui.textinput import TextInput
+
 class Utils():
   LAST_ASSIGNED_ID = 0
   
@@ -132,6 +134,11 @@ class Utils():
     for id in childrenIds:
       children.append(nodeList[int(id)])
     return children
+  
+  
+  @staticmethod
+  def createTextInput(onEnterTextCb):
+    TextInput(onEnterTextCb)
   
   
   

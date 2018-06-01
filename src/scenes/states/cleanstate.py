@@ -25,6 +25,8 @@ class CleanState(State):
   def initEvents(self):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
+    
+    map.showBase.accept("mouse3", self.mouse2Down)
 
   def mouse1Down(self):
     clickedNode = self.map.cameraManager.getClickedNode()
@@ -32,6 +34,22 @@ class CleanState(State):
       self.switchToScrollingState()
     else:
       self.switchToNodeClickedState(clickedNode)
+      
+      
+  def mouse2Down(self):
+    print("CleanState mouse2Down")
+    clickedNode = self.map.cameraManager.getClickedNode()
+    if clickedNode is not None:
+      self.switchToEditText(clickedNode)
+      
+      
+  """ mouse2Down Helper """
+  def switchToEditText(self, clickedNode):
+    self.exit()
+    
+    from scenes.states.editTextState import EditTextState
+    self.map.state = EditTextState(self.map)
+    self.map.state.enter(clickedNode, self.map)
       
       
   def switchToNodeClickedState(self, clickedNode):
