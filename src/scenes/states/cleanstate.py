@@ -1,4 +1,5 @@
 from state import State
+from stateManager import StateManager
 
 class CleanState(State):
   
@@ -26,7 +27,7 @@ class CleanState(State):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
     
-    map.showBase.accept("mouse3", self.mouse2Down)
+    map.showBase.accept("mouse3", self.mouse3Down)
 
   def mouse1Down(self):
     clickedNode = self.map.cameraManager.getClickedNode()
@@ -36,20 +37,15 @@ class CleanState(State):
       self.switchToNodeClickedState(clickedNode)
       
       
-  def mouse2Down(self):
-    print("CleanState mouse2Down")
+  def mouse3Down(self):
+    print("CleanState mouse3Down")
     clickedNode = self.map.cameraManager.getClickedNode()
     if clickedNode is not None:
-      self.switchToEditText(clickedNode)
+      StateManager.switchToEditTextState(self, clickedNode)
       
       
-  """ mouse2Down Helper """
-  def switchToEditText(self, clickedNode):
-    self.exit()
-    
-    from scenes.states.editTextState import EditTextState
-    self.map.state = EditTextState(self.map)
-    self.map.state.enter(clickedNode, self.map)
+  """ mouse3Down Helper """
+  
       
       
   def switchToNodeClickedState(self, clickedNode):
