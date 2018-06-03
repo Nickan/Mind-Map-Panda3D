@@ -15,7 +15,6 @@ class EditTextState(State):
     Utils.createTextInput(self.onEnterText)
     
   def exit(self, map):
-    print("EditTextState exit")
     self.map.showBase.ignoreAll()
     
   

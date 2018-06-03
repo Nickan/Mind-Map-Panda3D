@@ -23,8 +23,17 @@ class StateManager():
   @staticmethod
   def switchToStaticMapState(currentState):
     map = currentState.map
-    map.state.exit(map)
+    map.state.exit()
     
     from scenes.states.staticMapState import StaticMapState
     map.state = StaticMapState(map)
     map.state.enter()
+    
+  @staticmethod
+  def switchToDeleteNodeDataState(currentState, selectedNodeData):
+    map = currentState.map
+    map.state.exit()
+    
+    from scenes.states.deleteNodeDataState import DeleteNodeDataState
+    map.state = DeleteNodeDataState(map)
+    map.state.enter(selectedNodeData)

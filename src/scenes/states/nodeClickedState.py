@@ -1,4 +1,5 @@
 from state import State
+from stateManager import StateManager
 
 import sys
 
@@ -31,17 +32,19 @@ class NodeClickedState(State):
     map.showBase.accept("mouse1-up", self.mouse1Up)
     
     map.showBase.accept("tab", self.onTab)
+    map.showBase.accept("delete", self.onDelete)
   
   
   """ Events """
   def mouse1Down(self):
+    nodeManager = self.map.nodeManager
     selectedNodeData = self.map.getSelectedNodeData()
     if selectedNodeData is None:
-#       self.switchToScrollingState()
-      print("none seelected")
-    else:
       self.goToScrollingState()
       self.map.state.mouse1Down()
+    else:
+      nodeManager.selectedNodeData = selectedNodeData
+      
 #     if clickedNode is not None:
 #       node = self.map.nodeManager.getNode(clickedNode)
 #       self.map.nodeManager.selectedNode = node
@@ -56,6 +59,10 @@ class NodeClickedState(State):
   
   def onTab(self):
     self.switchToCreateNode()
+    
+  def onDelete(self):
+    nodeManager = self.map.nodeManager
+    StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
     
     
     

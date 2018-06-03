@@ -115,7 +115,32 @@ class NodeManager():
     nodeDataToEdit["name"] = newText
     self.loadJson(loader, mapNode, self.nodeDataList)
   
+  
+  def deleteNodeData(self, nodeDataToDelete, loader, mapNode):
+    if len(self.nodeDataList) == 1:
+      print("Can't delete Main node")
+      return
     
+    self.tmpClearNodes()
+    self.removeFromParentChildrenIdList(nodeDataToDelete)
+    self.nodeDataList.pop(nodeDataToDelete["id"])
+    self.loadJson(loader, mapNode, self.nodeDataList)
+    
+    
+  def removeFromParentChildrenIdList(self, nodeDataToDelete):
+    parentId = nodeDataToDelete["parentId"]
+    parentNodeData = self.nodeDataList[parentId]
+    parentNodeData["childrenIds"]
+    
+    childrenIds = parentNodeData.get('childrenIds')
+    if childrenIds is not None:
+      childrenIds.remove(nodeDataToDelete["id"])
+    print("test")
+      
+#       for childId in childrenIds:
+#         if childId == nodeDataToDelete["id"]
+#           childrenIds.remove(childId)
+          
     
   def tmpClearNodes(self):
     for key in self.nodeDrawings:
