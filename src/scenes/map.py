@@ -28,6 +28,12 @@ class Map():
   def initNodeManager(self):
     self.nodeManager = NodeManager()
 #     self.nodeManager.loadJson(self.showBase.loader, self.mapNode, jsonData)
+
+  def getSelectedNodeData(self):
+    clickedNodePath = self.cameraManager.getClickedNodePath()
+    if clickedNodePath is not None:
+      return self.nodeManager.getNodeData(clickedNodePath)
+    return None
     
 
   

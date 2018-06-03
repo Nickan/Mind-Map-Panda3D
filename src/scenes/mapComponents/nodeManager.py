@@ -19,7 +19,7 @@ class NodeManager():
     self.nodeDrawings = {}
     self.nodeDataList = {}
     self.tree = ReingoldTilford()
-    self.selectedNode = None
+    self.selectedNodeData = None
 
   def loadJson(self, loader, mapNode, nodeDataList):
     coords = self.tree.getCoordinates(nodeDataList)
@@ -63,18 +63,18 @@ class NodeManager():
     
   
   """ TODO, implementation needs to be changed """
-  def getNode(self, nodePath):
+  def getNodeData(self, nodePath):
     nodePath = nodePath.findNetTag("Node")
     
-    for key in self.nodes:
-      node = self.nodes[key]
-      if nodePath == node.mainNode:
-        return node
+    for key in self.nodeDrawings:
+      nodeDrawing = self.nodeDrawings[key]
+      if nodePath == nodeDrawing.mainNode:
+        return self.nodeDataList[key]
     return None
   
-  def getNodeId(self, node):
-    for key in self.nodes:
-      if node == self.nodes[key]:
+  def getNodeDataId(self, nodeData):
+    for key in self.nodeDataList:
+      if nodeData == self.nodeDataList[key]:
         return key
     
     
@@ -93,7 +93,6 @@ class NodeManager():
     if parentId is not None:
       childData['parentId'] = parentId
       
-      
     childData['id'] = Utils.getUniqueId()
     childData['name'] = name
     self.nodeDataList[childData['id']] = childData
@@ -111,9 +110,10 @@ class NodeManager():
     
     self.loadJson(loader, mapNode, self.nodeDataList)
     
-  def editNode(self, nodeToEdit, newText):
+  def editNodeData(self, nodeDataToEdit, newText, loader, mapNode):
     self.tmpClearNodes()
-    
+    nodeDataToEdit["name"] = newText
+    self.loadJson(loader, mapNode, self.nodeDataList)
   
     
     

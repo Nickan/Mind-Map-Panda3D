@@ -1,4 +1,5 @@
 from state import State
+from stateManager import StateManager
 
 import sys
 
@@ -31,10 +32,7 @@ class ScrollingMapState(State):
     map.showBase.accept("mouse1-up", self.mouse1Up)
 
     
-
-
   def mouse1Up(self):
-    # print("mouse1Up")
     self.map.state.exit()
     self.switchToStaticMap(self.map)
     
@@ -44,23 +42,14 @@ class ScrollingMapState(State):
     map.state.enter()
 
   def mouse1Down(self):
-    clickedNode = self.map.cameraManager.getClickedNode()
-    if clickedNode is not None:
-      self.switchToClickedNodeState(clickedNode)
-    else:
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
       cameraManager = self.map.cameraManager
       cameraManager.mouse1Down()
       taskMgr = self.map.showBase.taskMgr
       taskMgr.add(cameraManager.mouseMove, "mouseMove")
-      
-  
-  
-  def switchToClickedNodeState(self, clickedNode):
-    self.exit()
-    
-    from scenes.states.nodeClickedState import NodeClickedState
-    self.map.state = NodeClickedState(self.map)
-    self.map.state.enter(clickedNode)
+    else:
+      StateManager.switchToNodeClickedState(self, selectedNodeData)
     
     
     

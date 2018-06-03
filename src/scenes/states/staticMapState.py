@@ -42,18 +42,20 @@ class StaticMapState(State):
     self.map.cameraManager.zoomOut()
 
   def mouse1Down(self):
-    clickedNode = self.map.cameraManager.getClickedNode()
-    if clickedNode is not None:
-      self.switchToClickedNodeState(clickedNode)
-    else:
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
       self.goToScrollingState()
       self.map.state.mouse1Down()
+    else:
+      StateManager.switchToNodeClickedState(self, selectedNodeData)
+      
       
   def mouse3Down(self):
-    print("NodeClickedState mouse2Down")
-    clickedNode = self.map.cameraManager.getClickedNode()
-    if clickedNode is not None:
-      StateManager.switchToEditTextState(self, clickedNode)
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
+      print("None selected")
+    else:
+      StateManager.switchToEditTextState(self, selectedNodeData)
       
 
   def mouse1Up(self):

@@ -30,32 +30,33 @@ class CleanState(State):
     map.showBase.accept("mouse3", self.mouse3Down)
 
   def mouse1Down(self):
-    clickedNode = self.map.cameraManager.getClickedNode()
-    if clickedNode is None:
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
       self.switchToScrollingState()
     else:
-      self.switchToNodeClickedState(clickedNode)
+      self.switchToNodeClickedState(selectedNodeData)
       
       
   def mouse3Down(self):
-    print("CleanState mouse3Down")
-    clickedNode = self.map.cameraManager.getClickedNode()
-    if clickedNode is not None:
-      StateManager.switchToEditTextState(self, clickedNode)
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
+      print("None selected")
+    else:
+      StateManager.switchToEditTextState(self, selectedNodeData)
       
       
   """ mouse3Down Helper """
   
       
       
-  def switchToNodeClickedState(self, clickedNode):
+  def switchToNodeClickedState(self, selectedNodeData):
     print("Switch to node clicked mode")
     
     map = self.map
     self.exit()
     from scenes.states.nodeClickedState import NodeClickedState
     map.state = NodeClickedState(self.map)
-    map.state.enter(clickedNode)
+    map.state.enter(selectedNodeData)
     
   def switchToScrollingState(self):
     self.map.state.exit()
@@ -64,3 +65,21 @@ class CleanState(State):
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
     self.map.state.mouse1Down()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

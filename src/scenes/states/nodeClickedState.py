@@ -9,9 +9,9 @@ class NodeClickedState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, nodePath):
-    node = self.map.nodeManager.getNode(nodePath)
-    self.selectedNode = node
+  def enter(self, selectedNodeData):
+    nodeManager = self.map.nodeManager
+    nodeManager.selectedNodeData = selectedNodeData
     self.setupControls()
   
   def exit(self):
@@ -35,15 +35,20 @@ class NodeClickedState(State):
   
   """ Events """
   def mouse1Down(self):
-    print("NodeClickedState mouse1Down")
-    clickedNode = self.map.cameraManager.getClickedNode()
-    if clickedNode is not None:
-      node = self.map.nodeManager.getNode(clickedNode)
-      self.map.nodeManager.selectedNode = node
-      print(node.textNode.getText())
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
+#       self.switchToScrollingState()
+      print("none seelected")
     else:
       self.goToScrollingState()
       self.map.state.mouse1Down()
+#     if clickedNode is not None:
+#       node = self.map.nodeManager.getNode(clickedNode)
+#       self.map.nodeManager.selectedNode = node
+#       print(node.textNode.getText())
+#     else:
+#       self.goToScrollingState()
+#       self.map.state.mouse1Down()
     
   def mouse1Up(self):
     print("NodeClickedState mouse1Up")
@@ -67,7 +72,7 @@ class NodeClickedState(State):
     
     from scenes.states.createNodeState import CreateNodeState
     self.map.state = CreateNodeState(self.map)
-    self.map.state.enter(self.map.nodeManager.selectedNode)
+    self.map.state.enter(self.map.nodeManager.selectedNodeData)
     
   
     

@@ -8,11 +8,10 @@ class CreateNodeState(State):
   def __init__(self, map):
     State.__init__(self)
     self.map = map
-#     self.selectedNode = None
     
-  def enter(self, selectedNode):
-    print("enter CreateNodeState")
-    self.selectedNode = selectedNode
+  def enter(self, selectecNodeData):
+    nodeManager = self.map.nodeManager
+    nodeManager.selectecNodeData = selectecNodeData
     Utils.createTextInput(self.onEnterText)
     
   def exit(self):
@@ -23,8 +22,8 @@ class CreateNodeState(State):
   """ enter() Helpers """
   def onEnterText(self, text):
     nodeManager = self.map.nodeManager
-    id = nodeManager.getNodeId(self.selectedNode)
-    nodeManager.createNode(id, text, self.map.showBase.loader, 
+    id = nodeManager.getNodeDataId(nodeManager.selectecNodeData)
+    nodeManager.createNodeData(id, text, self.map.showBase.loader, 
                            self.map.mapNode)
     self.switchToStaticMapState(self.map)
 
