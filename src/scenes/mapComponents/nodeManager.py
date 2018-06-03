@@ -21,9 +21,22 @@ class NodeManager():
     self.tree = ReingoldTilford()
     self.selectedNodeData = None
 
-  def loadJson(self, loader, mapNode, nodeDataList):
-    coords = self.tree.getCoordinates(nodeDataList)
-    self.render(loader, mapNode, nodeDataList)
+#   def loadJson(self, loader, mapNode, nodeDataList):
+#     coords = self.tree.getCoordinates(nodeDataList)
+#     self.render(loader, mapNode, nodeDataList)
+#     return self.nodeDataList
+
+  def renderNodeData(self, loader, mapNode, nodeData):
+    if Utils.VERTICAL_DEPTH:
+      x = nodeData.get("x") * Utils.VERT_BREADTH_DIST
+      y = float(nodeData.get("depth")) * Utils.VERT_DEPTH_DIST
+    else:
+      y = nodeData.get("x") * Utils.HORT_BREADTH_DIST
+      x = float(nodeData.get("depth")) * Utils.HORT_DEPTH_DIST
+    z = 1
+
+    pos = Vec3(x, y, z)
+    self.addNodeDrawing(nodeData.get('id'), nodeData.get('name'), loader, mapNode, pos)
 
   def render(self, loader, mapNode, nodeDataList):
     for key in nodeDataList:
@@ -37,10 +50,10 @@ class NodeManager():
       z = 1
 
       pos = Vec3(x, y, z)
-      self.addNodeGraphics(key, tmpNodeData.get('name'), loader, mapNode, pos)
+      self.addNodeDrawing(key, tmpNodeData.get('name'), loader, mapNode, pos)
 
 
-  def addNodeGraphics(self, id, text, loader, mapNode, pos = Vec3()):
+  def addNodeDrawing(self, id, text, loader, mapNode, pos = Vec3()):
     nodeDrawing = NodeDrawing(text, loader, mapNode)
     nodeDrawing.mainNode.setPos(pos)
 
@@ -70,7 +83,7 @@ class NodeManager():
         
   
   
-  def createNodeData(self, parentId, name, loader, mapNode):
+  def createNodeData(self, parentId, name):
     self.tmpClearNodes()
     
     childData = {}
@@ -93,7 +106,8 @@ class NodeManager():
     else:
       childData["depth"] = 1
     
-    self.loadJson(loader, mapNode, self.nodeDataList)
+    return self.nodeDataList
+#     self.loadJson(loader, mapNode, self.nodeDataList)
     
   def editNodeData(self, nodeDataToEdit, newText, loader, mapNode):
     self.tmpClearNodes()

@@ -23,8 +23,7 @@ class CreateNodeState(State):
   def onEnterText(self, text):
     nodeManager = self.map.nodeManager
     id = nodeManager.getNodeDataId(nodeManager.selectecNodeData)
-    nodeManager.createNodeData(id, text, self.map.showBase.loader, 
-                           self.map.mapNode)
+    self.map.createNodeData(id, text)
     self.switchToStaticMapState(self.map)
 
 

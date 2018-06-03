@@ -14,11 +14,11 @@ from utils.utils import Utils
 
 class NodeDrawing():
 
-  def __init__(self, text, loader, nodePath):
+  def __init__(self, text, loader, parentNodePath):
     self.scale = Utils.NODE_SCALE
     
     self.mainNode = NodePath("Node")
-    self.mainNode.reparentTo(nodePath)
+    self.mainNode.reparentTo(parentNodePath)
     
     self.addText(text, self.mainNode)
     self.addModel(loader, self.mainNode)

@@ -13,9 +13,11 @@ class CleanState(State):
     map.initMapNode(map.showBase)
     map.initNodeManager()
     
-    map.nodeManager.createNodeData(None, "Main", map.showBase.loader, map.mapNode)
+    map.createNodeData(None, "Main")
+    map.initLineDrawings()
     
     self.initEvents()
+    
     
   def exit(self):
     print("exit clean state")
