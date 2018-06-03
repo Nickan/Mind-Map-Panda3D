@@ -1,4 +1,5 @@
 from state import State
+from stateManager import StateManager
 
 from scrollingMapState import ScrollingMapState
 
@@ -6,22 +7,21 @@ import sys
 
 class StaticMapState(State):
 
-  def __init__(self):
+  def __init__(self, map):
     State.__init__(self)
-
-  def enter(self, map):
-    # print("enter")
-    self.setupControls(map)
-
-  def exit(self, map):
-    # print("exit StaticMapState")
-    map.showBase.ignoreAll()
-    map.state = ScrollingMapState()
-    map.state.enter(map)
-
-
-  def setupControls(self, map):
     self.map = map
+
+  def enter(self):
+    self.setupControls()
+
+  def exit(self):
+    print("exit StaticMapState")
+    self.map.showBase.ignoreAll()
+    
+
+  """ enter helper """
+  def setupControls(self):
+    map = self.map
     map.showBase.accept('escape', sys.exit)
 
     cameraManager = map.cameraManager
@@ -30,7 +30,9 @@ class StaticMapState(State):
 
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
-
+    map.showBase.accept("mouse3", self.mouse3Down)
+  
+  """ Events """
   def zoomIn(self):
     self.goToScrollingState()
     self.map.cameraManager.zoomIn()
@@ -40,14 +42,45 @@ class StaticMapState(State):
     self.map.cameraManager.zoomOut()
 
   def mouse1Down(self):
-    self.goToScrollingState()
-    self.map.state.mouse1Down()
+    clickedNode = self.map.cameraManager.getClickedNode()
+    if clickedNode is not None:
+      self.switchToClickedNodeState(clickedNode)
+    else:
+      self.goToScrollingState()
+      self.map.state.mouse1Down()
+      
+  def mouse3Down(self):
+    print("NodeClickedState mouse2Down")
+    clickedNode = self.map.cameraManager.getClickedNode()
+    if clickedNode is not None:
+      StateManager.switchToEditTextState(self, clickedNode)
+      
 
   def mouse1Up(self):
-    self.goToScrollingState()
-    self.map.cameraManager.mouse1Up()
-
-  def goToScrollingState(self):
-    self.map.state.exit(self.map)
+    print("static move up")
+  
+  """ mouse1Down Helper """
+  def switchToClickedNodeState(self, clickedNode):
+    self.exit()
     
+    from scenes.states.nodeClickedState import NodeClickedState
+    self.map.state = NodeClickedState(self.map)
+    self.map.state.enter(clickedNode)
+    
+    
+  """ mouse1Up Helper """
+  def goToScrollingState(self):
+    self.map.state.exit()
+    self.map.state = ScrollingMapState(self.map)
+    self.map.state.enter()
+    
+  """ mouse3Down Helper """
+    
+    
+  
+  
+  
+  
+  
+  
   

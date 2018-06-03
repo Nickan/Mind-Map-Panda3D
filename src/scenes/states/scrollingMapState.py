@@ -5,24 +5,22 @@ import sys
 class ScrollingMapState(State):
   
 
-  def __init__(self):
+  def __init__(self, map):
     State.__init__(self)
-
-  def enter(self, map):
-    # print("enter ScrollingMapState")
     self.map = map
-    self.setupControls(map)
 
-  def exit(self, map):
-    # print("exit ScrollingMapState")
+  def enter(self):
+    self.setupControls()
+
+  def exit(self):
+    print("exit ScrollingMapState")
+    map = self.map
     map.showBase.ignoreAll()
     map.showBase.taskMgr.remove("mouseMove")
 
-    from scenes.states.staticMapState import StaticMapState
-    map.state = StaticMapState()
-    map.state.enter(map)
 
-  def setupControls(self, map):
+  def setupControls(self):
+    map = self.map
     map.showBase.accept('escape', sys.exit)
 
     cameraManager = map.cameraManager
@@ -37,10 +35,36 @@ class ScrollingMapState(State):
 
   def mouse1Up(self):
     # print("mouse1Up")
-    self.map.state.exit(self.map)
+    self.map.state.exit()
+    self.switchToStaticMap(self.map)
+    
+  def switchToStaticMap(self, map):
+    from scenes.states.staticMapState import StaticMapState
+    map.state = StaticMapState(map)
+    map.state.enter()
 
   def mouse1Down(self):
-    cameraManager = self.map.cameraManager
-    cameraManager.mouse1Down()
-    taskMgr = self.map.showBase.taskMgr
-    taskMgr.add(cameraManager.mouseMove, "mouseMove")
+    clickedNode = self.map.cameraManager.getClickedNode()
+    if clickedNode is not None:
+      self.switchToClickedNodeState(clickedNode)
+    else:
+      cameraManager = self.map.cameraManager
+      cameraManager.mouse1Down()
+      taskMgr = self.map.showBase.taskMgr
+      taskMgr.add(cameraManager.mouseMove, "mouseMove")
+      
+  
+  
+  def switchToClickedNodeState(self, clickedNode):
+    self.exit()
+    
+    from scenes.states.nodeClickedState import NodeClickedState
+    self.map.state = NodeClickedState(self.map)
+    self.map.state.enter(clickedNode)
+    
+    
+    
+    
+    
+    
+    
