@@ -102,13 +102,14 @@ class NodeManager():
   
   
   def deleteNodeData(self, nodeDataToDelete, loader, mapNode):
-    if len(self.nodeDataList) == 1:
+    if nodeDataToDelete["id"] == 1:
       print("Can't delete Main node")
       return
     
     self.tmpClearNodes()
     self.removeFromParentChildrenIdList(nodeDataToDelete)
-    self.nodeDataList.pop(nodeDataToDelete["id"])
+    self.deleteNodeAndChildren(nodeDataToDelete)
+    
     self.loadJson(loader, mapNode, self.nodeDataList)
     
     
@@ -121,11 +122,16 @@ class NodeManager():
     if childrenIds is not None:
       childrenIds.remove(nodeDataToDelete["id"])
     print("test")
-      
-#       for childId in childrenIds:
-#         if childId == nodeDataToDelete["id"]
-#           childrenIds.remove(childId)
-          
+    
+  def deleteNodeAndChildren(self, nodeData):
+    self.nodeDataList.pop(nodeData["id"])
+    childrenIds = nodeData.get("childrenIds")
+    
+    if childrenIds is not None:
+      for childId in childrenIds:
+        childData = self.nodeDataList[childId]
+        self.deleteNodeAndChildren(childData)
+        
     
   def tmpClearNodes(self):
     for key in self.nodeDrawings:
