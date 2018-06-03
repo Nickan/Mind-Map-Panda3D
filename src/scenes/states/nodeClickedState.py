@@ -26,8 +26,6 @@ class NodeClickedState(State):
     map.showBase.accept('escape', sys.exit)
 
     cameraManager = map.cameraManager
-#     map.showBase.accept("wheel_up", self.zoomIn)
-#     map.showBase.accept("wheel_down", self.zoomOut)
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
     
@@ -44,21 +42,14 @@ class NodeClickedState(State):
       self.map.state.mouse1Down()
     else:
       nodeManager.selectedNodeData = selectedNodeData
-      
-#     if clickedNode is not None:
-#       node = self.map.nodeManager.getNode(clickedNode)
-#       self.map.nodeManager.selectedNode = node
-#       print(node.textNode.getText())
-#     else:
-#       self.goToScrollingState()
-#       self.map.state.mouse1Down()
     
   def mouse1Up(self):
     print("NodeClickedState mouse1Up")
     
   
   def onTab(self):
-    self.switchToCreateNode()
+    selectedNodeData = self.map.nodeManager.selectedNodeData
+    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
     
   def onDelete(self):
     nodeManager = self.map.nodeManager
@@ -72,14 +63,6 @@ class NodeClickedState(State):
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
-    
-    
-  def switchToCreateNode(self):
-    self.exit()
-    
-    from scenes.states.createNodeState import CreateNodeState
-    self.map.state = CreateNodeState(self.map)
-    self.map.state.enter(self.map.nodeManager.selectedNodeData)
     
   
     

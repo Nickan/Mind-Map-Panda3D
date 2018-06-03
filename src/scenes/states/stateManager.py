@@ -37,3 +37,12 @@ class StateManager():
     from scenes.states.deleteNodeDataState import DeleteNodeDataState
     map.state = DeleteNodeDataState(map)
     map.state.enter(selectedNodeData)
+    
+  @staticmethod
+  def switchToCreateNodeDataState(currentState, selectedNodeData):
+    map = currentState.map
+    currentState.exit()
+    
+    from scenes.states.createNodeState import CreateNodeState
+    map.state = CreateNodeState(map)
+    map.state.enter(map.nodeManager.selectedNodeData)

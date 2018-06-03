@@ -31,6 +31,8 @@ class StaticMapState(State):
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
     map.showBase.accept("mouse3", self.mouse3Down)
+    
+    map.showBase.accept("tab", self.onTab)
   
   """ Events """
   def zoomIn(self):
@@ -60,6 +62,11 @@ class StaticMapState(State):
 
   def mouse1Up(self):
     print("static move up")
+    
+  def onTab(self):
+    selectedNodeData = self.map.nodeManager.selectedNodeData
+    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+  
   
   """ mouse1Down Helper """
   def switchToClickedNodeState(self, clickedNode):
