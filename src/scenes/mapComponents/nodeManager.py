@@ -26,16 +26,16 @@ class NodeManager():
 #     self.render(loader, mapNode, nodeDataList)
 #     return self.nodeDataList
 
-  def renderNodeData(self, loader, mapNode, nodeData):
-    if Utils.VERTICAL_DEPTH:
-      x = nodeData.get("x") * Utils.VERT_BREADTH_DIST
-      y = float(nodeData.get("depth")) * Utils.VERT_DEPTH_DIST
-    else:
-      y = nodeData.get("x") * Utils.HORT_BREADTH_DIST
-      x = float(nodeData.get("depth")) * Utils.HORT_DEPTH_DIST
-    z = 1
-
-    pos = Vec3(x, y, z)
+  def renderNodeData(self, loader, mapNode, nodeData, pos):
+#     if Utils.VERTICAL_DEPTH:
+#       x = nodeData.get("x") * Utils.VERT_BREADTH_DIST
+#       y = float(nodeData.get("depth")) * Utils.VERT_DEPTH_DIST
+#     else:
+#       y = nodeData.get("x") * Utils.HORT_BREADTH_DIST
+#       x = float(nodeData.get("depth")) * Utils.HORT_DEPTH_DIST
+#     z = 1
+# 
+#     pos = Vec3(x, y, z)
     self.addNodeDrawing(nodeData.get('id'), nodeData.get('name'), loader, mapNode, pos)
 
   def render(self, loader, mapNode, nodeDataList):

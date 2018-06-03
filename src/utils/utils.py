@@ -5,6 +5,9 @@ import copy
 
 from gui.textinput import TextInput
 
+
+from panda3d.core import LVecBase3f
+
 class Utils():
   LAST_ASSIGNED_ID = 0
   
@@ -142,7 +145,25 @@ class Utils():
   @staticmethod
   def createTextInput(onEnterTextCb):
     TextInput(onEnterTextCb)
+    
   
+  @staticmethod
+  def getPosition(depth, breadth):
+    if Utils.VERTICAL_DEPTH:
+      x = breadth * Utils.VERT_BREADTH_DIST
+      y = float(depth) * Utils.VERT_DEPTH_DIST
+    else:
+      y = breadth * Utils.HORT_BREADTH_DIST
+      x = float(depth) * Utils.HORT_DEPTH_DIST
+    z = 1
+    
+    return LVecBase3f(x, y, z)
+  
+  @staticmethod
+  def getNodeDataPoint(nodeData):
+    depth = nodeData.get("depth")
+    breadth = nodeData.get("x")
+    return Utils.getPosition(depth, breadth)
   
   
   

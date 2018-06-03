@@ -20,7 +20,7 @@ class CameraManager():
   
   """ init helpers """
   def setDefaultSettings(self):
-    self.showBase.camera.setPos(0, 0, -100)
+    self.showBase.camera.setPos(50, 0, -180)
     self.camPos = self.showBase.camera.getPos()
     self.showBase.camera.setHpr(0, 90, 0)
 

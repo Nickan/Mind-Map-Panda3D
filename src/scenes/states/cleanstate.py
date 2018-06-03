@@ -12,9 +12,9 @@ class CleanState(State):
     map.initCamera()
     map.initMapNode(map.showBase)
     map.initNodeManager()
-    
-    map.createNodeData(None, "Main")
     map.initLineDrawings()
+    map.createNodeData(None, "Main")
+    
     
     self.initEvents()
     

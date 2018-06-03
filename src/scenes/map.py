@@ -4,9 +4,10 @@ from scenes.mapComponents.nodeManager import NodeManager
 from scenes.states.state import State
 from scenes.states.cleanState import CleanState
 
+from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
 
-
+from utils.utils import Utils
 
 class Map():
   
@@ -42,9 +43,19 @@ class Map():
     nodeManager.createNodeData(parentId, name)
     nodeManager.tree.getCoordinates(nodeManager.nodeDataList)
     
+    self.lineDrawings.clear()
     for key in nodeManager.nodeDataList:
       nodeData = nodeManager.nodeDataList[key]
-      nodeManager.renderNodeData(loader, mapNode, nodeData)
+      
+      breadth = nodeData.get("x")
+      depth = nodeData.get("depth")
+      
+      nodePos = Utils.getPosition(depth, breadth)
+      
+      nodeManager.renderNodeData(loader, mapNode, nodeData, nodePos)
+      self.lineDrawings.drawLine(nodeData, nodeManager.nodeDataList)
+#       self.lineDrawings.addPoint(nodePos)
+#     self.lineDrawings.draw()
     
     
 
