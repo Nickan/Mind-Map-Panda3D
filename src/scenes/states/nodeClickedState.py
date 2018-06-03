@@ -39,7 +39,7 @@ class NodeClickedState(State):
     clickedNode = self.map.cameraManager.getClickedNode()
     if clickedNode is not None:
       node = self.map.nodeManager.getNode(clickedNode)
-      self.selectedNode = node
+      self.map.nodeManager.selectedNode = node
       print(node.textNode.getText())
     else:
       self.goToScrollingState()
@@ -67,7 +67,7 @@ class NodeClickedState(State):
     
     from scenes.states.createNodeState import CreateNodeState
     self.map.state = CreateNodeState(self.map)
-    self.map.state.enter(self.selectedNode)
+    self.map.state.enter(self.map.nodeManager.selectedNode)
     
   
     

@@ -12,7 +12,7 @@ from utils.utils import Utils
 
 
 
-class Node():
+class NodeDrawing():
 
   def __init__(self, text, loader, nodePath):
     self.scale = Utils.NODE_SCALE

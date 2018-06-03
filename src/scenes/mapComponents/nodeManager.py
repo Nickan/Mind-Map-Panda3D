@@ -3,7 +3,7 @@ from collections import defaultdict
 from pprint import pprint
 
 from direct.showbase.ShowBase import Vec3
-from scenes.mapComponents.node import Node
+from scenes.mapComponents.nodeDrawing import NodeDrawing
 
 
 from utils.reingoldTilford import ReingoldTilford
@@ -16,17 +16,18 @@ import copy
 class NodeManager():
 
   def __init__(self):
-    self.nodes = {}
-    self.nodeData = {}
+    self.nodeDrawings = {}
+    self.nodeDataList = {}
     self.tree = ReingoldTilford()
+    self.selectedNode = None
 
-  def loadJson(self, loader, mapNode, jsonData):
-    coords = self.tree.getCoordinates(jsonData)
-    self.render(loader, mapNode, jsonData)
+  def loadJson(self, loader, mapNode, nodeDataList):
+    coords = self.tree.getCoordinates(nodeDataList)
+    self.render(loader, mapNode, nodeDataList)
 
-  def render(self, loader, mapNode, nodeList):
-    for key in nodeList:
-      tmpNodeData = nodeList[key]
+  def render(self, loader, mapNode, nodeDataList):
+    for key in nodeDataList:
+      tmpNodeData = nodeDataList[key]
       x = tmpNodeData.get("x") * Utils.BREADTH_DIST
       y = int(tmpNodeData.get("depth")) * Utils.DEPTH_DIST
       z = 1
@@ -38,29 +39,30 @@ class NodeManager():
 
 
   
-  def createChildren(self, parent, children, loader,
-    depthDistBetweenChildren, breadthDistBetweenChildren):
-
-    childrenCount = len(children)
-    totalBreadthDist = breadthDistBetweenChildren * (childrenCount - 1)
-    startingBreadth = -totalBreadthDist / 2
-    
-    tempParent = self.mapNode
-
-    x = depthDistBetweenChildren
-    z = 1 # Might change later
-    for index, child in enumerate(children):
-      y = startingBreadth + (breadthDistBetweenChildren * index)
-      pos = Vec3(x, y, z)
-      self.addNode(child.get('name'), loader, tempParent, pos)
+#   def createChildren(self, parent, children, loader,
+#     depthDistBetweenChildren, breadthDistBetweenChildren):
+# 
+#     childrenCount = len(children)
+#     totalBreadthDist = breadthDistBetweenChildren * (childrenCount - 1)
+#     startingBreadth = -totalBreadthDist / 2
+#     
+#     tempParent = self.mapNode
+# 
+#     x = depthDistBetweenChildren
+#     z = 1 # Might change later
+#     for index, child in enumerate(children):
+#       y = startingBreadth + (breadthDistBetweenChildren * index)
+#       pos = Vec3(x, y, z)
+#       self.addNode(child.get('name'), loader, tempParent, pos)
 
   def addNodeGraphics(self, id, text, loader, mapNode, pos = Vec3()):
-    nodeGraphics = Node(text, loader, mapNode)
-    nodeGraphics.mainNode.setPos(pos)
+    nodeDrawing = NodeDrawing(text, loader, mapNode)
+    nodeDrawing.mainNode.setPos(pos)
 
-    self.nodes[id] = nodeGraphics
+    self.nodeDrawings[id] = nodeDrawing
     
   
+  """ TODO, implementation needs to be changed """
   def getNode(self, nodePath):
     nodePath = nodePath.findNetTag("Node")
     
@@ -83,37 +85,42 @@ class NodeManager():
         
   
   
-  def createNode(self, parentId, name, loader, mapNode):
+  def createNodeData(self, parentId, name, loader, mapNode):
     self.tmpClearNodes()
     
-    childNodeData = {}
+    childData = {}
     
     if parentId is not None:
-      childNodeData['parentId'] = parentId
+      childData['parentId'] = parentId
       
       
-    childNodeData['id'] = Utils.getUniqueId()
-    childNodeData['name'] = name
-    self.nodeData[childNodeData['id']] = childNodeData
+    childData['id'] = Utils.getUniqueId()
+    childData['name'] = name
+    self.nodeDataList[childData['id']] = childData
     
-    parentNodeData = self.nodeData.get(parentId)
-    if parentNodeData is not None:
-      childNodeData["depth"] = parentNodeData.get("depth") + 1
+    parentData = self.nodeDataList.get(parentId)
+    if parentData is not None:
+      childData["depth"] = parentData.get("depth") + 1
       
-      children = parentNodeData.get('childrenIds')
+      children = parentData.get('childrenIds')
       if children is None:
-        parentNodeData['childrenIds'] = []
-      parentNodeData['childrenIds'].append(childNodeData['id'])
+        parentData['childrenIds'] = []
+      parentData['childrenIds'].append(childData['id'])
     else:
-      childNodeData["depth"] = 1
+      childData["depth"] = 1
     
-    self.loadJson(loader, mapNode, self.nodeData)
+    self.loadJson(loader, mapNode, self.nodeDataList)
+    
+  def editNode(self, nodeToEdit, newText):
+    self.tmpClearNodes()
+    
+  
     
     
   def tmpClearNodes(self):
-    for key in self.nodes:
-      self.nodes[key].dispose()
-    self.nodes = {}
+    for key in self.nodeDrawings:
+      self.nodeDrawings[key].dispose()
+    self.nodeDrawings = {}
     
     
         

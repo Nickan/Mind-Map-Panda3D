@@ -20,9 +20,10 @@ class EditTextState(State):
     
   
   """ enter() Helpers """
-  def onEnterText(self, text):
+  def onEnterText(self, newText):
     nodeManager = self.map.nodeManager
-    self.selectedNode.textNode.setText(text)
+    nodeManager.editNode(self.selectedNode, newText)
+#     self.selectedNode.textNode.setText(text)
     
     self.switchToStaticState(self.map)
     
