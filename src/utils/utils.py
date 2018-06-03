@@ -13,8 +13,11 @@ class Utils():
   # Node
   NODE_SCALE = (6, 6, 1)
   
-  DEPTH_DIST = 20
-  BREADTH_DIST = 30
+  VERT_DEPTH_DIST = 20
+  VERT_BREADTH_DIST = 30
+  HORT_DEPTH_DIST = 25
+  HORT_BREADTH_DIST = 10
+  VERTICAL_DEPTH = False
 
   def __init__(self):
     print("Init Utils")

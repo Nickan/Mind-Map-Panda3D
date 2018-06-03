@@ -2,6 +2,7 @@ from direct.showbase.ShowBase import ShowBase
 
 from panda3d.core import DynamicTextFont
 from panda3d.core import Filename
+from panda3d.core import WindowProperties
 
 from scenes.map import Map
 
@@ -24,7 +25,8 @@ class Epiphany(ShowBase):
     Map.FONT_UBUNTU = self.loader.loadFont("../ubuntu.regular.ttf")
     Map.FONT_UBUNTU.setPixelsPerUnit(120)
     Map.FONT_UBUNTU.setScaleFactor(3)
-#     Map.FONT_UBUNTU.setPageSize(1024, 1024)
+    Map.FONT_UBUNTU.setNativeAntialias(0)
+    self.setScreenSize()
 
   def loadJson(self, onLoadJsonFn):
     file = "../../assets/setRelativeXToParent.json"
@@ -38,6 +40,14 @@ class Epiphany(ShowBase):
 
   def initMap(self, jsonData):
     self.map = Map(self, jsonData)
+    
+    
+  def setScreenSize(self):
+    w, h = 1024, 768 
+    props = WindowProperties() 
+    props.setSize(w, h) 
+    
+    base.win.requestProperties(props)
 
 
  

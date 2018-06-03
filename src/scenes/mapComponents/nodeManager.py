@@ -28,32 +28,17 @@ class NodeManager():
   def render(self, loader, mapNode, nodeDataList):
     for key in nodeDataList:
       tmpNodeData = nodeDataList[key]
-      x = tmpNodeData.get("x") * Utils.BREADTH_DIST
-      y = int(tmpNodeData.get("depth")) * Utils.DEPTH_DIST
+      if Utils.VERTICAL_DEPTH:
+        x = tmpNodeData.get("x") * Utils.VERT_BREADTH_DIST
+        y = int(tmpNodeData.get("depth")) * Utils.VERT_DEPTH_DIST
+      else:
+        y = tmpNodeData.get("x") * Utils.HORT_BREADTH_DIST
+        x = int(tmpNodeData.get("depth")) * Utils.HORT_DEPTH_DIST
       z = 1
 
       pos = Vec3(x, y, z)
-
-#       name = tmpNodeData.get('name') + " x " + str(x) + " y " + str(y)
       self.addNodeGraphics(key, tmpNodeData.get('name'), loader, mapNode, pos)
 
-
-  
-#   def createChildren(self, parent, children, loader,
-#     depthDistBetweenChildren, breadthDistBetweenChildren):
-# 
-#     childrenCount = len(children)
-#     totalBreadthDist = breadthDistBetweenChildren * (childrenCount - 1)
-#     startingBreadth = -totalBreadthDist / 2
-#     
-#     tempParent = self.mapNode
-# 
-#     x = depthDistBetweenChildren
-#     z = 1 # Might change later
-#     for index, child in enumerate(children):
-#       y = startingBreadth + (breadthDistBetweenChildren * index)
-#       pos = Vec3(x, y, z)
-#       self.addNode(child.get('name'), loader, tempParent, pos)
 
   def addNodeGraphics(self, id, text, loader, mapNode, pos = Vec3()):
     nodeDrawing = NodeDrawing(text, loader, mapNode)
