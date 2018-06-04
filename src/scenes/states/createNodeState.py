@@ -22,9 +22,11 @@ class CreateNodeState(State):
     
   """ enter() Helpers """
   def onEnterText(self, text):
-    nodeManager = self.map.nodeManager
-    id = nodeManager.getNodeDataId(nodeManager.selectecNodeData)
-    self.map.createNodeData(id, text)
+    if text is not None:
+      nodeManager = self.map.nodeManager
+      id = nodeManager.getNodeDataId(nodeManager.selectecNodeData)
+      self.map.createNodeData(id, text)
+      
     StateManager.switchToStaticMapState(self)
 
 

@@ -4,28 +4,19 @@ from direct.gui.DirectGui import *
 from panda3d.core import NodePath
 from panda3d.core import TextNode
 
+from Tkinter import Tk
+from tkSimpleDialog import askstring
+
 class TextInput():
   
   def __init__(self, onEnterTextFn):
     self.onEnterTextFn = onEnterTextFn
-    self.bk_text = "This is my Demo"
-#     self.textObject = OnscreenText(text = self.bk_text, pos = (0.95,-0.95), 
-#                                    scale = 0.07, fg = (1,0.5,0.5,1), 
-#                                    align = TextNode.ACenter,mayChange=1)
-    
     self.addText()
    
   def addText(self):
-    self.entry = DirectEntry(text = "", scale=.05, command = self.setText,
-                      initialText="Type Something", numLines = 2, 
-                      focus=1, focusInCommand = self.clearText)
-   
-  def setText(self, textEntered):
-    self.entry.destroy()
-    self.onEnterTextFn(textEntered)
-       
-  def clearText(self):
-    self.entry.enterText('')
+    Tk().withdraw()
+    text = askstring("Enter text", "")
+    self.onEnterTextFn(text)
 
      
     
