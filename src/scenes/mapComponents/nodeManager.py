@@ -21,21 +21,8 @@ class NodeManager():
     self.tree = ReingoldTilford()
     self.selectedNodeData = None
 
-#   def loadJson(self, loader, mapNode, nodeDataList):
-#     coords = self.tree.getCoordinates(nodeDataList)
-#     self.render(loader, mapNode, nodeDataList)
-#     return self.nodeDataList
 
   def renderNodeData(self, loader, mapNode, nodeData, pos):
-#     if Utils.VERTICAL_DEPTH:
-#       x = nodeData.get("x") * Utils.VERT_BREADTH_DIST
-#       y = float(nodeData.get("depth")) * Utils.VERT_DEPTH_DIST
-#     else:
-#       y = nodeData.get("x") * Utils.HORT_BREADTH_DIST
-#       x = float(nodeData.get("depth")) * Utils.HORT_DEPTH_DIST
-#     z = 1
-# 
-#     pos = Vec3(x, y, z)
     self.addNodeDrawing(nodeData.get('id'), nodeData.get('name'), loader, mapNode, pos)
 
   def render(self, loader, mapNode, nodeDataList):
@@ -91,7 +78,7 @@ class NodeManager():
     if parentId is not None:
       childData['parentId'] = parentId
       
-    childData['id'] = Utils.getUniqueId()
+    childData['id'] = Utils.getUniqueId(self.nodeDataList)
     childData['name'] = name
     self.nodeDataList[childData['id']] = childData
     

@@ -15,10 +15,6 @@ class LineDrawings():
     self.lineNodePaths = []
     self.points = []
 
-#     self.addPoint(one)
-#     self.addPoint(two)
-#     self.draw()
-
   def drawLine(self, nodeData, nodeDataList):
     childrenIds = nodeData.get("childrenIds")
      
@@ -37,11 +33,7 @@ class LineDrawings():
       self.endingPoint(childPos)
       self.setParentPoint(parentNode)
       
-      
-        
-      
 
-    
   def startingPoint(self, point):
     self.lineSegs.moveTo(point)
   
@@ -53,30 +45,6 @@ class LineDrawings():
     lineNodePath.reparentTo(self.mainNodePath)
     self.lineNodePaths.append(lineNodePath)
     
-  def addPoint(self, point):
-    self.points.append(point)
-    
-#   def draw(self):
-#     self.drawLine(self.points)
-#   
-#   def drawLine(self, points):
-# #     self.lineSegs = LineSegs()
-#     firstPoint = points[0]
-#     self.lineSegs.moveTo(firstPoint)
-#     
-#     for point in points:
-#       if point == points[0]:
-#         continue
-#       
-#       self.lineSegs.drawTo(point)
-#       self.lineSegs.setThickness(4)
-#       self.lineSegs.setColor (1, 1 ,1, 1)
-#       node = self.lineSegs.create()
-#       lineNodePath = NodePath(node)
-#       lineNodePath.reparentTo(self.mainNodePath)
-#       self.lineNodePaths.append(lineNodePath)
-#       
-#       self.lineSegs.moveTo(point)
       
   def clear(self):
     for lineNodePath in self.lineNodePaths:
@@ -84,3 +52,15 @@ class LineDrawings():
     
     self.lineNodePaths = []
     self.points = []
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

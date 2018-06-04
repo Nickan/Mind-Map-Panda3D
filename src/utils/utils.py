@@ -21,6 +21,8 @@ class Utils():
   HORT_DEPTH_DIST = 25
   HORT_BREADTH_DIST = 10
   VERTICAL_DEPTH = False
+  
+  CURRENT_NODE_DATA_LIST = None
 
   def __init__(self):
     print("Init Utils")
@@ -100,11 +102,21 @@ class Utils():
   
   
   @staticmethod
-  def getUniqueId():
+  def getUniqueId(nodeDataList):
+    Utils.LAST_ASSIGNED_ID = Utils.getLastAssignedId(nodeDataList)
     Utils.LAST_ASSIGNED_ID += 1
     return Utils.LAST_ASSIGNED_ID
   
-
+  @staticmethod
+  def getLastAssignedId(nodeDataList):
+    highestIdAssigned = Utils.LAST_ASSIGNED_ID
+    if Utils.CURRENT_NODE_DATA_LIST != nodeDataList:
+      Utils.CURRENT_NODE_DATA_LIST = nodeDataList
+      for key in nodeDataList:
+        if key >= highestIdAssigned:
+          highestIdAssigned = key
+      
+    return highestIdAssigned
 
   @staticmethod
   def showNode(node):

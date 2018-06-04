@@ -8,14 +8,8 @@ class CleanState(State):
     self.map = map
     
   def enter(self):
-    map = self.map
-    map.initCamera()
-    map.initMapNode(map.showBase)
-    map.initNodeManager()
-    map.initLineDrawings()
+    map = self.map 
     map.createNodeData(None, "Main")
-    
-    
     self.initEvents()
     
     

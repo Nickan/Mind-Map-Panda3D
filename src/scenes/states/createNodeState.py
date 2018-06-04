@@ -1,4 +1,5 @@
 from state import State
+from stateManager import StateManager
 
 from utils.utils import Utils
 
@@ -24,15 +25,7 @@ class CreateNodeState(State):
     nodeManager = self.map.nodeManager
     id = nodeManager.getNodeDataId(nodeManager.selectecNodeData)
     self.map.createNodeData(id, text)
-    self.switchToStaticMapState(self.map)
-
-
-  def switchToStaticMapState(self, map):
-    map.state.exit()
-    
-    from scenes.states.staticMapState import StaticMapState
-    map.state = StaticMapState(map)
-    map.state.enter()
+    StateManager.switchToStaticMapState(self)
 
 
 

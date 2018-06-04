@@ -2,8 +2,10 @@ from state import State
 from stateManager import StateManager
 
 from scrollingMapState import ScrollingMapState
+from utils.saveManager import SaveManager
 
 import sys
+
 
 class StaticMapState(State):
 
@@ -33,6 +35,9 @@ class StaticMapState(State):
     map.showBase.accept("mouse3", self.mouse3Down)
     
     map.showBase.accept("tab", self.onTab)
+    
+    map.showBase.accept("f1", self.onSave)
+    map.showBase.accept("f2", self.onOpenFile)
   
   """ Events """
   def zoomIn(self):
@@ -66,6 +71,16 @@ class StaticMapState(State):
   def onTab(self):
     selectedNodeData = self.map.nodeManager.selectedNodeData
     StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+    
+  def onSave(self):
+    SaveManager.saveNodeDataList(self.map.nodeManager.nodeDataList)
+    
+  def onOpenFile(self):
+    SaveManager.loadNodeDataList(self.onNodeDataListLoaded)
+    
+    
+  def onNodeDataListLoaded(self, nodeDataList):
+    StateManager.switchToLoadMapState(self, nodeDataList)
   
   
   """ mouse1Down Helper """

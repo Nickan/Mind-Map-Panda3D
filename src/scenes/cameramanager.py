@@ -88,8 +88,8 @@ class CameraManager():
       render = self.showBase.render
       camera = self.showBase.camera
       if plane.intersectsLine(pos3d,
-          render.getRelativePoint(camera, nearPoint),
-          render.getRelativePoint(camera, farPoint)):
+        render.getRelativePoint(camera, nearPoint),
+        render.getRelativePoint(camera, farPoint)):
         return pos3d
     return None
   

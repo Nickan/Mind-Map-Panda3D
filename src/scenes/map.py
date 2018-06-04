@@ -17,8 +17,15 @@ class Map():
     self.showBase = showBase
     self.jsonData = jsonData
     
+    self.initCamera()
+    self.initMapNode(self.showBase)
+    self.initNodeManager()
+    self.initLineDrawings()
+    
     self.state = CleanState(self)
     self.state.enter()
+    
+    
 
   def initCamera(self):
     self.cameraManager = CameraManager(self.showBase)
@@ -36,16 +43,21 @@ class Map():
     
     
   def createNodeData(self, parentId, name):
-    loader = self.showBase.loader
-    mapNode = self.mapNode
-    
     nodeManager = self.nodeManager
     nodeManager.createNodeData(parentId, name)
-    nodeManager.tree.getCoordinates(nodeManager.nodeDataList)
+    self.loadNodeDataList(nodeManager.nodeDataList)
+      
+  def loadNodeDataList(self, nodeDataList):
+    nodeManager = self.nodeManager
+    nodeManager.tree.getCoordinates(nodeDataList)
     
+    nodeManager.tmpClearNodes()
     self.lineDrawings.clear()
-    for key in nodeManager.nodeDataList:
-      nodeData = nodeManager.nodeDataList[key]
+    
+    loader = self.showBase.loader
+    mapNode = self.mapNode
+    for key in nodeDataList:
+      nodeData = nodeDataList[key]
       
       breadth = nodeData.get("x")
       depth = nodeData.get("depth")
@@ -53,9 +65,7 @@ class Map():
       nodePos = Utils.getPosition(depth, breadth)
       
       nodeManager.renderNodeData(loader, mapNode, nodeData, nodePos)
-      self.lineDrawings.drawLine(nodeData, nodeManager.nodeDataList)
-#       self.lineDrawings.addPoint(nodePos)
-#     self.lineDrawings.draw()
+      self.lineDrawings.drawLine(nodeData, nodeDataList)
     
     
 
