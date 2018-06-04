@@ -8,6 +8,7 @@ from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
 
 from utils.utils import Utils
+from utils.saveManager import SaveManager
 
 class Map():
   
@@ -55,6 +56,7 @@ class Map():
   def deleteNodeData(self, nodeDataToDelete):
     nodeManager = self.nodeManager
     nodeManager.deleteNodeData(nodeDataToDelete)
+    SaveManager.clearNodeDataList(nodeManager.nodeDataList)
     
     self.loadNodeDataList(nodeManager.nodeDataList)
       
