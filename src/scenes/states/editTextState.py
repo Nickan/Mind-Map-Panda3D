@@ -9,18 +9,17 @@ class EditTextState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, selectedNodeData, map):
-    nodeManager = map.nodeManager
+  def enter(self, selectedNodeData):
+    nodeManager = self.map.nodeManager
     nodeManager.selectedNodeData = selectedNodeData
     Utils.createTextInput(self.onEnterText)
     
-  def exit(self, map):
+  def exit(self):
     self.map.showBase.ignoreAll()
     
   
   """ enter() Helpers """
   def onEnterText(self, newText):
     nodeManager = self.map.nodeManager
-    nodeManager.editNodeData(nodeManager.selectedNodeData, newText, 
-                             self.map.showBase.loader, self.map.mapNode)
+    self.map.editNodeData(nodeManager.selectedNodeData, newText)
     StateManager.switchToStaticMapState(self)

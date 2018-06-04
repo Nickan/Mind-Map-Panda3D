@@ -46,6 +46,17 @@ class Map():
     nodeManager = self.nodeManager
     nodeManager.createNodeData(parentId, name)
     self.loadNodeDataList(nodeManager.nodeDataList)
+    
+  def editNodeData(self, nodeDataToEdit, newText):
+    nodeManager = self.nodeManager
+    nodeDataToEdit["name"] = newText
+    self.loadNodeDataList(nodeManager.nodeDataList)
+    
+  def deleteNodeData(self, nodeDataToDelete):
+    nodeManager = self.nodeManager
+    nodeManager.deleteNodeData(nodeDataToDelete)
+    
+    self.loadNodeDataList(nodeManager.nodeDataList)
       
   def loadNodeDataList(self, nodeDataList):
     nodeManager = self.nodeManager

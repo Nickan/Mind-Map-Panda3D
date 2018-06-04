@@ -94,24 +94,14 @@ class NodeManager():
       childData["depth"] = 1
     
     return self.nodeDataList
-#     self.loadJson(loader, mapNode, self.nodeDataList)
-    
-  def editNodeData(self, nodeDataToEdit, newText, loader, mapNode):
-    self.tmpClearNodes()
-    nodeDataToEdit["name"] = newText
-    self.loadJson(loader, mapNode, self.nodeDataList)
   
-  
-  def deleteNodeData(self, nodeDataToDelete, loader, mapNode):
+  def deleteNodeData(self, nodeDataToDelete):
     if nodeDataToDelete["id"] == 1:
       print("Can't delete Main node")
       return
     
-    self.tmpClearNodes()
     self.removeFromParentChildrenIdList(nodeDataToDelete)
     self.deleteNodeAndChildren(nodeDataToDelete)
-    
-    self.loadJson(loader, mapNode, self.nodeDataList)
     
     
   def removeFromParentChildrenIdList(self, nodeDataToDelete):

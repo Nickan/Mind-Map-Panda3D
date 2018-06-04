@@ -9,7 +9,7 @@ class StateManager():
     
     from scenes.states.editTextState import EditTextState
     map.state = EditTextState(map)
-    map.state.enter(clickedNode, map)
+    map.state.enter(clickedNode)
     
   @staticmethod
   def switchToNodeClickedState(currentState, selectedNodeData):

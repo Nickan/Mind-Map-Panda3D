@@ -10,8 +10,7 @@ class DeleteNodeDataState(State):
   def enter(self, selectedNodeData):
     nodeManager = self.map.nodeManager
     nodeManager.selectedNodeData = selectedNodeData
-    nodeManager.deleteNodeData(nodeManager.selectedNodeData, 
-                               self.map.showBase.loader, self.map.mapNode)
+    self.map.deleteNodeData(nodeManager.selectedNodeData)
     nodeManager.selectedNodeData = None
     StateManager.switchToStaticMapState(self)
     
