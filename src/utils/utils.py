@@ -14,7 +14,7 @@ class Utils():
   STARTJSON = None
   
   # Node
-  NODE_SCALE = (6, 6, 1)
+  NODE_SCALE = LVecBase3f(6, 6, 1)
   
   VERT_DEPTH_DIST = 20
   VERT_BREADTH_DIST = 30
@@ -102,15 +102,15 @@ class Utils():
   
   
   @staticmethod
-  def getUniqueId(nodeDataList):
-    Utils.LAST_ASSIGNED_ID = Utils.getLastAssignedId(nodeDataList)
+  def getUniqueId(nodeDataList, recheckLastId = False):
+    Utils.LAST_ASSIGNED_ID = Utils.getLastAssignedId(nodeDataList, recheckLastId)
     Utils.LAST_ASSIGNED_ID += 1
     return Utils.LAST_ASSIGNED_ID
   
   @staticmethod
-  def getLastAssignedId(nodeDataList):
+  def getLastAssignedId(nodeDataList, recheckLastId):
     highestIdAssigned = Utils.LAST_ASSIGNED_ID
-    if Utils.CURRENT_NODE_DATA_LIST != nodeDataList:
+    if Utils.CURRENT_NODE_DATA_LIST != nodeDataList or recheckLastId:
       Utils.CURRENT_NODE_DATA_LIST = nodeDataList
       for key in nodeDataList:
         if key >= highestIdAssigned:
@@ -176,6 +176,7 @@ class Utils():
     depth = nodeData.get("depth")
     breadth = nodeData.get("x")
     return Utils.getPosition(depth, breadth)
+  
   
   
   

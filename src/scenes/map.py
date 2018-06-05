@@ -43,9 +43,9 @@ class Map():
     self.lineDrawings = LineDrawings(self.mapNode)
     
     
-  def createNodeData(self, parentId, name):
+  def createNodeData(self, parentId, name, recheckLastId = False):
     nodeManager = self.nodeManager
-    nodeManager.createNodeData(parentId, name)
+    nodeManager.createNodeData(parentId, name, recheckLastId)
     self.loadNodeDataList(nodeManager.nodeDataList)
     
   def editNodeData(self, nodeDataToEdit, newText):

@@ -10,9 +10,14 @@ class CreateNodeState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, selectecNodeData):
+  def enter(self, selectedNodeData):
     nodeManager = self.map.nodeManager
-    nodeManager.selectecNodeData = selectecNodeData
+    nodeManager.selectedNodeData = selectedNodeData
+    
+    # Need way how to pass the position to convert to screen coords
+#     pos = nodeManager.getNodeDrawingPos()
+#     print("Node pos " + str(pos))
+    
     Utils.createTextInput(self.onEnterText)
     
   def exit(self):
@@ -24,7 +29,7 @@ class CreateNodeState(State):
   def onEnterText(self, text):
     if text is not None:
       nodeManager = self.map.nodeManager
-      id = nodeManager.getNodeDataId(nodeManager.selectecNodeData)
+      id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
       self.map.createNodeData(id, text)
       
     StateManager.switchToStaticMapState(self)

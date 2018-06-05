@@ -4,6 +4,7 @@ from panda3d.core import AntialiasAttrib
 from panda3d.core import NodePath
 from panda3d.core import TextNode
 from panda3d.core import BitMask32
+from panda3d.core import TextProperties
 
 
 
@@ -39,7 +40,11 @@ class NodeDrawing():
     
      #this is case-sensitive
     from scenes.map import Map
+    
+    textNode = self.textNode
     self.textNode.setFont(Map.FONT_UBUNTU)
+    self.textNode.setAlign(TextProperties.A_center)
+    textNode.setWordwrap(Utils.NODE_SCALE.x * 1.4)
     
     self.textNode.setText(text)
     self.textNode.setTextColor(0, 0, 1, 1)

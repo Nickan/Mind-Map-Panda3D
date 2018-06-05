@@ -70,30 +70,30 @@ class NodeManager():
         
   
   
-  def createNodeData(self, parentId, name):
+  def createNodeData(self, parentId, name, recheckLastId):
     self.tmpClearNodes()
     
-    childData = {}
+    newNodeData = {}
     
     if parentId is not None:
-      childData['parentId'] = parentId
+      newNodeData['parentId'] = parentId
       
-    childData['id'] = Utils.getUniqueId(self.nodeDataList)
-    childData['name'] = name
-    self.nodeDataList[childData['id']] = childData
+    newNodeData['id'] = Utils.getUniqueId(self.nodeDataList, recheckLastId)
+    newNodeData['name'] = name
+    self.nodeDataList[newNodeData['id']] = newNodeData
     
     parentData = self.nodeDataList.get(parentId)
     if parentData is not None:
-      childData["depth"] = parentData.get("depth") + 1
+      newNodeData["depth"] = parentData.get("depth") + 1
       
       children = parentData.get('childrenIds')
       if children is None:
         parentData['childrenIds'] = []
-      parentData['childrenIds'].append(childData['id'])
+      parentData['childrenIds'].append(newNodeData['id'])
     else:
-      childData["depth"] = 1
+      newNodeData["depth"] = 1
     
-    return self.nodeDataList
+    return newNodeData
   
   def deleteNodeData(self, nodeDataToDelete):
     if nodeDataToDelete["id"] == 1:
@@ -123,11 +123,23 @@ class NodeManager():
         childData = self.nodeDataList[childId]
         self.deleteNodeAndChildren(childData)
         
+        
+        
+  
     
   def tmpClearNodes(self):
     for key in self.nodeDrawings:
       self.nodeDrawings[key].dispose()
     self.nodeDrawings = {}
+    
+    
+  #Utils
+  def getNodeDrawing(self, nodeData):
+    return nodeManager.nodeDrawings[nodeData["id"]]
+  
+  def getNodeDrawingPos(self, nodeData):
+    nodeDrawing = self.getNodeDrawing(nodeData)
+    return nodeDrawing.mainNode.getPos()
     
     
         
