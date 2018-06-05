@@ -18,8 +18,7 @@ class TextInput():
   def addText(self):
     self.entry = DirectEntry(text = "", scale=.05, command = self.setText,
                       initialText="Type Something", numLines = 2, 
-                      focus=1, focusInCommand = self.clearText,
-                      )
+                      focus=1, focusInCommand = self.clearText)
     entry = self.entry
     entry.setColor(1, 1, 1, 0.5)
     print("bounds " + str(entry.getHeight()))
@@ -33,6 +32,7 @@ class TextInput():
        
   def clearText(self):
     self.entry.enterText('')
+    
 
      
     

@@ -23,6 +23,8 @@ class Utils():
   VERTICAL_DEPTH = False
   
   CURRENT_NODE_DATA_LIST = None
+  
+  TEXT_INPUT = None
 
   def __init__(self):
     print("Init Utils")
@@ -156,7 +158,13 @@ class Utils():
   
   @staticmethod
   def createTextInput(onEnterTextCb):
-    TextInput(onEnterTextCb)
+    Utils.TEXT_INPUT = TextInput(onEnterTextCb)
+    
+  @staticmethod
+  def closeTextInput():
+    if Utils.TEXT_INPUT is not None:
+      Utils.TEXT_INPUT.entry.destroy()
+      Utils.TEXT_INPUT = None
     
   
   @staticmethod

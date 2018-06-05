@@ -45,8 +45,9 @@ class Map():
     
   def createNodeData(self, parentId, name, recheckLastId = False):
     nodeManager = self.nodeManager
-    nodeManager.createNodeData(parentId, name, recheckLastId)
+    newNodeData = nodeManager.createNodeData(parentId, name, recheckLastId)
     self.loadNodeDataList(nodeManager.nodeDataList)
+    return newNodeData
     
   def editNodeData(self, nodeDataToEdit, newText):
     nodeManager = self.nodeManager
@@ -87,6 +88,18 @@ class Map():
     if clickedNodePath is not None:
       return self.nodeManager.getNodeData(clickedNodePath)
     return None
+  
+  
+  # Utils
+  def clickedOutsideTextInput(self):
+    camManager = self.cameraManager
+    return (camManager.getMouseCollisionToPlane(camManager.plane) is None or
+      camManager.getClickedNodePath() is None)
+    
+    
+    
+    
+    
     
 
   
