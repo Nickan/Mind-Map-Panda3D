@@ -135,7 +135,7 @@ class NodeManager():
     
   #Utils
   def getNodeDrawing(self, nodeData):
-    return nodeManager.nodeDrawings[nodeData["id"]]
+    return self.nodeDrawings[nodeData["id"]]
   
   def getNodeDrawingPos(self, nodeData):
     nodeDrawing = self.getNodeDrawing(nodeData)

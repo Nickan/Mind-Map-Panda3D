@@ -16,7 +16,7 @@ class CreateNodeState(State):
     nodeManager.selectedNodeData = selectedNodeData
     
     
-#     self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
+    self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
     Utils.createTextInput(self.onEnterText)
     
   def setupControls(self):
@@ -31,9 +31,7 @@ class CreateNodeState(State):
   """ enter() Helpers """
   def onEnterText(self, text):
     if text is not None:
-      nodeManager = self.map.nodeManager
-      id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
-      self.map.createNodeData(id, text)
+      self.map.editNodeData(self.tmpNewNodeData, text)
       
     StateManager.switchToStaticMapState(self)
     
@@ -44,15 +42,16 @@ class CreateNodeState(State):
   def onClickedOutsideTextInput(self):
     Utils.closeTextInput()
     StateManager.switchToStaticMapState(self)
+    self.map.deleteNodeData(self.tmpNewNodeData)
+    self.tmpNewNodeData = None
     
     
-#   def tmpCreatePotentialNewNode(self, nodeManager, selectedNodeData):
-#     id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
-#     tmpNewNodeData = self.map.createNodeData(id, "")
-#     pos = nodeManager.getNodeDrawingPos(tmpNewNodeData)
-        # Need way how to pass the position to convert to screen coords
-#     pos = nodeManager.getNodeDrawingPos()
-#     print("Node pos " + str(pos))
+  def tmpCreatePotentialNewNode(self, nodeManager, selectedNodeData):
+    id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
+    self.tmpNewNodeData = self.map.createNodeData(id, "")
+    pos = nodeManager.getNodeDrawingPos(self.tmpNewNodeData)
+#         Need way how to pass the position to convert to screen coords
+    print("Node pos " + str(pos))
 
 
 
