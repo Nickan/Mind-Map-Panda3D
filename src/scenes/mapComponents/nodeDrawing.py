@@ -68,10 +68,6 @@ class NodeDrawing():
   
   def dispose(self):
     self.mainNode.removeNode()
-#     self.mainNode.dispose()
-#     self.model.dispose()
-#     self.textNode.dispose()
-#     self.text3d.dispose()
     
     
     

@@ -25,9 +25,6 @@ class Utils():
   CURRENT_NODE_DATA_LIST = None
   
   TEXT_INPUT = None
-
-  def __init__(self):
-    print("Init Utils")
   
   @staticmethod
   def convertToNodes(jsonData): # Needed to be able to assign parentId(Proof?)
@@ -157,8 +154,8 @@ class Utils():
   
   
   @staticmethod
-  def createTextInput(onEnterTextCb):
-    Utils.TEXT_INPUT = TextInput(onEnterTextCb)
+  def createTextInput(pos, onEnterTextCb):
+    Utils.TEXT_INPUT = TextInput(pos, onEnterTextCb)
     
   @staticmethod
   def closeTextInput():

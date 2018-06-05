@@ -6,21 +6,22 @@ from panda3d.core import TextNode
 
 class TextInput():
   
-  def __init__(self, onEnterTextFn):
+  def __init__(self, pos, onEnterTextFn):
     self.onEnterTextFn = onEnterTextFn
     self.bk_text = "This is my Demo"
 #     self.textObject = OnscreenText(text = self.bk_text, pos = (0.95,-0.95), 
 #                                    scale = 0.07, fg = (1,0.5,0.5,1), 
 #                                    align = TextNode.ACenter,mayChange=1)
     
-    self.addText()
+    self.addText(pos)
    
-  def addText(self):
+  def addText(self, pos):
     self.entry = DirectEntry(text = "", scale=.05, command = self.setText,
                       initialText="Type Something", numLines = 2, 
                       focus=1, focusInCommand = self.clearText)
     entry = self.entry
-    entry.setColor(1, 1, 1, 0.5)
+#     entry.setColor(1, 1, 1, 0.5)
+    entry.setPos(pos.x, 0, pos.y)
     print("bounds " + str(entry.getHeight()))
 #     entry.
     

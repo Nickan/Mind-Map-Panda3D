@@ -2,6 +2,9 @@ from state import State
 from stateManager import StateManager
 
 from utils.utils import Utils
+from utils.coordManager import CoordManager
+
+from panda3d.core import ModifierButtons
 
 
 class CreateNodeState(State):
@@ -16,15 +19,42 @@ class CreateNodeState(State):
     nodeManager.selectedNodeData = selectedNodeData
     
     
-    self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
-    Utils.createTextInput(self.onEnterText)
+    self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
+    self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
+    
+    self.setupRealTimeTypingOnNodeDrawing()
+
+  def setupRealTimeTypingOnNodeDrawing(self):
+    showBase = self.map.showBase
+    showBase.buttonThrowers[0].node().setButtonDownEvent('buttonDown')
+    showBase.accept('buttonDown', self.onButtonDown)
+    
+    
+    
+  def onButtonDown(self, keyname):
+    text = self.tmpNodeDrawing.textNode.getText()
+    if keyname == "backspace":
+      text = text[:-1]
+    else:
+      if len(keyname) == 1:
+        text += keyname
+       
+      if keyname == "space":
+        text += " "
+        
+      if keyname == "enter":
+        self.map.editNodeData(self.tmpNewNodeData, text)
+        StateManager.switchToStaticMapState(self)
+        
+    self.tmpNodeDrawing.textNode.setText(text)
+    
+
     
   def setupControls(self):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
     
   def exit(self):
-    print("exit CreateNodeState")
     self.map.showBase.ignoreAll()
     
     
@@ -39,6 +69,7 @@ class CreateNodeState(State):
     if self.map.clickedOutsideTextInput():
       self.onClickedOutsideTextInput()
     
+    
   def onClickedOutsideTextInput(self):
     Utils.closeTextInput()
     StateManager.switchToStaticMapState(self)
@@ -49,9 +80,7 @@ class CreateNodeState(State):
   def tmpCreatePotentialNewNode(self, nodeManager, selectedNodeData):
     id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
     self.tmpNewNodeData = self.map.createNodeData(id, "")
-    pos = nodeManager.getNodeDrawingPos(self.tmpNewNodeData)
-#         Need way how to pass the position to convert to screen coords
-    print("Node pos " + str(pos))
+    return self.tmpNewNodeData
 
 
 
