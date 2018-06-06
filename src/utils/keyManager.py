@@ -26,6 +26,15 @@ class KeyManager():
     
   @staticmethod
   def onKeyDown(keyname):
-    if keyname.isalnum():
+    print(keyname)
+    if KeyManager.is_ascii(keyname) and keyname != '\b':
       KeyManager.ON_KEY_DOWN_FN(keyname)
+  
+  @staticmethod  
+  def is_ascii(text):
+    try:
+      text = text.encode('ascii')
+    except UnicodeEncodeError:
+      return False
+    return True
   
