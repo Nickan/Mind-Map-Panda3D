@@ -16,6 +16,8 @@ class SaveManager():
     Tk().withdraw()
     filename = asksaveasfilename()
     
+    if len(filename) < 1:
+      return
     with open(filename, 'w') as fp:
       json.dump(nodeDataList, fp)
       
@@ -25,6 +27,8 @@ class SaveManager():
     filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
     print(filename)
     
+    if len(filename) < 1:
+      return
     nodeDataList = json.load(open(filename))
   
     nodeDataList = SaveManager.setKeyAsInt(nodeDataList)
