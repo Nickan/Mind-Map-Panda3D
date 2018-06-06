@@ -19,25 +19,19 @@ class CreateNodeState(State):
     self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
     self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
     
-    KeyManager.setupKeyListener(self.map.showBase, self.onButtonDown)
+    KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     
-  def onButtonDown(self, keyname):
+  def onKeyDown(self, keyname):
     text = self.tmpNodeDrawing.textNode.getText()
-    
-    if keyname == "\b":
-      text = text[:-1]
-    else:
-        
-      if keyname == "\r":
-        self.map.editNodeData(self.tmpNewNodeData, text)
-        StateManager.switchToStaticMapState(self)
-        
-      if keyname != "\t":
-        text += keyname
+    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, self.onEnterDown)
         
     textNode = self.tmpNodeDrawing.textNode
     textNode.setText(text)
     self.tmpNodeDrawing.keepTextCenter()
+    
+  def onEnterDown(self, text):
+    self.map.editNodeData(self.tmpNewNodeData, text)
+    StateManager.switchToStaticMapState(self)
     
     
     

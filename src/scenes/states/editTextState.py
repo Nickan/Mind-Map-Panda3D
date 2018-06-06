@@ -17,28 +17,20 @@ class EditTextState(State):
     nodeManager.selectedNodeData = selectedNodeData
     
     self.nodeDrawingToEdit = nodeManager.getNodeDrawing(selectedNodeData)
-    KeyManager.setupKeyListener(self.map.showBase, self.onButtonDown)
+    KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     
-  def onButtonDown(self, keyname):
+  def onKeyDown(self, keyname):
     text = self.nodeDrawingToEdit.textNode.getText()
-    
-    if keyname == "backspace":
-      text = text[:-1]
-    else:
-      if keyname == "space":
-        text += " "
-        
-      if keyname == "enter":
-        nodeData = self.map.nodeManager.getNodeData(self.nodeDrawingToEdit.mainNode)
-        self.map.editNodeData(nodeData, text)
-        StateManager.switchToStaticMapState(self)
-        
-      if len(keyname) == 1:
-        text += keyname
+    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, self.onEnterDown)
         
     textNode = self.nodeDrawingToEdit.textNode
     textNode.setText(text)
     self.nodeDrawingToEdit.keepTextCenter()
+    
+  def onEnterDown(self, text):
+    nodeData = self.map.nodeManager.getNodeData(self.nodeDrawingToEdit.mainNode)
+    self.map.editNodeData(nodeData, text)
+    StateManager.switchToStaticMapState(self)
     
     
     
