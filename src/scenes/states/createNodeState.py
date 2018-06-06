@@ -24,17 +24,15 @@ class CreateNodeState(State):
   def onButtonDown(self, keyname):
     text = self.tmpNodeDrawing.textNode.getText()
     
-    if keyname == "backspace":
+    if keyname == "\b":
       text = text[:-1]
     else:
-      if keyname == "space":
-        text += " "
         
-      if keyname == "enter":
+      if keyname == "\r":
         self.map.editNodeData(self.tmpNewNodeData, text)
         StateManager.switchToStaticMapState(self)
         
-      if len(keyname) == 1:
+      if keyname != "\t":
         text += keyname
         
     textNode = self.tmpNodeDrawing.textNode
