@@ -14,7 +14,7 @@ class Utils():
   STARTJSON = None
   
   # Node
-  NODE_SCALE = LVecBase3f(6, 6, 1)
+  NODE_SCALE = LVecBase3f(7, 7, 1)
   
   VERT_DEPTH_DIST = 20
   VERT_BREADTH_DIST = 30

@@ -2,7 +2,7 @@ from state import State
 from stateManager import StateManager
 
 from utils.utils import Utils
-from utils.coordManager import CoordManager
+from utils.keyManager import KeyManager
 
 from panda3d.core import ModifierButtons
 
@@ -22,23 +22,14 @@ class CreateNodeState(State):
     self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
     self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
     
-    self.setupRealTimeTypingOnNodeDrawing()
-
-  def setupRealTimeTypingOnNodeDrawing(self):
-    showBase = self.map.showBase
-    showBase.buttonThrowers[0].node().setButtonDownEvent('buttonDown')
-    showBase.accept('buttonDown', self.onButtonDown)
-    
-    
+    KeyManager.setupKeyListener(self.map.showBase, self.onButtonDown)
     
   def onButtonDown(self, keyname):
     text = self.tmpNodeDrawing.textNode.getText()
+    
     if keyname == "backspace":
       text = text[:-1]
     else:
-      if len(keyname) == 1:
-        text += keyname
-       
       if keyname == "space":
         text += " "
         
@@ -46,7 +37,14 @@ class CreateNodeState(State):
         self.map.editNodeData(self.tmpNewNodeData, text)
         StateManager.switchToStaticMapState(self)
         
-    self.tmpNodeDrawing.textNode.setText(text)
+      if len(keyname) == 1:
+        text += keyname
+        
+    textNode = self.tmpNodeDrawing.textNode
+    textNode.setText(text)
+    self.tmpNodeDrawing.keepTextCenter()
+    
+    
     
 
     

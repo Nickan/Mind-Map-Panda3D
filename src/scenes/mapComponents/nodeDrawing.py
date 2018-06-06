@@ -6,15 +6,10 @@ from panda3d.core import TextNode
 from panda3d.core import BitMask32
 from panda3d.core import TextProperties
 
-
-
 from utils.utils import Utils
 
-
-
-
 class NodeDrawing():
-
+  
   def __init__(self, text, loader, parentNodePath):
     self.scale = Utils.NODE_SCALE
     
@@ -26,6 +21,7 @@ class NodeDrawing():
     
     self.mainNode.setTag("Node", self.textNode.getText())
     self.mainNode.setCollideMask(BitMask32.bit(1))
+    self.keepTextCenter()
     
     
   def addModel(self, loader, nodePath):
@@ -48,7 +44,7 @@ class NodeDrawing():
     
     self.textNode.setText(text)
     self.textNode.setTextColor(0, 0, 1, 1)
-    self.textNode.setAlign(TextNode.A_center)
+#     self.textNode.setAlign(TextNode.A_center)
     
     
     self.text3d = NodePath(self.textNode)
@@ -58,6 +54,7 @@ class NodeDrawing():
     self.text3d.setTwoSided(True)
 
     self.text3d.setScale(2, 2, 2)
+#     self.text3d.setScale(1, 1, 1)
     self.text3d.setAntialias(AntialiasAttrib.MAuto)
     
   
@@ -68,6 +65,50 @@ class NodeDrawing():
   
   def dispose(self):
     self.mainNode.removeNode()
+    
+  
+  def keepTextCenter(self):
+    textHeight = self.getTextHeight()
+    
+    if textHeight == 0:
+      return
+    
+    
+    lineRows = self.textNode.getNumRows()
+    oneLineHeight = textHeight / lineRows
+    
+    heightAdj = 0
+    if lineRows == 1:
+      heightAdj = (textHeight / 2)
+    else:
+      heightAdj = (oneLineHeight / 1) - (textHeight / 1.5)
+    self.text3d.setPos(0, heightAdj, -2)
+    
+  def getTextHeight(self):
+    text = self.textNode.getText()
+    if len(text) < 1:
+      return 0
+    
+    pt1, pt2 = self.text3d.getTightBounds()
+    width = pt2.getX()  - pt1.getX()
+    height = pt2.getY() - pt1.getY()
+    return height
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

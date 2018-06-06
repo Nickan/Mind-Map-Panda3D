@@ -1,5 +1,6 @@
 from state import State
 from stateManager import StateManager
+from utils.utils import Utils
 
 class CleanState(State):
   
@@ -9,7 +10,8 @@ class CleanState(State):
     
   def enter(self):
     map = self.map 
-    map.createNodeData(None, "Main")
+    nodeData = map.createNodeData(None, "Main")
+    self.setHighestOneLineHeightText(nodeData)
     self.initEvents()
     
     
@@ -31,15 +33,17 @@ class CleanState(State):
       self.switchToScrollingState()
     else:
       self.switchToNodeClickedState(selectedNodeData)
-      
-      
+        
   def mouse3Down(self):
     selectedNodeData = self.map.getSelectedNodeData()
     if selectedNodeData is None:
       print("None selected")
     else:
       StateManager.switchToEditTextState(self, selectedNodeData)
-      
+  
+  def setHighestOneLineHeightText(self, nodeData):
+    nodeDrawing = self.map.nodeManager.getNodeDrawing(nodeData)
+    nodeDrawing.keepTextCenter()
       
   """ mouse3Down Helper """
   
