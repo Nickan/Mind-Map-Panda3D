@@ -4,8 +4,6 @@ from stateManager import StateManager
 from utils.utils import Utils
 from utils.keyManager import KeyManager
 
-from panda3d.core import ModifierButtons
-
 
 class CreateNodeState(State):
   
@@ -17,7 +15,6 @@ class CreateNodeState(State):
     self.setupControls()
     nodeManager = self.map.nodeManager
     nodeManager.selectedNodeData = selectedNodeData
-    
     
     self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
     self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
@@ -46,8 +43,6 @@ class CreateNodeState(State):
     
     
     
-
-    
   def setupControls(self):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
@@ -64,12 +59,11 @@ class CreateNodeState(State):
     StateManager.switchToStaticMapState(self)
     
   def mouse1Down(self):
-    if self.map.clickedOutsideTextInput():
+    if self.map.clickedOnMapBg():
       self.onClickedOutsideTextInput()
     
     
   def onClickedOutsideTextInput(self):
-    Utils.closeTextInput()
     StateManager.switchToStaticMapState(self)
     self.map.deleteNodeData(self.tmpNewNodeData)
     self.tmpNewNodeData = None

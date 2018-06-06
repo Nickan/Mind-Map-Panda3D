@@ -91,7 +91,7 @@ class Map():
   
   
   # Utils
-  def clickedOutsideTextInput(self):
+  def clickedOnMapBg(self):
     camManager = self.cameraManager
     return (camManager.getMouseCollisionToPlane(camManager.plane) is None or
       camManager.getClickedNodePath() is None)
