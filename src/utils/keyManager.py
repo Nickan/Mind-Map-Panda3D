@@ -26,8 +26,9 @@ class KeyManager():
     
   @staticmethod
   def onKeyDown(keyname):
-    print(keyname)
-    if KeyManager.is_ascii(keyname) and keyname != '\b':
+    test = str(keyname)
+    print(len(test))
+    if KeyManager.is_ascii(keyname) and keyname != '\b' and keyname != '\t':
       KeyManager.ON_KEY_DOWN_FN(keyname)
   
   @staticmethod  

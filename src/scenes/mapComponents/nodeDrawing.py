@@ -89,6 +89,10 @@ class NodeDrawing():
     if len(text) < 1:
       return 0
     
+    if self.text3d.getTightBounds() is None:
+      return 0
+    
+    
     pt1, pt2 = self.text3d.getTightBounds()
     width = pt2.getX()  - pt1.getX()
     height = pt2.getY() - pt1.getY()
