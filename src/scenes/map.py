@@ -76,7 +76,7 @@ class Map():
       breadth = nodeData.get("x")
       depth = nodeData.get("depth")
       
-      nodePos = Utils.getPosition(depth, breadth)
+      nodePos = Utils.getNodePosition(depth, breadth)
       
       nodeManager.renderNodeData(loader, mapNode, nodeData, nodePos)
       self.lineDrawings.drawLine(nodeData, nodeDataList)
