@@ -172,12 +172,12 @@ class Utils():
     else:
       y = breadth * Utils.HORT_BREADTH_DIST
       x = float(depth) * Utils.HORT_DEPTH_DIST
-    z = -3 # Should be addressed later on
+    z = 0 # Should be addressed later on
     
     return LVecBase3f(x, y, z)
   
   @staticmethod
-  def getNodeDataPoint(nodeData):
+  def getNodeDataPointt(nodeData):
     depth = nodeData.get("depth")
     breadth = nodeData.get("x")
     return Utils.getNodePosition(depth, breadth)

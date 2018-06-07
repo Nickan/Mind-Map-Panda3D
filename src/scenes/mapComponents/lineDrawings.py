@@ -12,6 +12,7 @@ class LineDrawings():
     self.mainNodePath.reparentTo(parentNodePath)
     
     self.lineSegs = LineSegs()
+    self.lineSegs.setThickness(0.01)
     self.lineNodePaths = []
     self.points = []
 
@@ -23,13 +24,14 @@ class LineDrawings():
       self.setChildrenPoints(nodeData, childrenIds, nodeDataList)
       
   def setParentPoint(self, nodeData):
-    parentPos = Utils.getNodeDataPoint(nodeData)
+    parentPos = Utils.getNodeDataPointt(nodeData)
     self.startingPoint(parentPos)
         
   def setChildrenPoints(self, parentNode, childrenIds, nodeDataList):
     for childId in childrenIds:
       childNode = nodeDataList[childId]
-      childPos = Utils.getNodeDataPoint(childNode)
+      childPos = Utils.getNodeDataPointt(childNode)
+      childPos.z += 1
       self.endingPoint(childPos)
       self.setParentPoint(parentNode)
       
