@@ -14,9 +14,8 @@ class Map():
   
   FONT_UBUNTU = None
 
-  def __init__(self, showBase, jsonData):
+  def __init__(self, showBase):
     self.showBase = showBase
-    self.jsonData = jsonData
     
     self.initCamera()
     self.initMapNode(self.showBase)
@@ -37,7 +36,6 @@ class Map():
 
   def initNodeManager(self):
     self.nodeManager = NodeManager()
-#     self.nodeManager.loadJson(self.showBase.loader, self.mapNode, jsonData)
   
   def initLineDrawings(self):
     self.lineDrawings = LineDrawings(self.mapNode)
@@ -57,7 +55,7 @@ class Map():
   def deleteNodeData(self, nodeDataToDelete):
     nodeManager = self.nodeManager
     nodeManager.deleteNodeData(nodeDataToDelete)
-    SaveManager.clearNodeDataList(nodeManager.nodeDataList)
+#     SaveManager.clearNodeDataList(nodeManager.nodeDataList)
     
     self.loadNodeDataList(nodeManager.nodeDataList)
       

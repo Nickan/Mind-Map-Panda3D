@@ -101,7 +101,6 @@ class NodeManager():
   def removeFromParentChildrenIdList(self, nodeDataToDelete):
     parentId = nodeDataToDelete["parentId"]
     parentNodeData = self.nodeDataList[parentId]
-    parentNodeData["childrenIds"]
     
     childrenIds = parentNodeData.get('childrenIds')
     if childrenIds is not None:

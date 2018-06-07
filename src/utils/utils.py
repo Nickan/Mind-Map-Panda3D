@@ -136,9 +136,13 @@ class Utils():
   
   
   @staticmethod
-  def getJson(name):
+  def getJson(name):  # Deprecated
     jsonPath = path.abspath(path.join(__file__ , "../../../assets/" + name))
     return json.load(open(jsonPath))
+  
+  @staticmethod
+  def getAssetPath(fileName):
+    return path.abspath(path.join(__file__ , "../../../assets/" + fileName))
   
   
   @staticmethod

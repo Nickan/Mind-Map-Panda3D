@@ -16,7 +16,7 @@ class Epiphany(ShowBase):
     ShowBase.__init__(self)
     self.map = None
     self.loadTtf()
-    self.loadJson(self.initMap)
+    self.initMap()
     
   def loadTtf(self):
     file = "../../assets/fonts/ubuntu.regular.ttf"
@@ -28,18 +28,8 @@ class Epiphany(ShowBase):
     Map.FONT_UBUNTU.setNativeAntialias(0)
     self.setScreenSize()
 
-  def loadJson(self, onLoadJsonFn):
-    file = "../../assets/setRelativeXToParent.json"
-#     file = "../../assets/map.json"
-    jsonPath =  path.abspath(path.join(__file__ ,file))
-    jsonData = json.load(open(jsonPath))
-
-    # Utils.init(jsonData.get("lastIdAssigned"))
-    onLoadJsonFn(jsonData)
-
-
-  def initMap(self, jsonData):
-    self.map = Map(self, jsonData)
+  def initMap(self):
+    self.map = Map(self)
     
     
   def setScreenSize(self):

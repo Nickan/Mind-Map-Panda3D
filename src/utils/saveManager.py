@@ -24,15 +24,17 @@ class SaveManager():
   @staticmethod
   def loadNodeDataList(onLoadFilePathCb):
     Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-    print(filename)
+    fileName = askopenfilename() # show an "Open" dialog box and return the path to the selected file
     
-    if len(filename) < 1:
+    if len(fileName) < 1:
       return
-    nodeDataList = json.load(open(filename))
-  
-    nodeDataList = SaveManager.setKeyAsInt(nodeDataList)
+    nodeDataList = SaveManager.loadNodeDataListKeyConvertedToInt(fileName)
     onLoadFilePathCb(nodeDataList)
+    
+  @staticmethod
+  def loadNodeDataListKeyConvertedToInt(fileName):
+    nodeDataList = json.load(open(fileName))
+    return SaveManager.setKeyAsInt(nodeDataList)
     
   @staticmethod
   def setKeyAsInt(nodeDataList):

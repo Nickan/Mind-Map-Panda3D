@@ -56,9 +56,10 @@ class CreateNodeState(State):
     
     
   def onClickedOutsideTextInput(self):
-    StateManager.switchToStaticMapState(self)
+    
     self.map.deleteNodeData(self.tmpNewNodeData)
     self.tmpNewNodeData = None
+    StateManager.switchToStaticMapState(self)
     
     
   def tmpCreatePotentialNewNode(self, nodeManager, selectedNodeData):
