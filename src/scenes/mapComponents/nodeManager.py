@@ -105,6 +105,9 @@ class NodeManager():
     childrenIds = parentNodeData.get('childrenIds')
     if childrenIds is not None:
       childrenIds.remove(nodeDataToDelete["id"])
+      # Temp
+      if len(childrenIds) == 0:
+        parentNodeData.pop('childrenIds')
     
   def deleteNodeAndChildren(self, nodeData):
     self.nodeDataList.pop(nodeData["id"])
