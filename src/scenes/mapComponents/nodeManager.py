@@ -140,7 +140,17 @@ class NodeManager():
   def getNodeDrawingPos(self, nodeData):
     nodeDrawing = self.getNodeDrawing(nodeData)
     return nodeDrawing.mainNode.getPos()
+  
+  
+  def setNodeSelected(self, nodeData):
+    self.setAllAsUnselected()
+    selectedNodeDrawing = self.getNodeDrawing(nodeData)
+    selectedNodeDrawing.setSelected(True)
     
+  def setAllAsUnselected(self):
+    for key in self.nodeDrawings:
+      nodeDrawing = self.nodeDrawings[key]
+      nodeDrawing.setSelected(False)
     
         
         

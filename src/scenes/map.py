@@ -84,6 +84,7 @@ class Map():
     
 
   def getSelectedNodeData(self):
+    # Requires interaction between camera and nodemanager, so it is put in map class
     clickedNodePath = self.cameraManager.getClickedNodePath()
     if clickedNodePath is not None:
       return self.nodeManager.getNodeData(clickedNodePath)

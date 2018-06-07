@@ -13,6 +13,8 @@ class NodeClickedState(State):
   def enter(self, selectedNodeData):
     nodeManager = self.map.nodeManager
     nodeManager.selectedNodeData = selectedNodeData
+    nodeManager.setNodeSelected(selectedNodeData)
+    selectedNodeData["selected"] = True
     self.setupControls()
   
   def exit(self):
@@ -42,6 +44,9 @@ class NodeClickedState(State):
       self.map.state.mouse1Down()
     else:
       nodeManager.selectedNodeData = selectedNodeData
+      selectedNodeData["selected"] = True
+      nodeManager.setNodeSelected(selectedNodeData)
+      
     
   def mouse1Up(self):
     print("NodeClickedState mouse1Up")
@@ -56,14 +61,12 @@ class NodeClickedState(State):
     StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
     
     
-    
   """ mouse1Down Helper """
   def goToScrollingState(self):
     from scenes.states.scrollingMapState import ScrollingMapState
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
-    
   
     
     

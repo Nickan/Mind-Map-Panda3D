@@ -43,7 +43,7 @@ class NodeDrawing():
     textNode.setWordwrap(Utils.NODE_SCALE.x * 1.4)
     
     self.textNode.setText(text)
-    self.textNode.setTextColor(0, 0, 1, 1)
+    self.textNode.setTextColor(0, 0, 0, 1)
 #     self.textNode.setAlign(TextNode.A_center)
     
     
@@ -57,11 +57,6 @@ class NodeDrawing():
 #     self.text3d.setScale(1, 1, 1)
     self.text3d.setAntialias(AntialiasAttrib.MAuto)
     
-  
-  def setClicked(self, isClicked = True):
-    if isClicked:
-      self.model.setColor(0.9, 0.9, 0.9, 1)
-      
   
   def dispose(self):
     self.mainNode.removeNode()
@@ -97,6 +92,13 @@ class NodeDrawing():
     width = pt2.getX()  - pt1.getX()
     height = pt2.getY() - pt1.getY()
     return height
+  
+  
+  def setSelected(self, isSelected = False):
+    if isSelected:
+      self.model.setColor(0, 0, 1, 1)
+    else:
+      self.model.setColor(1, 1, 1, 1)
     
     
     

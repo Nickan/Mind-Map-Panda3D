@@ -26,7 +26,7 @@ class Epiphany(ShowBase):
     Map.FONT_UBUNTU.setPixelsPerUnit(120)
     Map.FONT_UBUNTU.setScaleFactor(3)
     Map.FONT_UBUNTU.setNativeAntialias(0)
-#     self.setScreenSize()
+    self.setScreenSize()
 
   def loadJson(self, onLoadJsonFn):
     file = "../../assets/setRelativeXToParent.json"
@@ -43,7 +43,7 @@ class Epiphany(ShowBase):
     
     
   def setScreenSize(self):
-    w, h = 1024, 768 
+    w, h = 1366, 640 
     props = WindowProperties() 
     props.setSize(w, h) 
     
