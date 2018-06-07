@@ -23,26 +23,20 @@ class NodeManager():
 
 
   def renderNodeData(self, loader, mapNode, nodeData, pos):
-    self.addNodeDrawing(nodeData.get('id'), nodeData.get('name'), loader, mapNode, pos)
-
-  def render(self, loader, mapNode, nodeDataList):
-    for key in nodeDataList:
-      tmpNodeData = nodeDataList[key]
-      if Utils.VERTICAL_DEPTH:
-        x = tmpNodeData.get("x") * Utils.VERT_BREADTH_DIST
-        y = int(tmpNodeData.get("depth")) * Utils.VERT_DEPTH_DIST
-      else:
-        y = tmpNodeData.get("x") * Utils.HORT_BREADTH_DIST
-        x = int(tmpNodeData.get("depth")) * Utils.HORT_DEPTH_DIST
-      z = 1
-
-      pos = Vec3(x, y, z)
-      self.addNodeDrawing(key, tmpNodeData.get('name'), loader, mapNode, pos)
+    self.addNodeDrawing(nodeData, loader, mapNode, pos)
 
 
-  def addNodeDrawing(self, id, text, loader, mapNode, pos = Vec3()):
+  def addNodeDrawing(self, nodeData, loader, mapNode, pos = Vec3()):
+    id = nodeData.get('id')
+    text = nodeData.get('name')
+    selected = nodeData.get('selected')
+    
+    
     nodeDrawing = NodeDrawing(text, loader, mapNode)
     nodeDrawing.mainNode.setPos(pos)
+    
+    if selected is not None:
+      nodeDrawing.setSelected(selected)
 
     self.nodeDrawings[id] = nodeDrawing
     
@@ -112,7 +106,6 @@ class NodeManager():
     childrenIds = parentNodeData.get('childrenIds')
     if childrenIds is not None:
       childrenIds.remove(nodeDataToDelete["id"])
-    print("test")
     
   def deleteNodeAndChildren(self, nodeData):
     self.nodeDataList.pop(nodeData["id"])
@@ -126,14 +119,14 @@ class NodeManager():
         
         
   
-    
+  ##################### Utils  
   def tmpClearNodes(self):
     for key in self.nodeDrawings:
       self.nodeDrawings[key].dispose()
     self.nodeDrawings = {}
     
     
-  #Utils
+  
   def getNodeDrawing(self, nodeData):
     return self.nodeDrawings[nodeData["id"]]
   
@@ -151,6 +144,8 @@ class NodeManager():
     for key in self.nodeDrawings:
       nodeDrawing = self.nodeDrawings[key]
       nodeDrawing.setSelected(False)
+      nodeData = self.nodeDataList[key]
+      nodeData['selected'] = False
     
         
         
