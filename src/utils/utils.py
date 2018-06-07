@@ -172,7 +172,7 @@ class Utils():
     else:
       y = breadth * Utils.HORT_BREADTH_DIST
       x = float(depth) * Utils.HORT_DEPTH_DIST
-    z = 0 # Should be addressed later on
+    z = -3 # Should be addressed later on
     
     return LVecBase3f(x, y, z)
   
