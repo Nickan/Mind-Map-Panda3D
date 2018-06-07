@@ -1,0 +1,135 @@
+{
+	"name": "Start",
+	"lastSetUniqueId": 24,
+	"id": 1,
+	"selected": false,
+	"transform": {
+		"k": 0.5743491774985183,
+		"x": 187.358570555705,
+		"y": 8.575916696287834
+	},
+	"children": [
+		{
+			"name": "test 4",
+			"id": 5,
+			"parentId": 1,
+			"selected": false,
+			"children": [
+				{
+					"name": "test 6",
+					"id": 7,
+					"parentId": 5,
+					"selected": false,
+					"children": [
+						{
+							"name": "1",
+							"id": 23,
+							"parentId": 7,
+							"selected": false
+						},
+						{
+							"name": "2",
+							"id": 24,
+							"parentId": 7,
+							"selected": false
+						}
+					]
+				},
+				{
+					"name": "1",
+					"id": 10,
+					"parentId": 5,
+					"selected": false
+				},
+				{
+					"name": "2",
+					"id": 11,
+					"parentId": 5,
+					"selected": false,
+					"children": [
+						{
+							"name": "1",
+							"id": 21,
+							"parentId": 11,
+							"selected": true
+						},
+						{
+							"name": "1",
+							"id": 22,
+							"parentId": 11,
+							"selected": false
+						}
+					]
+				},
+				{
+					"name": "3",
+					"id": 12,
+					"parentId": 5,
+					"selected": false
+				}
+			]
+		},
+		{
+			"name": "test 5",
+			"id": 6,
+			"parentId": 1,
+			"selected": false,
+			"children": [
+				{
+					"name": "1",
+					"id": 13,
+					"parentId": 6,
+					"selected": false
+				},
+				{
+					"name": "1",
+					"id": 15,
+					"parentId": 6,
+					"selected": false,
+					"children": [
+						{
+							"name": "1",
+							"id": 16,
+							"parentId": 15,
+							"selected": false,
+							"children": [
+								{
+									"name": "1",
+									"id": 17,
+									"parentId": 16,
+									"selected": false,
+									"children": [
+										{
+											"name": "1",
+											"id": 18,
+											"parentId": 17,
+											"selected": false
+										},
+										{
+											"name": "2",
+											"id": 19,
+											"parentId": 17,
+											"selected": false
+										},
+										{
+											"name": "3",
+											"id": 20,
+											"parentId": 17,
+											"selected": false
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "1",
+			"id": 14,
+			"parentId": 1,
+			"selected": false
+		}
+	]
+}
