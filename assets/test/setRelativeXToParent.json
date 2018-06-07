@@ -1,7 +1,7 @@
 {
   "1": {
   	"name": "1",
-  	"id": "1",
+  	"id": 1,
   	"depth": 1,
   	"childrenIds": [
   	  2, 3, 4
@@ -9,7 +9,7 @@
   },
   "2": {
   	"name": "2",
-  	"id": "2",
+  	"id": 2,
   	"parentId": 1,
   	"depth": 2,
   	"childrenIds": [
@@ -18,7 +18,7 @@
   },
   "3": {
   	"name": "3",
-  	"id": "3",
+  	"id": 3,
   	"parentId": 1,
   	"depth": 2,
   	"childrenIds": [
@@ -27,7 +27,7 @@
   },
   "4": {
   	"name": "4",
-  	"id": "4",
+  	"id": 4,
   	"parentId": 1,
   	"depth": 2,
   	"childrenIds": [
@@ -36,37 +36,37 @@
   },
   "5": {
   	"name": "5",
-  	"id": "5",
+  	"id": 5,
   	"parentId": 2,
   	"depth": 3
   },
   "6": {
   	"name": "6",
-  	"id": "6",
+  	"id": 6,
   	"parentId": 2,
   	"depth": 3
   },
   "7": {
   	"name": "7",
-  	"id": "7",
+  	"id": 7,
   	"parentId": 2,
   	"depth": 3
   },
   "8": {
   	"name": "8",
-  	"id": "8",
+  	"id": 8,
   	"parentId": 3,
   	"depth": 3
   },
   "9": {
   	"name": "9",
-  	"id": "9",
+  	"id": 9,
   	"parentId": 4,
   	"depth": 3
   },
   "10": {
   	"name": "10",
-  	"id": "10",
+  	"id": 10,
   	"parentId": 4,
   	"depth": 3
   }
