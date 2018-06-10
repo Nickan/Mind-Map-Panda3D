@@ -1,8 +1,10 @@
 from state import State
 from stateManager import StateManager
 
-from utils.utils import Utils
 from utils.keyManager import KeyManager
+from utils.saveManager import SaveManager
+from utils.utils import Utils
+
 
 
 class CreateNodeState(State):
@@ -17,11 +19,14 @@ class CreateNodeState(State):
     nodeManager.selectedNodeData = selectedNodeData
     
     self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
-    self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
+    SaveManager.clearNodeDataList(nodeManager.nodeDataList)
     
+    self.map.drawNodeDataList(nodeManager.nodeDataList)
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     
   def onKeyDown(self, keyname):
+    nodeManager = self.map.nodeManager
+    self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
     text = self.tmpNodeDrawing.textNode.getText()
     text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, self.onEnterDown)
         
@@ -40,6 +45,7 @@ class CreateNodeState(State):
     map.showBase.accept("mouse1", self.mouse1Down)
     
   def exit(self):
+    KeyManager.clear()
     self.map.showBase.ignoreAll()
     
     
@@ -64,7 +70,7 @@ class CreateNodeState(State):
     
   def tmpCreatePotentialNewNode(self, nodeManager, selectedNodeData):
     id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
-    self.tmpNewNodeData = self.map.createNodeData(id, "")
+    self.tmpNewNodeData = nodeManager.createNodeData(id, "", False)
     return self.tmpNewNodeData
 
 

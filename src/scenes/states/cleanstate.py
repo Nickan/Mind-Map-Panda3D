@@ -9,9 +9,15 @@ class CleanState(State):
     self.map = map
     
   def enter(self):
-    map = self.map 
+    map = self.map
+    nodeManager = map.nodeManager
     nodeData = map.createNodeData(None, "Main")
-    self.setHighestOneLineHeightText(nodeData)
+    
+    
+    nodeDataList = nodeManager.nodeDataList
+    nodeManager.tree.getCoordinates(nodeDataList)
+    
+    map.drawNodeDataList()
     self.initEvents()
     
     
@@ -41,10 +47,6 @@ class CleanState(State):
     else:
       StateManager.switchToEditTextState(self, selectedNodeData)
   
-  def setHighestOneLineHeightText(self, nodeData):
-    nodeDrawing = self.map.nodeManager.getNodeDrawing(nodeData)
-    nodeDrawing.keepTextCenter()
-      
   """ mouse3Down Helper """
   
       

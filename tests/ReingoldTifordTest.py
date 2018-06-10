@@ -8,6 +8,7 @@ from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
 from utils.saveManager import SaveManager
 
+
 class ReingoldTilfordTest(unittest.TestCase):
   
   def __init__(self, methodName='runTest'):
@@ -95,7 +96,6 @@ class ReingoldTilfordTest(unittest.TestCase):
     self.assertTrue(reingold.checkForConflicts(node, nodeList, True), 
                     name + " is not being checked for conflict")
        
-    
   def testContourList(self):
     filePath = Utils.getAssetPath("test/setRelativeXToParent.json")
     nodeList = SaveManager.loadNodeDataListKeyConvertedToInt(filePath)
@@ -183,7 +183,6 @@ class ReingoldTilfordTest(unittest.TestCase):
     self.assertTrue(leftContour[depth] == 2.5, "node " + name + " " + 
                     str(depth) + " depth left contour is wrong ")
      
-   
   def testFixConflictingX(self):
     filePath = Utils.getAssetPath("test/setRelativeXToParent.json")
     nodeList = SaveManager.loadNodeDataListKeyConvertedToInt(filePath)
@@ -206,8 +205,7 @@ class ReingoldTilfordTest(unittest.TestCase):
     self.assertTrue(self.verifyMod(node4, 4), "Error")
   
   
-  
-  ####################### Utils
+  """ Utils """
   def verifyNodeName(self, node, name):
     return node["name"] == name
   

@@ -29,6 +29,7 @@ class NodeManager():
   def addNodeDrawing(self, nodeData, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
+#     text = "id " + str(id) + " x " + str(nodeData['x']) + "y " + str(nodeData['depth']) # For debugging
     selected = nodeData.get('selected')
     
     
@@ -137,16 +138,20 @@ class NodeManager():
     return nodeDrawing.mainNode.getPos()
   
   
-  def setNodeSelected(self, nodeData):
-    self.setAllAsUnselected()
+  def setNodeSelected(self, nodeData, nodeDataList = None):
+    self.setAllAsUnselected(nodeDataList)
     selectedNodeDrawing = self.getNodeDrawing(nodeData)
     selectedNodeDrawing.setSelected(True)
     
-  def setAllAsUnselected(self):
+  def setAllAsUnselected(self, nodeDataList = None):
     for key in self.nodeDrawings:
       nodeDrawing = self.nodeDrawings[key]
       nodeDrawing.setSelected(False)
-      nodeData = self.nodeDataList[key]
+      
+      if nodeDataList is None:
+        nodeData = self.nodeDataList[key]
+      else:
+        nodeData = nodeDataList[key]
       nodeData['selected'] = False
     
         

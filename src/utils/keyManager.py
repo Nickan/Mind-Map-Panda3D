@@ -10,8 +10,8 @@ class KeyManager():
     
   @staticmethod
   def setupControls(showBase):
-    showBase.buttonThrowers[0].node().setKeystrokeEvent('keystroke')
     showBase.accept('keystroke', KeyManager.onKeyDown)
+    showBase.buttonThrowers[0].node().setKeystrokeEvent('keystroke')
     
     
   @staticmethod
@@ -31,5 +31,8 @@ class KeyManager():
         text += keyname
     return text
     
+  @staticmethod
+  def clear():
+     KeyManager.ON_KEY_DOWN_FN = None
     
   

@@ -1,0 +1,464 @@
+{
+	"1": {
+		"name": "Node hiding",
+		"childrenIds": [
+			2
+		],
+		"selected": false,
+		"depth": 1,
+		"x": 0,
+		"id": 1,
+		"mod": 0
+	},
+	"2": {
+		"name": "Possible solutions",
+		"childrenIds": [
+			3
+		],
+		"selected": false,
+		"depth": 2,
+		"parentId": 1,
+		"x": 0,
+		"id": 2,
+		"mod": 0
+	},
+	"3": {
+		"name": "Have the \"visible\" property in NodeData",
+		"childrenIds": [
+			4,
+			5,
+			6,
+			23
+		],
+		"selected": false,
+		"depth": 3,
+		"parentId": 2,
+		"x": 0,
+		"id": 3,
+		"mod": 0
+	},
+	"4": {
+		"name": "This will save the state that will be helpful for loading and saving",
+		"selected": false,
+		"depth": 4,
+		"parentId": 3,
+		"x": 0,
+		"id": 4,
+		"mod": 0
+	},
+	"5": {
+		"name": "Pros",
+		"childrenIds": [
+			7
+		],
+		"selected": false,
+		"depth": 4,
+		"parentId": 3,
+		"x": 0,
+		"id": 5,
+		"mod": 0
+	},
+	"6": {
+		"name": "Cons",
+		"childrenIds": [
+			11
+		],
+		"selected": false,
+		"depth": 4,
+		"parentId": 3,
+		"x": 0,
+		"id": 6,
+		"mod": 0
+	},
+	"7": {
+		"name": "Benefiting implementations",
+		"childrenIds": [
+			8,
+			9,
+			10
+		],
+		"selected": false,
+		"depth": 5,
+		"parentId": 5,
+		"x": 0,
+		"id": 7,
+		"mod": 0
+	},
+	"8": {
+		"name": "Load system",
+		"selected": false,
+		"depth": 6,
+		"parentId": 7,
+		"x": 0,
+		"id": 8,
+		"mod": 0
+	},
+	"9": {
+		"name": "Save system",
+		"selected": false,
+		"depth": 6,
+		"parentId": 7,
+		"x": 0,
+		"id": 9,
+		"mod": 0
+	},
+	"10": {
+		"name": "Rendering",
+		"selected": false,
+		"depth": 6,
+		"parentId": 7,
+		"x": 0,
+		"id": 10,
+		"mod": 0
+	},
+	"11": {
+		"name": "Unconfirmed side effects in Reingold-Tilford algorithm",
+		"childrenIds": [
+			12,
+			16
+		],
+		"selected": false,
+		"depth": 5,
+		"parentId": 6,
+		"x": 0,
+		"id": 11,
+		"mod": 0
+	},
+	"12": {
+		"name": "Finding out...",
+		"childrenIds": [
+			13
+		],
+		"selected": false,
+		"depth": 6,
+		"parentId": 11,
+		"x": 0,
+		"id": 12,
+		"mod": 0
+	},
+	"13": {
+		"name": "Effects of feeding it to algorithm",
+		"childrenIds": [
+			14,
+			15
+		],
+		"selected": false,
+		"depth": 7,
+		"parentId": 12,
+		"x": 0,
+		"id": 13,
+		"mod": 0
+	},
+	"14": {
+		"name": "Able to selectively set the breadth level of each node",
+		"selected": false,
+		"depth": 8,
+		"parentId": 13,
+		"x": 0,
+		"id": 14,
+		"mod": 0
+	},
+	"15": {
+		"name": "Might make the algorithm complicated",
+		"selected": false,
+		"depth": 8,
+		"parentId": 13,
+		"x": 0,
+		"id": 15,
+		"mod": 0
+	},
+	"16": {
+		"name": "Goal",
+		"childrenIds": [
+			17,
+			19,
+			20,
+			21,
+			22
+		],
+		"selected": false,
+		"depth": 6,
+		"parentId": 11,
+		"x": 0,
+		"id": 16,
+		"mod": 0
+	},
+	"17": {
+		"name": "To minimize the negative impact",
+		"childrenIds": [
+			18
+		],
+		"selected": false,
+		"depth": 7,
+		"parentId": 16,
+		"x": 0,
+		"id": 17,
+		"mod": 0
+	},
+	"18": {
+		"name": "Make the code easily removable",
+		"selected": false,
+		"depth": 8,
+		"parentId": 17,
+		"x": 0,
+		"id": 18,
+		"mod": 0
+	},
+	"19": {
+		"name": "To know, we have to do it",
+		"selected": false,
+		"depth": 7,
+		"parentId": 16,
+		"x": 0,
+		"id": 19,
+		"mod": 0
+	},
+	"20": {
+		"name": "We will learn a lot from it",
+		"selected": false,
+		"depth": 7,
+		"parentId": 16,
+		"x": 0,
+		"id": 20,
+		"mod": 0
+	},
+	"21": {
+		"name": "Have to collect data",
+		"selected": false,
+		"depth": 7,
+		"parentId": 16,
+		"x": 0,
+		"id": 21,
+		"mod": 0
+	},
+	"22": {
+		"name": "All in all, it is a nice loot",
+		"selected": false,
+		"depth": 7,
+		"parentId": 16,
+		"x": 0,
+		"id": 22,
+		"mod": 0
+	},
+	"23": {
+		"name": "Implementation",
+		"childrenIds": [
+			24,
+			25,
+			27,
+			43
+		],
+		"selected": true,
+		"depth": 4,
+		"parentId": 3,
+		"x": 0,
+		"id": 23,
+		"mod": 0
+	},
+	"24": {
+		"name": "add \"visible\" to the NodeData",
+		"selected": false,
+		"depth": 5,
+		"parentId": 23,
+		"x": 0,
+		"id": 24,
+		"mod": 0
+	},
+	"25": {
+		"name": "in Reingold-Tilford",
+		"childrenIds": [
+			26,
+			36
+		],
+		"selected": false,
+		"depth": 5,
+		"parentId": 23,
+		"x": 0,
+		"id": 25,
+		"mod": 0
+	},
+	"26": {
+		"name": "It won't be processed if it visible is set to false",
+		"selected": false,
+		"depth": 6,
+		"parentId": 25,
+		"x": 0,
+		"id": 26,
+		"mod": 0
+	},
+	"27": {
+		"name": "Rendering",
+		"childrenIds": [
+			28,
+			31
+		],
+		"selected": false,
+		"depth": 5,
+		"parentId": 23,
+		"x": 0,
+		"id": 27,
+		"mod": 0
+	},
+	"28": {
+		"name": "NodeDrawing",
+		"childrenIds": [
+			29
+		],
+		"selected": false,
+		"depth": 6,
+		"parentId": 27,
+		"x": 0,
+		"id": 28,
+		"mod": 0
+	},
+	"29": {
+		"name": "Won't be created if visiabl",
+		"selected": false,
+		"depth": 7,
+		"parentId": 28,
+		"x": 0,
+		"id": 29,
+		"mod": 0
+	},
+	"31": {
+		"name": "visible",
+		"childrenIds": [
+			32,
+			34
+		],
+		"selected": false,
+		"depth": 6,
+		"parentId": 27,
+		"x": 0,
+		"id": 31,
+		"mod": 0
+	},
+	"32": {
+		"name": "If false",
+		"childrenIds": [
+			33
+		],
+		"selected": false,
+		"depth": 7,
+		"parentId": 31,
+		"x": 0,
+		"id": 32,
+		"mod": 0
+	},
+	"33": {
+		"name": "No NodeDrawing will be created",
+		"selected": false,
+		"depth": 8,
+		"parentId": 32,
+		"x": 0,
+		"id": 33,
+		"mod": 0
+	},
+	"34": {
+		"name": "Else",
+		"childrenIds": [
+			35
+		],
+		"selected": false,
+		"depth": 7,
+		"parentId": 31,
+		"x": 0,
+		"id": 34,
+		"mod": 0
+	},
+	"35": {
+		"name": "Create NodeDrawing",
+		"selected": false,
+		"depth": 8,
+		"parentId": 34,
+		"x": 0,
+		"id": 35,
+		"mod": 0
+	},
+	"36": {
+		"name": "visible",
+		"childrenIds": [
+			37,
+			40
+		],
+		"selected": false,
+		"depth": 6,
+		"parentId": 25,
+		"x": 0,
+		"id": 36,
+		"mod": 0
+	},
+	"37": {
+		"name": "If true",
+		"childrenIds": [
+			38
+		],
+		"selected": false,
+		"depth": 7,
+		"parentId": 36,
+		"x": 0,
+		"id": 37,
+		"mod": 0
+	},
+	"38": {
+		"name": "Calculate breadth",
+		"selected": false,
+		"depth": 8,
+		"parentId": 37,
+		"x": 0,
+		"id": 38,
+		"mod": 0
+	},
+	"40": {
+		"name": "Else",
+		"childrenIds": [
+			41,
+			42
+		],
+		"selected": false,
+		"depth": 7,
+		"parentId": 36,
+		"x": 0,
+		"id": 40,
+		"mod": 0
+	},
+	"41": {
+		"name": "Do not do anything to the node",
+		"selected": false,
+		"depth": 8,
+		"parentId": 40,
+		"x": 0,
+		"id": 41,
+		"mod": 0
+	},
+	"42": {
+		"name": "Treat it as non-existing",
+		"selected": false,
+		"depth": 8,
+		"parentId": 40,
+		"x": 0,
+		"id": 42,
+		"mod": 0
+	},
+	"43": {
+		"name": "Database",
+		"childrenIds": [
+			44
+		],
+		"selected": false,
+		"depth": 5,
+		"parentId": 23,
+		"x": 0,
+		"id": 43,
+		"mod": 0
+	},
+	"44": {
+		"name": "Just add visible to the NodeData",
+		"selected": false,
+		"depth": 6,
+		"parentId": 43,
+		"x": 0,
+		"id": 44,
+		"mod": 0
+	}
+}

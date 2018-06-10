@@ -1,14 +1,14 @@
 from utils import Utils
-import copy
 
 class ReingoldTilford():
   NODE_SIZE = 1.0
 
-  def __init__(self):
+  def __init__(self, deltaFn = None):
     self.checkedConflictedIds = {}
+    self.deltaFn = deltaFn # Will be called when there is a change in mod and x
+    
 
   # Returns points to represent tree
-    # 2D jagged list of points?
   def getCoordinates(self, nodeList, enableCheckForConflicts = True):
     mainNode = nodeList.get(1)
     self.firstTraversal(mainNode, nodeList, enableCheckForConflicts)
@@ -17,7 +17,6 @@ class ReingoldTilford():
   def firstTraversal(self, mainNode, nodeList, enableCheckForConflicts = False):
     self.setInitialX(mainNode, nodeList, enableCheckForConflicts)
     
-
   def calcFinalPos(self, node, nodeList, modSum):
     name = node.get("name")
     node["x"] += modSum
@@ -29,6 +28,9 @@ class ReingoldTilford():
     if children is not None:
       for child in children:
         self.calcFinalPos(child, nodeList, modSum)
+        
+        
+        
 
   def setInitialX(self, node, nodeList, enableCheckForConflicts = False):
     self.setInitialXRelativeToChildren(node, nodeList, enableCheckForConflicts)
@@ -64,6 +66,10 @@ class ReingoldTilford():
       leftSibling = self.getLeftSibling(node, nodeList)
       node["x"] = leftSibling.get("x") + ReingoldTilford.NODE_SIZE
       
+    
+    if self.deltaFn is not None:
+      self.deltaFn(node, "setLeafInitialX")
+      
   def setOneChildNodeInitialX(self, children, node, nodeList):
     if Utils.dictLen(children) is not 1:
       return
@@ -75,6 +81,9 @@ class ReingoldTilford():
       node["x"] = leftSibling.get("x") + ReingoldTilford.NODE_SIZE
       firstChild = Utils.getChildren(node, nodeList)
       node["mod"] = node["x"] - firstChild[0]["x"]
+      
+    if self.deltaFn is not None:
+      self.deltaFn(node, "setOneChildNodeInitialX")
         
   def setManyChidrenNodeInitialX(self, children, node, nodeList):
     if Utils.dictLen(children) <= 1:
@@ -87,6 +96,9 @@ class ReingoldTilford():
       leftSibling = self.getLeftSibling(node, nodeList)
       node["x"] = leftSibling.get("x") + ReingoldTilford.NODE_SIZE
       node["mod"] = node["x"] - midX
+      
+    if self.deltaFn is not None:
+      self.deltaFn(node, "setManyChidrenNodeInitialX")
 
 
   def fixConflictingX(self, node, nodeList):
@@ -117,7 +129,10 @@ class ReingoldTilford():
       if shiftValue > 0:
         node["x"] += shiftValue
         node["mod"] += shiftValue
-        self.centerNodesBetween(leftSibling, node, nodeList, shiftValue)
+#         self.centerNodesBetween(leftSibling, node, nodeList, shiftValue)
+        
+        if self.deltaFn is not None:
+          self.deltaFn(node, "fixConflictingX")
       
       leftSibling = self.getRightSibling(leftSibling, nodeList)
         
@@ -170,6 +185,9 @@ class ReingoldTilford():
         if middleNode.has_key("mod") is False:
           middleNode["mod"] = 0
         middleNode["mod"] += offset
+        
+        if self.deltaFn is not None:
+          self.deltaFn(middleNode, "centerNodesBetween")
 
         count += 1
 

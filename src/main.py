@@ -1,45 +1,27 @@
-from direct.showbase.ShowBase import ShowBase
 
-from panda3d.core import DynamicTextFont
-from panda3d.core import Filename
-from panda3d.core import WindowProperties
 
-from scenes.map import Map
+from epiphany import Epiphany
 
-import json
-import os.path as path
+from scenes.states.cleanState import CleanState
 
-#  C:\dev\visualTool\Panda3D\Epiphany\assets\fonts\ubuntu.regular.ttf
-class Epiphany(ShowBase):
+from test.debuggingState import DebuggingState
+
+class Main():
  
   def __init__(self):
-    ShowBase.__init__(self)
-    self.map = None
-    self.loadTtf()
-    self.initMap()
+    epiphany = Epiphany()
+    epiphany.map.setState(CleanState(epiphany.map))
+#     epiphany.map.setState(DebuggingState(epiphany.map))
+    epiphany.run()
     
-  def loadTtf(self):
-    file = "../../assets/fonts/ubuntu.regular.ttf"
-    fontPath =  path.abspath(path.join(__file__ ,file))
-#     Map.FONT_UBUNTU = self.loader.loadFont(fontPath)
-    Map.FONT_UBUNTU = self.loader.loadFont("../ubuntu.regular.ttf")
-    Map.FONT_UBUNTU.setPixelsPerUnit(120)
-    Map.FONT_UBUNTU.setScaleFactor(3)
-    Map.FONT_UBUNTU.setNativeAntialias(0)
-    self.setScreenSize()
-
-  def initMap(self):
-    self.map = Map(self)
+main = Main()
     
-    
-  def setScreenSize(self):
-    w, h = 1366, 640 
-    props = WindowProperties() 
-    props.setSize(w, h) 
-    
-    base.win.requestProperties(props)
 
 
- 
-app = Epiphany()
-app.run()
+
+
+
+
+
+
+

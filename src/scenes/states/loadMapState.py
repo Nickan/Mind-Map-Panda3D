@@ -11,7 +11,9 @@ class LoadMapState(State):
   def enter(self, nodeDataList):
     nodeManager = self.map.nodeManager
     nodeManager.nodeDataList = nodeDataList
-    self.map.loadNodeDataList(nodeDataList)
+    nodeManager.tree.getCoordinates(nodeDataList)
+    
+    self.map.drawNodeDataList(nodeDataList)
     StateManager.switchToStaticMapState(self)
     
     

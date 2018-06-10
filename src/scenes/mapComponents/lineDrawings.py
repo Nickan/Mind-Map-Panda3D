@@ -25,6 +25,7 @@ class LineDrawings():
       
   def setParentPoint(self, nodeData):
     parentPos = Utils.getNodeDataPointt(nodeData)
+    parentPos.z += 1
     self.startingPoint(parentPos)
         
   def setChildrenPoints(self, parentNode, childrenIds, nodeDataList):

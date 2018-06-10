@@ -1,8 +1,6 @@
 from scenes.cameramanager import CameraManager
 from scenes.mapComponents.lineDrawings import LineDrawings
 from scenes.mapComponents.nodeManager import NodeManager
-from scenes.states.state import State
-from scenes.states.cleanState import CleanState
 
 from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
@@ -20,12 +18,7 @@ class Map():
     self.initCamera()
     self.initMapNode(self.showBase)
     self.initNodeManager()
-    self.initLineDrawings()
-    
-    self.state = CleanState(self)
-    self.state.enter()
-    
-    
+    self.initLineDrawings()    
 
   def initCamera(self):
     self.cameraManager = CameraManager(self.showBase)
@@ -44,24 +37,29 @@ class Map():
   def createNodeData(self, parentId, name, recheckLastId = False):
     nodeManager = self.nodeManager
     newNodeData = nodeManager.createNodeData(parentId, name, recheckLastId)
-    self.loadNodeDataList(nodeManager.nodeDataList)
+#     self.drawNodeDataList(nodeManager.nodeDataList)
     return newNodeData
     
   def editNodeData(self, nodeDataToEdit, newText):
     nodeManager = self.nodeManager
     nodeDataToEdit["name"] = newText
-    self.loadNodeDataList(nodeManager.nodeDataList)
+    
+    self.drawNodeDataList(nodeManager.nodeDataList)
     
   def deleteNodeData(self, nodeDataToDelete):
     nodeManager = self.nodeManager
     nodeManager.deleteNodeData(nodeDataToDelete)
-#     SaveManager.clearNodeDataList(nodeManager.nodeDataList)
-    
-    self.loadNodeDataList(nodeManager.nodeDataList)
+
+    SaveManager.clearNodeDataList(nodeManager.nodeDataList)
+    nodeManager.tree.getCoordinates(nodeManager.nodeDataList)
+    self.drawNodeDataList(nodeManager.nodeDataList)
       
-  def loadNodeDataList(self, nodeDataList):
+  def drawNodeDataList(self, nodeDataList = None):
     nodeManager = self.nodeManager
-    nodeManager.tree.getCoordinates(nodeDataList)
+    if nodeDataList is None:
+      nodeDataList = nodeManager.nodeDataList
+    
+#     nodeManager.tree.getCoordinates(nodeDataList)
     
     nodeManager.tmpClearNodes()
     self.lineDrawings.clear()
@@ -80,7 +78,11 @@ class Map():
       self.lineDrawings.drawLine(nodeData, nodeDataList)
     
     
-
+  """ Getters and Setters """
+  def setState(self, state):
+    self.state = state
+    self.state.enter()
+  
   def getSelectedNodeData(self):
     # Requires interaction between camera and nodemanager, so it is put in map class
     clickedNodePath = self.cameraManager.getClickedNodePath()

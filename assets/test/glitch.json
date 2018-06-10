@@ -1,0 +1,87 @@
+{
+	"1": {
+		"name": "1",
+		"childrenIds": [
+			2,
+			3,
+			4,
+			5
+		],
+		"selected": false,
+		"depth": 1,
+		"x": 0,
+		"id": 1,
+		"mod": 0
+	},
+	"2": {
+		"name": "2",
+		"selected": false,
+		"depth": 2,
+		"parentId": 1,
+		"x": 0,
+		"id": 2,
+		"mod": 0
+	},
+	"3": {
+		"name": "3",
+		"childrenIds": [
+			6,
+			7
+		],
+		"selected": false,
+		"depth": 2,
+		"parentId": 1,
+		"x": 0,
+		"id": 3,
+		"mod": 0
+	},
+	"4": {
+		"name": "4",
+		"childrenIds": [
+			8
+		],
+		"selected": false,
+		"depth": 2,
+		"parentId": 1,
+		"x": 0,
+		"id": 4,
+		"mod": 0
+	},
+	"5": {
+		"name": "5",
+		"selected": false,
+		"depth": 2,
+		"parentId": 1,
+		"x": 0,
+		"id": 5,
+		"mod": 0
+	},
+	"6": {
+		"name": "6",
+		"selected": false,
+		"depth": 3,
+		"parentId": 3,
+		"x": 0,
+		"id": 6,
+		"mod": 0
+	},
+	"7": {
+		"name": "7",
+		"childrenIds": [],
+		"selected": true,
+		"depth": 3,
+		"parentId": 3,
+		"x": 0,
+		"id": 7,
+		"mod": 0
+	},
+	"8": {
+		"name": "8",
+		"selected": false,
+		"depth": 3,
+		"parentId": 4,
+		"x": 0,
+		"id": 8,
+		"mod": 0
+	}
+}
