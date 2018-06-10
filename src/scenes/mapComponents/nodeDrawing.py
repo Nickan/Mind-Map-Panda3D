@@ -53,7 +53,7 @@ class NodeDrawing():
     self.text3d.setHpr(0, 90, 0)
     self.text3d.setTwoSided(True)
 
-    self.text3d.setScale(2, 2, 2)
+    self.text3d.setScale(2, 0.1, 2)
 #     self.text3d.setScale(1, 1, 1)
     self.text3d.setAntialias(AntialiasAttrib.MAuto)
     

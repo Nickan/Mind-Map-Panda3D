@@ -3,6 +3,7 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import DynamicTextFont
 from panda3d.core import Filename
 from panda3d.core import WindowProperties
+from panda3d.core import TextFont
 
 from scenes.map import Map
 
@@ -27,8 +28,10 @@ class Epiphany(ShowBase):
 #     Map.FONT_UBUNTU = self.loader.loadFont(fontPath)
     Map.FONT_UBUNTU = self.loader.loadFont("../ubuntu.regular.ttf")
     Map.FONT_UBUNTU.setPixelsPerUnit(120)
-    Map.FONT_UBUNTU.setScaleFactor(3)
-    Map.FONT_UBUNTU.setNativeAntialias(0)
+#     Map.FONT_UBUNTU.setScaleFactor(1)
+#     Map.FONT_UBUNTU.setNativeAntialias(0)
+    Map.FONT_UBUNTU.setRenderMode(TextFont.RMSolid)
+    Map.FONT_UBUNTU.setPageSize(512,512)
     self.setScreenSize()
 
   def initMap(self):
