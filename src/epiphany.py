@@ -27,11 +27,11 @@ class Epiphany(ShowBase):
     fontPath =  path.abspath(path.join(__file__ ,file))
 #     Map.FONT_UBUNTU = self.loader.loadFont(fontPath)
     Map.FONT_UBUNTU = self.loader.loadFont("../ubuntu.regular.ttf")
-    Map.FONT_UBUNTU.setPixelsPerUnit(120)
+    Map.FONT_UBUNTU.setPixelsPerUnit(60)
 #     Map.FONT_UBUNTU.setScaleFactor(1)
 #     Map.FONT_UBUNTU.setNativeAntialias(0)
-    Map.FONT_UBUNTU.setRenderMode(TextFont.RMSolid)
-    Map.FONT_UBUNTU.setPageSize(512,512)
+#     Map.FONT_UBUNTU.setRenderMode(TextFont.RMSolid)
+    Map.FONT_UBUNTU.setPageSize(256,256)
     self.setScreenSize()
 
   def initMap(self):

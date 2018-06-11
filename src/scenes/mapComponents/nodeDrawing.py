@@ -10,6 +10,8 @@ from utils.utils import Utils
 
 class NodeDrawing():
   
+  ONE_LINE_TEXT_HEIGHT = 0
+  
   def __init__(self, text, loader, parentNodePath):
     self.scale = Utils.NODE_SCALE
     
@@ -40,11 +42,11 @@ class NodeDrawing():
     textNode = self.textNode
     self.textNode.setFont(Map.FONT_UBUNTU)
     self.textNode.setAlign(TextProperties.A_center)
+#     self.textNode.setAlign(TextProperties.A_boxed_center )
     textNode.setWordwrap(Utils.NODE_SCALE.x * 1.4)
     
     self.textNode.setText(text)
     self.textNode.setTextColor(0, 0, 0, 1)
-#     self.textNode.setAlign(TextNode.A_center)
     
     
     self.text3d = NodePath(self.textNode)
@@ -63,13 +65,8 @@ class NodeDrawing():
     
   
   def keepTextCenter(self):
-    textHeight = self.getTextHeight()
-    
-    if textHeight == 0:
-      return
-    
-    
     lineRows = self.textNode.getNumRows()
+    textHeight = lineRows * NodeDrawing.ONE_LINE_TEXT_HEIGHT
     oneLineHeight = textHeight / lineRows
     
     heightAdj = 0
@@ -79,14 +76,15 @@ class NodeDrawing():
       heightAdj = (oneLineHeight / 1) - (textHeight / 1.5)
     self.text3d.setPos(0, heightAdj, -2)
     
-  def getTextHeight(self):
+  """ Calculates text height based on the created tightbounds 
+      might not be the accurate height of the text """
+  def getActualTextHeight(self):
     text = self.textNode.getText()
     if len(text) < 1:
       return 0
     
     if self.text3d.getTightBounds() is None:
       return 0
-    
     
     pt1, pt2 = self.text3d.getTightBounds()
     width = pt2.getX()  - pt1.getX()

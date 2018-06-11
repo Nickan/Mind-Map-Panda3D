@@ -2,6 +2,8 @@ from state import State
 from stateManager import StateManager
 from utils.utils import Utils
 
+from scenes.mapComponents.nodeDrawing import NodeDrawing
+
 class CleanState(State):
   
   def __init__(self, map):
@@ -13,11 +15,11 @@ class CleanState(State):
     nodeManager = map.nodeManager
     nodeData = map.createNodeData(None, "Main")
     
-    
     nodeDataList = nodeManager.nodeDataList
     nodeManager.tree.getCoordinates(nodeDataList)
     
     map.drawNodeDataList()
+    self.setNodeDrawingHeight()
     self.initEvents()
     
     
@@ -32,6 +34,13 @@ class CleanState(State):
     map.showBase.accept("mouse1", self.mouse1Down)
     
     map.showBase.accept("mouse3", self.mouse3Down)
+
+  def setNodeDrawingHeight(self):
+    print("test")
+    nodeManager = self.map.nodeManager
+    nodeDrawing = nodeManager.nodeDrawings[1]
+    NodeDrawing.ONE_LINE_TEXT_HEIGHT = nodeDrawing.getActualTextHeight()
+    nodeDrawing.keepTextCenter()
 
   def mouse1Down(self):
     selectedNodeData = self.map.getSelectedNodeData()
