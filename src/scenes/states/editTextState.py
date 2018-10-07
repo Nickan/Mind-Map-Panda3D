@@ -17,6 +17,7 @@ class EditTextState(State):
     nodeManager.selectedNodeData = selectedNodeData
     
     self.nodeDrawingToEdit = nodeManager.getNodeDrawing(selectedNodeData)
+    nodeManager.setNodeSelected(selectedNodeData)
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     
   def onKeyDown(self, keyname):

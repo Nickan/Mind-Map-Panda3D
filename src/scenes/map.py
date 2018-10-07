@@ -59,8 +59,6 @@ class Map():
     if nodeDataList is None:
       nodeDataList = nodeManager.nodeDataList
     
-#     nodeManager.tree.getCoordinates(nodeDataList)
-    
     nodeManager.tmpClearNodes()
     self.lineDrawings.clear()
     

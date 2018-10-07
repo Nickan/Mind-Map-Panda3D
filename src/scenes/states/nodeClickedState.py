@@ -30,6 +30,8 @@ class NodeClickedState(State):
     cameraManager = map.cameraManager
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
+
+    map.showBase.accept("mouse3", self.mouse3Down)
     
     map.showBase.accept("tab", self.onTab)
     map.showBase.accept("delete", self.onDelete)
@@ -55,6 +57,13 @@ class NodeClickedState(State):
   def onTab(self):
     selectedNodeData = self.map.nodeManager.selectedNodeData
     StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+
+  def mouse3Down(self):
+    selectedNodeData = self.map.getSelectedNodeData()
+    if selectedNodeData is None:
+      print("None selected")
+    else:
+      StateManager.switchToEditTextState(self, selectedNodeData)
     
   def onDelete(self):
     nodeManager = self.map.nodeManager

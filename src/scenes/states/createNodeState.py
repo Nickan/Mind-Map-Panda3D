@@ -21,6 +21,7 @@ class CreateNodeState(State):
     self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
     SaveManager.clearNodeDataList(nodeManager.nodeDataList)
     
+    nodeManager.tree.getCoordinates(nodeManager.nodeDataList)
     self.map.drawNodeDataList(nodeManager.nodeDataList)
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     

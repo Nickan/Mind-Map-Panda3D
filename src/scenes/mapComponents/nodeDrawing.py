@@ -27,7 +27,7 @@ class NodeDrawing():
     
     
   def addModel(self, loader, nodePath):
-    self.model = loader.loadModel("../models/capsule") 
+    self.model = loader.loadModel("../models/capsule")
     self.model.setScale(self.scale)
     self.model.reparentTo(nodePath)
     
@@ -66,6 +66,9 @@ class NodeDrawing():
   
   def keepTextCenter(self):
     lineRows = self.textNode.getNumRows()
+    if lineRows == 0:
+      return NodeDrawing.ONE_LINE_TEXT_HEIGHT
+    
     textHeight = lineRows * NodeDrawing.ONE_LINE_TEXT_HEIGHT
     oneLineHeight = textHeight / lineRows
     

@@ -38,7 +38,7 @@ class Epiphany(ShowBase):
     self.map = Map(self)
     
   def setScreenSize(self):
-    w, h = 1366, 640 
+    w, h = 1366, 750 
     props = WindowProperties()
 #     props.setFullscreen(1)
     props.setSize(w, h)

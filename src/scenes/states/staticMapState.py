@@ -1,3 +1,5 @@
+
+
 from state import State
 from stateManager import StateManager
 
@@ -17,7 +19,6 @@ class StaticMapState(State):
     self.setupControls()
 
   def exit(self):
-    print("exit StaticMapState")
     self.map.showBase.ignoreAll()
     
 

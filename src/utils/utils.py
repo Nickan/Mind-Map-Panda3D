@@ -153,7 +153,7 @@ class Utils():
     
     children = []
     for id in childrenIds:
-      children.append(nodeList[int(id)])
+      children.append(nodeList[id])
     return children
   
   

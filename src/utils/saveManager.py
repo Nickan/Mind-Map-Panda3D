@@ -1,6 +1,7 @@
 
 
 import json
+import os.path
 from __builtin__ import staticmethod
 
 from Tkinter import Tk
@@ -9,16 +10,19 @@ from tkFileDialog import asksaveasfilename
 
 class SaveManager():
   
+  
   @staticmethod
   def saveNodeDataList(nodeDataList):
     SaveManager.clearNodeDataList(nodeDataList)
     
     Tk().withdraw()
-    filename = asksaveasfilename()
+    fileName = asksaveasfilename()
     
-    if len(filename) < 1:
+    if len(fileName) < 1:
       return
-    with open(filename, 'w') as fp:
+
+    SaveManager.setMainJsonAndSettingJson(fileName)
+    with open(fileName, 'w') as fp:
       json.dump(nodeDataList, fp)
       
   @staticmethod
@@ -28,6 +32,8 @@ class SaveManager():
     
     if len(fileName) < 1:
       return
+
+    SaveManager.setMainJsonAndSettingJson(fileName)
     nodeDataList = SaveManager.loadNodeDataListKeyConvertedToInt(fileName)
     onLoadFilePathCb(nodeDataList)
     
@@ -66,3 +72,27 @@ class SaveManager():
   def getNodeDataList(name):
     jsonPath = '../assets/' + name
     return json.load(open(jsonPath))
+
+
+  mainJson = ""
+  settingJson = "-setting.json"
+
+  # For loading the settings
+  @staticmethod
+  def loadSettingJson():
+    SaveManager.getNodeDataList()
+
+  @staticmethod
+  def setMainJsonAndSettingJson(filename):
+    SaveManager.mainJson = filename
+
+    modFilename = filename.replace(".json", "")
+    SaveManager.settingJson = modFilename + "-setting.json"
+    if os.path.exists(SaveManager.settingJson):
+      print("Setting exists")
+    else:
+      print("Setting doesn't exists")
+
+    print("SettingJson " + SaveManager.settingJson)
+    print("FileName " + SaveManager.mainJson)
+

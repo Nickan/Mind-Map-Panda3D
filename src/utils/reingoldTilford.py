@@ -158,6 +158,7 @@ class ReingoldTilford():
     return children[children.index(node) + 1]
 
 
+  """ Will fix later """
   def centerNodesBetween(self, leftNode, rightNode, nodeList, shiftValue):
     parentId = leftNode.get("parentId")
     parent = nodeList[parentId]
@@ -190,8 +191,9 @@ class ReingoldTilford():
           self.deltaFn(middleNode, "centerNodesBetween")
 
         count += 1
-
-      self.fixConflictingX(rightNode, nodeList)
+        
+#       self.solveConflictingX(rightNode, nodeList, True)
+#       self.fixConflictingX(rightNode, nodeList)
 
   def getLeftContour(self, node, nodeList, modSum, contour):
     y = node.get("depth")
