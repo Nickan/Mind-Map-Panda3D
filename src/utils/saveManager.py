@@ -24,7 +24,7 @@ class SaveManager():
     if len(fileName) < 1:
       return
 
-    SaveManager.setMainJsonAndSettingJson(fileName)
+    SaveManager.saveSettingJson(fileName)
     with open(fileName, 'w') as fp:
       json.dump(nodeDataList, fp)
       
@@ -36,7 +36,7 @@ class SaveManager():
     if len(fileName) < 1:
       return
 
-    nodeDataSettings = SaveManager.setMainJsonAndSettingJson(fileName)
+    nodeDataSettings = SaveManager.loadSettingJson(fileName)
     nodeDataList = SaveManager.convertKeyTypeToInt(fileName)
     dataContainer = DataContainer(nodeDataList, nodeDataSettings)
     onLoadFilePathCb(dataContainer)
@@ -84,10 +84,21 @@ class SaveManager():
 
   # For loading the settings
   @staticmethod
-  def setMainJsonAndSettingJson(filename):
+  def saveSettingJson(filename):
     SaveManager.mainJson = filename
 
     modFilename = filename.replace(".json", "")
+    SaveManager.settingJson = modFilename + "-setting.json"
+    SaveManager.createSettingJsonData(SaveManager.settingJson,
+      SaveManager.settingJsonMap)
+    return SaveManager.settingJsonMap
+
+  
+  @staticmethod
+  def loadSettingJson(fileName):
+    SaveManager.mainJson = fileName
+
+    modFilename = fileName.replace(".json", "")
     SaveManager.settingJson = modFilename + "-setting.json"
     if os.path.exists(SaveManager.settingJson):
       SaveManager.loadSettingJsonData(SaveManager.settingJson)
@@ -95,6 +106,7 @@ class SaveManager():
       SaveManager.createSettingJsonData(SaveManager.settingJson,
         SaveManager.settingJsonMap)
     return SaveManager.settingJsonMap
+  
 
   @staticmethod
   def createSettingJsonData(filePath, map):

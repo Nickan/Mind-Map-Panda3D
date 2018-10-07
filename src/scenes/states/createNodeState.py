@@ -19,10 +19,11 @@ class CreateNodeState(State):
     nodeManager.selectedNodeData = selectedNodeData
     
     self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
-    SaveManager.clearNodeDataList(nodeManager.nodeDataList)
+    nodeDataList = nodeManager.dataContainer.nodeDataList
+    SaveManager.clearNodeDataList(nodeDataList)
     
-    nodeManager.tree.getCoordinates(nodeManager.nodeDataList)
-    self.map.drawNodeDataList(nodeManager.nodeDataList)
+    nodeManager.tree.getCoordinates(nodeDataList)
+    self.map.drawNodeData(nodeManager.dataContainer)
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     
   def onKeyDown(self, keyname):

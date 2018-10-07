@@ -14,7 +14,10 @@ class NodeClickedState(State):
     nodeManager = self.map.nodeManager
     nodeManager.selectedNodeData = selectedNodeData
     nodeManager.setNodeSelected(selectedNodeData)
-    selectedNodeData["selected"] = True
+    # selectedNodeData["selected"] = True
+    nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
+    nodeSettings = { "selected": True }
+    nodeDataSettings[selectedNodeData.get("id")] = nodeSettings
     self.setupControls()
   
   def exit(self):
@@ -39,6 +42,7 @@ class NodeClickedState(State):
   
   """ Events """
   def mouse1Down(self):
+    print("NodeClickedState mouse1Down")
     nodeManager = self.map.nodeManager
     selectedNodeData = self.map.getSelectedNodeData()
     if selectedNodeData is None:
@@ -46,7 +50,11 @@ class NodeClickedState(State):
       self.map.state.mouse1Down()
     else:
       nodeManager.selectedNodeData = selectedNodeData
-      selectedNodeData["selected"] = True
+      # selectedNodeData["selected"] = True
+      nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
+      nodeSettings = { "selected": True }
+      nodeDataSettings[selectedNodeData.get("id")] = nodeSettings
+
       nodeManager.setNodeSelected(selectedNodeData)
       
     

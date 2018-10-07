@@ -30,7 +30,6 @@ class NodeManager():
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
-    # selected = nodeData.get('selected')
     selected = False
     if nodeSettings is not None:
       selected = nodeSettings.get('selected')
