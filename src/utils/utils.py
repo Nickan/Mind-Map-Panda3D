@@ -185,6 +185,18 @@ class Utils():
     depth = nodeData.get("depth")
     breadth = nodeData.get("x")
     return Utils.getNodePosition(depth, breadth)
+
+
+
+
+  # Have to find another way to organize functions
+  @staticmethod
+  def removeSelectedField(nodeId, nodeDataSettings):
+    nodeSettings = nodeDataSettings.get(nodeId)
+    if nodeSettings is not None:
+      nodeDataSettings.pop(nodeId, None)
+    return nodeDataSettings
+
   
   
   

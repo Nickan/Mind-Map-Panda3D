@@ -5,6 +5,7 @@ from stateManager import StateManager
 
 from scrollingMapState import ScrollingMapState
 from utils.saveManager import SaveManager
+from utils.utils import Utils
 
 import sys
 
@@ -74,7 +75,8 @@ class StaticMapState(State):
     StateManager.switchToCreateNodeDataState(self, selectedNodeData)
     
   def onSave(self):
-    SaveManager.saveDataContainer(self.map.nodeManager.dataContainer)
+    nodeManager = self.map.nodeManager
+    SaveManager.saveDataContainer(nodeManager.dataContainer)
     
   def onOpenFile(self):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)

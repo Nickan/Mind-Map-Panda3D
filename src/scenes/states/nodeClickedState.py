@@ -1,5 +1,6 @@
 from state import State
 from stateManager import StateManager
+from utils.utils import Utils
 
 import sys
 
@@ -11,14 +12,10 @@ class NodeClickedState(State):
     self.map = map
     
   def enter(self, selectedNodeData):
-    nodeManager = self.map.nodeManager
-    nodeManager.selectedNodeData = selectedNodeData
-    nodeManager.setNodeSelected(selectedNodeData)
-    # selectedNodeData["selected"] = True
-    nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
-    nodeSettings = { "selected": True }
-    nodeDataSettings[selectedNodeData.get("id")] = nodeSettings
+    self.setNodeSelected(selectedNodeData)
     self.setupControls()
+
+  
   
   def exit(self):
     self.map.showBase.ignoreAll()
@@ -33,13 +30,33 @@ class NodeClickedState(State):
     cameraManager = map.cameraManager
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
-
     map.showBase.accept("mouse3", self.mouse3Down)
     
     map.showBase.accept("tab", self.onTab)
     map.showBase.accept("delete", self.onDelete)
-  
-  
+
+    # tmp
+    map.showBase.accept("f3", self.onF3Down)
+
+  def setNodeSelected(self, selectedNodeData):
+    nodeManager = self.map.nodeManager
+
+    nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
+    self.clearSelectedField(nodeDataSettings)
+
+    nodeManager.selectedNodeData = selectedNodeData
+    nodeManager.setNodeSelected(selectedNodeData)
+    
+    nodeSettings = { "selected": True }
+    nodeDataSettings[selectedNodeData.get("id")] = nodeSettings
+
+  def clearSelectedField(self, nodeDict):
+    for key in nodeDict:
+      nodeSettings = nodeDict.get(key)
+      if nodeSettings.get("selected") is not None:
+        nodeSettings.pop("selected", None)
+    return nodeDict
+
   """ Events """
   def mouse1Down(self):
     print("NodeClickedState mouse1Down")
@@ -49,22 +66,11 @@ class NodeClickedState(State):
       self.goToScrollingState()
       self.map.state.mouse1Down()
     else:
-      nodeManager.selectedNodeData = selectedNodeData
-      # selectedNodeData["selected"] = True
-      nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
-      nodeSettings = { "selected": True }
-      nodeDataSettings[selectedNodeData.get("id")] = nodeSettings
-
-      nodeManager.setNodeSelected(selectedNodeData)
+      self.setNodeSelected(selectedNodeData)
       
     
   def mouse1Up(self):
     print("NodeClickedState mouse1Up")
-    
-  
-  def onTab(self):
-    selectedNodeData = self.map.nodeManager.selectedNodeData
-    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
 
   def mouse3Down(self):
     selectedNodeData = self.map.getSelectedNodeData()
@@ -73,13 +79,27 @@ class NodeClickedState(State):
     else:
       StateManager.switchToEditTextState(self, selectedNodeData)
     
+  
+  def onTab(self):
+    selectedNodeData = self.map.nodeManager.selectedNodeData
+    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+
+  
+    
   def onDelete(self):
     nodeManager = self.map.nodeManager
     StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
-    
+
+
+  def onF3Down(self):
+    from scenes.states.foldNode import FoldNode
+    self.map.state.exit()
+    self.map.state = FoldNode(self.map)
+    self.map.state.enter()
     
   """ mouse1Down Helper """
   def goToScrollingState(self):
+    
     from scenes.states.scrollingMapState import ScrollingMapState
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
