@@ -66,7 +66,7 @@ class NodeManager():
   
   
   def createNodeData(self, parentId, name, recheckLastId):
-    self.tmpClearNodes()
+    self.tmpClearNodeDrawings()
     
     newNodeData = {}
     
@@ -126,7 +126,7 @@ class NodeManager():
         
   
   ##################### Utils  
-  def tmpClearNodes(self):
+  def tmpClearNodeDrawings(self):
     for key in self.nodeDrawings:
       self.nodeDrawings[key].dispose()
     self.nodeDrawings = {}

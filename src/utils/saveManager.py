@@ -39,7 +39,7 @@ class SaveManager():
     nodeDataSettings = SaveManager.setMainJsonAndSettingJson(fileName)
     nodeDataList = SaveManager.convertKeyTypeToInt(fileName)
     dataContainer = DataContainer(nodeDataList, None)
-    onLoadFilePathCb(dataContainer, nodeDataSettings)
+    onLoadFilePathCb(dataContainer)
     
   @staticmethod
   def convertKeyTypeToInt(fileName):

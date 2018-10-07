@@ -37,29 +37,30 @@ class Map():
   def createNodeData(self, parentId, name, recheckLastId = False):
     nodeManager = self.nodeManager
     newNodeData = nodeManager.createNodeData(parentId, name, recheckLastId)
-#     self.drawNodeDataList(nodeManager.nodeDataList)
     return newNodeData
     
   def editNodeData(self, nodeDataToEdit, newText):
     nodeManager = self.nodeManager
     nodeDataToEdit["name"] = newText
     
-    self.drawNodeDataList(nodeManager.nodeDataList)
+
+    self.drawNodeData(nodeManager.dataContainer)
     
   def deleteNodeData(self, nodeDataToDelete):
     nodeManager = self.nodeManager
     nodeManager.deleteNodeData(nodeDataToDelete)
 
-    SaveManager.clearNodeDataList(nodeManager.nodeDataList)
-    nodeManager.tree.getCoordinates(nodeManager.nodeDataList)
-    self.drawNodeDataList(nodeManager.nodeDataList)
+    nodeDataList = nodeManager.dataContainer.nodeDataList
+    SaveManager.clearNodeDataList(nodeDataList)
+    nodeManager.tree.getCoordinates(nodeDataList)
+    self.drawNodeData(nodeManager.dataContainer)
       
-  def drawNodeDataList(self, nodeDataList = None):
+  def drawNodeData(self, dataContainer):
     nodeManager = self.nodeManager
-    if nodeDataList is None:
-      nodeDataList = nodeManager.dataContainer.nodeDataList
+    nodeManager.dataContainer = dataContainer
+    nodeDataList = nodeManager.dataContainer.nodeDataList
     
-    nodeManager.tmpClearNodes()
+    nodeManager.tmpClearNodeDrawings()
     self.lineDrawings.clear()
     
     loader = self.showBase.loader

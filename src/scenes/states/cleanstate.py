@@ -18,7 +18,7 @@ class CleanState(State):
     nodeDataList = nodeManager.dataContainer.nodeDataList
     nodeManager.tree.getCoordinates(nodeDataList)
     
-    map.drawNodeDataList()
+    map.drawNodeData(nodeManager.dataContainer)
     self.setNodeDrawingHeight()
     self.initEvents()
     
@@ -36,7 +36,6 @@ class CleanState(State):
     map.showBase.accept("mouse3", self.mouse3Down)
 
   def setNodeDrawingHeight(self):
-    print("test")
     nodeManager = self.map.nodeManager
     nodeDrawing = nodeManager.nodeDrawings[1]
     NodeDrawing.ONE_LINE_TEXT_HEIGHT = nodeDrawing.getActualTextHeight()
