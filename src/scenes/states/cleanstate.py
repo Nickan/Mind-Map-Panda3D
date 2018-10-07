@@ -15,7 +15,7 @@ class CleanState(State):
     nodeManager = map.nodeManager
     nodeData = map.createNodeData(None, "Main")
     
-    nodeDataList = nodeManager.nodeDataList
+    nodeDataList = nodeManager.dataContainer.nodeDataList
     nodeManager.tree.getCoordinates(nodeDataList)
     
     map.drawNodeDataList()

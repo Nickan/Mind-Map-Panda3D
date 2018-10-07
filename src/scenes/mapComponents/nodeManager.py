@@ -4,6 +4,7 @@ from pprint import pprint
 
 from direct.showbase.ShowBase import Vec3
 from scenes.mapComponents.nodeDrawing import NodeDrawing
+from scenes.mapComponents.dataContainer import DataContainer
 
 
 from utils.reingoldTilford import ReingoldTilford
@@ -17,7 +18,7 @@ class NodeManager():
 
   def __init__(self):
     self.nodeDrawings = {}
-    self.nodeDataList = {}
+    self.dataContainer = DataContainer({}, {})
     self.tree = ReingoldTilford()
     self.selectedNodeData = None
 
@@ -29,9 +30,7 @@ class NodeManager():
   def addNodeDrawing(self, nodeData, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
-#     text = "id " + str(id) + " x " + str(nodeData['x']) + "y " + str(nodeData['depth']) # For debugging
     selected = nodeData.get('selected')
-    
     
     nodeDrawing = NodeDrawing(text, loader, mapNode)
     nodeDrawing.mainNode.setPos(pos)
@@ -49,12 +48,13 @@ class NodeManager():
     for key in self.nodeDrawings:
       nodeDrawing = self.nodeDrawings[key]
       if nodePath == nodeDrawing.mainNode:
-        return self.nodeDataList[key]
+        return self.dataContainer.nodeDataList[key]
     return None
   
   def getNodeDataId(self, nodeData):
-    for key in self.nodeDataList:
-      if nodeData == self.nodeDataList[key]:
+    nodeDataList = self.dataContainer.nodeDataList
+    for key in nodeDataList:
+      if nodeData == nodeDataList[key]:
         return key
     
     
@@ -73,11 +73,12 @@ class NodeManager():
     if parentId is not None:
       newNodeData['parentId'] = parentId
       
-    newNodeData['id'] = Utils.getUniqueId(self.nodeDataList, recheckLastId)
+    nodeDataList = self.dataContainer.nodeDataList
+    newNodeData['id'] = Utils.getUniqueId(nodeDataList, recheckLastId)
     newNodeData['name'] = name
-    self.nodeDataList[newNodeData['id']] = newNodeData
+    nodeDataList[newNodeData['id']] = newNodeData
     
-    parentData = self.nodeDataList.get(parentId)
+    parentData = nodeDataList.get(parentId)
     if parentData is not None:
       newNodeData["depth"] = parentData.get("depth") + 1
       
@@ -101,7 +102,8 @@ class NodeManager():
     
   def removeFromParentChildrenIdList(self, nodeDataToDelete):
     parentId = nodeDataToDelete["parentId"]
-    parentNodeData = self.nodeDataList[parentId]
+    nodeDataList = self.dataContainer.nodeDataList
+    parentNodeData = nodeDataList[parentId]
     
     childrenIds = parentNodeData.get('childrenIds')
     if childrenIds is not None:
@@ -111,12 +113,13 @@ class NodeManager():
         parentNodeData.pop('childrenIds')
     
   def deleteNodeAndChildren(self, nodeData):
-    self.nodeDataList.pop(nodeData["id"])
+    nodeDataList = self.dataContainer.nodeDataList
+    nodeDataList.pop(nodeData["id"])
     childrenIds = nodeData.get("childrenIds")
     
     if childrenIds is not None:
       for childId in childrenIds:
-        childData = self.nodeDataList[childId]
+        childData = nodeDataList[childId]
         self.deleteNodeAndChildren(childData)
         
         
@@ -149,7 +152,7 @@ class NodeManager():
       nodeDrawing.setSelected(False)
       
       if nodeDataList is None:
-        nodeData = self.nodeDataList[key]
+        nodeData = self.dataContainer.nodeDataList[key]
       else:
         nodeData = nodeDataList[key]
       nodeData['selected'] = False

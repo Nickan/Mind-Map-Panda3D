@@ -74,14 +74,14 @@ class StaticMapState(State):
     StateManager.switchToCreateNodeDataState(self, selectedNodeData)
     
   def onSave(self):
-    SaveManager.saveNodeDataList(self.map.nodeManager.nodeDataList)
+    SaveManager.saveDataContainer(self.map.nodeManager.dataContainer)
     
   def onOpenFile(self):
-    SaveManager.loadNodeDataList(self.onNodeDataListLoaded)
+    SaveManager.loadDataContainer(self.onNodeDataListLoaded)
     
     
-  def onNodeDataListLoaded(self, nodeDataList):
-    StateManager.switchToLoadMapState(self, nodeDataList)
+  def onNodeDataListLoaded(self, dataContainer):
+    StateManager.switchToLoadMapState(self, dataContainer)
   
   
   """ mouse1Down Helper """

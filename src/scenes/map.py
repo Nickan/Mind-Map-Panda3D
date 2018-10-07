@@ -57,7 +57,7 @@ class Map():
   def drawNodeDataList(self, nodeDataList = None):
     nodeManager = self.nodeManager
     if nodeDataList is None:
-      nodeDataList = nodeManager.nodeDataList
+      nodeDataList = nodeManager.dataContainer.nodeDataList
     
     nodeManager.tmpClearNodes()
     self.lineDrawings.clear()

@@ -4,6 +4,8 @@ import json
 import os.path
 from __builtin__ import staticmethod
 
+from scenes.mapComponents.dataContainer import DataContainer
+
 from Tkinter import Tk
 from tkFileDialog import askopenfilename
 from tkFileDialog import asksaveasfilename
@@ -12,7 +14,8 @@ class SaveManager():
   
   
   @staticmethod
-  def saveNodeDataList(nodeDataList):
+  def saveDataContainer(dataContainer):
+    nodeDataList = dataContainer.nodeDataList
     SaveManager.clearNodeDataList(nodeDataList)
     
     Tk().withdraw()
@@ -26,16 +29,17 @@ class SaveManager():
       json.dump(nodeDataList, fp)
       
   @staticmethod
-  def loadNodeDataList(onLoadFilePathCb):
+  def loadDataContainer(onLoadFilePathCb):
     Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
     fileName = askopenfilename() # show an "Open" dialog box and return the path to the selected file
     
     if len(fileName) < 1:
       return
 
-    SaveManager.setMainJsonAndSettingJson(fileName)
+    nodeDataSettings = SaveManager.setMainJsonAndSettingJson(fileName)
     nodeDataList = SaveManager.convertKeyTypeToInt(fileName)
-    onLoadFilePathCb(nodeDataList)
+    dataContainer = DataContainer(nodeDataList, None)
+    onLoadFilePathCb(dataContainer, nodeDataSettings)
     
   @staticmethod
   def convertKeyTypeToInt(fileName):
@@ -76,13 +80,9 @@ class SaveManager():
 
   mainJson = ""
   settingJson = "-setting.json"
-  settingJsonMap = []
+  settingJsonMap = {}
 
   # For loading the settings
-  @staticmethod
-  def loadSettingJson():
-    SaveManager.getNodeDataList()
-
   @staticmethod
   def setMainJsonAndSettingJson(filename):
     SaveManager.mainJson = filename
@@ -94,6 +94,7 @@ class SaveManager():
     else:
       SaveManager.createSettingJsonData(SaveManager.settingJson,
         SaveManager.settingJsonMap)
+    return SaveManager.settingJsonMap
 
   @staticmethod
   def createSettingJsonData(filePath, map):
