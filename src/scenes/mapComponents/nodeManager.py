@@ -23,14 +23,17 @@ class NodeManager():
     self.selectedNodeData = None
 
 
-  def renderNodeData(self, loader, mapNode, nodeData, pos):
-    self.addNodeDrawing(nodeData, loader, mapNode, pos)
+  def renderNodeData(self, loader, mapNode, nodeData, nodeSettings, pos):
+    self.addNodeDrawing(nodeData, nodeSettings, loader, mapNode, pos)
 
 
-  def addNodeDrawing(self, nodeData, loader, mapNode, pos = Vec3()):
+  def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
-    selected = nodeData.get('selected')
+    # selected = nodeData.get('selected')
+    selected = False
+    if nodeSettings is not None:
+      selected = nodeSettings.get('selected')
     
     nodeDrawing = NodeDrawing(text, loader, mapNode)
     nodeDrawing.mainNode.setPos(pos)

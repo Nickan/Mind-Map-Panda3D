@@ -59,6 +59,7 @@ class Map():
     nodeManager = self.nodeManager
     nodeManager.dataContainer = dataContainer
     nodeDataList = nodeManager.dataContainer.nodeDataList
+    nodeDataSettings = dataContainer.nodeDataSettings
     
     nodeManager.tmpClearNodeDrawings()
     self.lineDrawings.clear()
@@ -67,13 +68,14 @@ class Map():
     mapNode = self.mapNode
     for key in nodeDataList:
       nodeData = nodeDataList[key]
+      nodeSettings = nodeDataSettings.get(key)
       
       breadth = nodeData.get("x")
       depth = nodeData.get("depth")
       
       nodePos = Utils.getNodePosition(depth, breadth)
       
-      nodeManager.renderNodeData(loader, mapNode, nodeData, nodePos)
+      nodeManager.renderNodeData(loader, mapNode, nodeData, nodeSettings, nodePos)
       self.lineDrawings.drawLine(nodeData, nodeDataList)
     
     

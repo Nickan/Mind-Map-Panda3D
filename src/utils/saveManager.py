@@ -38,7 +38,7 @@ class SaveManager():
 
     nodeDataSettings = SaveManager.setMainJsonAndSettingJson(fileName)
     nodeDataList = SaveManager.convertKeyTypeToInt(fileName)
-    dataContainer = DataContainer(nodeDataList, None)
+    dataContainer = DataContainer(nodeDataList, nodeDataSettings)
     onLoadFilePathCb(dataContainer)
     
   @staticmethod
