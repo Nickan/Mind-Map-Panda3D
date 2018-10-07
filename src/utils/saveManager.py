@@ -34,21 +34,21 @@ class SaveManager():
       return
 
     SaveManager.setMainJsonAndSettingJson(fileName)
-    nodeDataList = SaveManager.loadNodeDataListKeyConvertedToInt(fileName)
+    nodeDataList = SaveManager.convertKeyTypeToInt(fileName)
     onLoadFilePathCb(nodeDataList)
     
   @staticmethod
-  def loadNodeDataListKeyConvertedToInt(fileName):
-    nodeDataList = json.load(open(fileName))
-    return SaveManager.setKeyAsInt(nodeDataList)
+  def convertKeyTypeToInt(fileName):
+    nodeList = json.load(open(fileName))
+    return SaveManager.setKeyAsInt(nodeList)
     
   @staticmethod
-  def setKeyAsInt(nodeDataList):
-    for key in nodeDataList:
-      nodeData = nodeDataList[key]
-      del nodeDataList[key]
-      nodeDataList[int(key)] = nodeData
-    return nodeDataList
+  def setKeyAsInt(nodeList):
+    for key in nodeList:
+      nodeData = nodeList[key]
+      del nodeList[key]
+      nodeList[int(key)] = nodeData
+    return nodeList
       
       
   @staticmethod
@@ -76,6 +76,7 @@ class SaveManager():
 
   mainJson = ""
   settingJson = "-setting.json"
+  settingJsonMap = []
 
   # For loading the settings
   @staticmethod
@@ -89,10 +90,16 @@ class SaveManager():
     modFilename = filename.replace(".json", "")
     SaveManager.settingJson = modFilename + "-setting.json"
     if os.path.exists(SaveManager.settingJson):
-      print("Setting exists")
+      SaveManager.loadSettingJsonData(SaveManager.settingJson)
     else:
-      print("Setting doesn't exists")
+      SaveManager.createSettingJsonData(SaveManager.settingJson,
+        SaveManager.settingJsonMap)
 
-    print("SettingJson " + SaveManager.settingJson)
-    print("FileName " + SaveManager.mainJson)
+  @staticmethod
+  def createSettingJsonData(filePath, map):
+    with open(filePath, 'w') as fp:
+      json.dump(map, fp)
 
+  @staticmethod
+  def loadSettingJsonData(filePath):
+    SaveManager.settingJsonMap = SaveManager.convertKeyTypeToInt(filePath)
