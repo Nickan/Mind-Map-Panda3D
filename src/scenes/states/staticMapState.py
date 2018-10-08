@@ -40,6 +40,13 @@ class StaticMapState(State):
     
     map.showBase.accept("f1", self.onSave)
     map.showBase.accept("f2", self.onOpenFile)
+
+    # Temporary for fixing bug when folding
+    map.showBase.accept("f5", self.clearAllDrawings)
+
+  def clearAllDrawings(self):
+    map = self.map
+    map.nodeManager.tmpClearNodeDrawings()
   
   """ Events """
   def zoomIn(self):

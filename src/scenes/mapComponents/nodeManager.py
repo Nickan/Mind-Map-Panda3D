@@ -110,7 +110,7 @@ class NodeManager():
     childrenIds = parentNodeData.get('childrenIds')
     if childrenIds is not None:
       childrenIds.remove(nodeDataToDelete["id"])
-      # Temp
+      # Remove the childrenIds field if there is no childrenIds left
       if len(childrenIds) == 0:
         parentNodeData.pop('childrenIds')
     
