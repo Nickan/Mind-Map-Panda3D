@@ -158,6 +158,14 @@ class NodeManager():
       else:
         nodeData = nodeDataList[key]
       nodeData['selected'] = False
+
+  def getSelectedNodeData(self):
+    settings = self.dataContainer.nodeDataSettings
+    for key in settings:
+      setting = settings.get(key)
+      if setting.get("selected") != None:
+        return self.dataContainer.nodeDataList.get(key)
+    return None
     
         
         
