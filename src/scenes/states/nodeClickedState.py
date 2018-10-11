@@ -47,8 +47,17 @@ class NodeClickedState(State):
     nodeManager.selectedNodeData = selectedNodeData
     nodeManager.setNodeSelected(selectedNodeData)
     
-    nodeSettings = { "selected": True }
-    nodeDataSettings[selectedNodeData.get("id")] = nodeSettings
+    nodeId = selectedNodeData.get("id")
+    self.setSelected(nodeDataSettings, nodeId)
+
+  def setSelected(self, nodeDataSettings, nodeId):
+    # nodeSettings = { "selected": True }
+    if nodeId != None:
+      nodeSettings = nodeDataSettings.get(nodeId)
+      if nodeSettings == None:
+        nodeDataSettings[nodeId] = { "selected": True }
+      else:
+        nodeDataSettings.get(nodeId)["selected"] = True
 
   def clearSelectedField(self, nodeDict):
     for key in nodeDict:

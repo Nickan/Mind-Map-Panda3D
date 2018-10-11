@@ -29,8 +29,9 @@ class FoldNode(State):
 
     nodeSettings = nodeDataSettings.get(selectedNodeId)
     if nodeSettings is not None:
-      if nodeSettings.get("folded") != None:
-        nodeSettings["folded"] = not nodeSettings.get("folded")
+      folded = nodeSettings.get("folded")
+      if folded != None:
+        nodeSettings.pop("folded", None)
       else:
         nodeSettings["folded"] = True
     else:

@@ -10,7 +10,8 @@ class NodeDataFilter():
     for key in dataContainer.unfilteredData:
       nodeSettings = dataContainer.nodeDataSettings.get(key)
       if nodeSettings is not None:
-        if nodeSettings.get("folded") is not None:
+        folded = nodeSettings.get("folded")
+        if folded is not None and folded is True:
           dataContainer.nodeDataList = self.removeChildrenIds(
             dataContainer.nodeDataList, key)
     return dataContainer.nodeDataList
