@@ -80,22 +80,11 @@ class Map():
       self.lineDrawings.drawLine(nodeData, nodeDataList)
 
   def setCameraViewToSelectedNode(self):
-    s = self.getSavedSelectedNodeData()
+    s = self.getActivatedNodeData()
     if s != None:
       drawing = self.nodeManager.getNodeDrawing(s)
       pos = drawing.mainNode.getPos()
       self.cameraManager.setViewBasedOnNodePos(pos)
-
-
-  def getSavedSelectedNodeData(self):
-    s = self.getSelectedNodeData()
-    if s != None:
-      return s
-      
-    if s == None:
-      return self.getActivatedNodeData()
-
-    return s
     
     
   """ Getters and Setters """
