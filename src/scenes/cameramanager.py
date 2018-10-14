@@ -107,6 +107,13 @@ class CameraManager():
     camera = self.showBase.camera
     curPos = camera.getPos()
     camera.setPos(curPos + delta)
+
+  def setViewBasedOnNodePos(self, pos):
+    camera = self.showBase.camera
+    newPos = Vec3(camera.getPos())
+    newPos.x = pos.x
+    newPos.y = pos.y
+    camera.setPos(newPos)
     
   
   # NodePath datection is manage internally in Panda3D, NodeManager shouod have been

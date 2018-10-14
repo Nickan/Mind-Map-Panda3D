@@ -166,6 +166,9 @@ class NodeManager():
       if setting.get("selected") != None:
         return self.dataContainer.nodeDataList.get(key)
     return None
+
+
+
     
         
         

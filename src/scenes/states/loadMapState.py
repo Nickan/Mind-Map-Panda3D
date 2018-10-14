@@ -18,6 +18,8 @@ class LoadMapState(State):
     nodeManager.tree.getCoordinates(dataContainer.nodeDataList)
     
     self.map.drawNodeData(dataContainer)
+    self.map.setCameraViewToSelectedNode()
+
     StateManager.switchToStaticMapState(self)
     
     

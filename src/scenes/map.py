@@ -1,6 +1,7 @@
 from scenes.cameramanager import CameraManager
 from scenes.mapComponents.lineDrawings import LineDrawings
 from scenes.mapComponents.nodeManager import NodeManager
+from scenes.mapComponents.dataContainer import DataContainer
 
 from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
@@ -77,6 +78,24 @@ class Map():
       
       nodeManager.renderNodeData(loader, mapNode, nodeData, nodeSettings, nodePos)
       self.lineDrawings.drawLine(nodeData, nodeDataList)
+
+  def setCameraViewToSelectedNode(self):
+    s = self.getSavedSelectedNodeData()
+    if s != None:
+      drawing = self.nodeManager.getNodeDrawing(s)
+      pos = drawing.mainNode.getPos()
+      self.cameraManager.setViewBasedOnNodePos(pos)
+
+
+  def getSavedSelectedNodeData(self):
+    s = self.getSelectedNodeData()
+    if s != None:
+      return s
+      
+    if s == None:
+      return self.getActivatedNodeData()
+
+    return s
     
     
   """ Getters and Setters """
@@ -84,11 +103,20 @@ class Map():
     self.state = state
     self.state.enter()
   
+  # Has to be refactored later
   def getSelectedNodeData(self):
     # Requires interaction between camera and nodemanager, so it is put in map class
     clickedNodePath = self.cameraManager.getClickedNodePath()
     if clickedNodePath is not None:
       return self.nodeManager.getNodeData(clickedNodePath)
+    return None
+
+  def getActivatedNodeData(self):
+    s = self.nodeManager.dataContainer.nodeDataSettings
+    for key in s:
+      nodeSettings = s.get(key)
+      if nodeSettings.get(DataContainer.SELECTED) != None:
+        return self.nodeManager.dataContainer.nodeDataList.get(key)
     return None
   
   
