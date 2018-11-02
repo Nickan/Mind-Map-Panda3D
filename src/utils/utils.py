@@ -1,12 +1,12 @@
-import json
-import os.path as path
+from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
+from gui.textinput import TextInput
+from panda3d.core import CollisionTraverser, CollisionNode
+from panda3d.core import CollisionHandlerQueue, CollisionRay
+from panda3d.core import LVecBase3f, BitMask32
 
 import copy
-
-from gui.textinput import TextInput
-
-
-from panda3d.core import LVecBase3f
+import json
+import os.path as path
 
 class Utils():
   LAST_ASSIGNED_ID = 0
@@ -28,7 +28,7 @@ class Utils():
   
   @staticmethod
   def convertToNodes(jsonData): # Needed to be able to assign parentId(Proof?)
-#     Utils.test(jsonData)
+    # Utils.test(jsonData)
     nodeList = {}
  
     allNodeJsons = [copy.deepcopy(jsonData)]
@@ -131,7 +131,6 @@ class Utils():
   def dictLen(argDict):
     if argDict is None:
       return 0
-    
     return len(argDict)
   
   
@@ -187,8 +186,6 @@ class Utils():
     return Utils.getNodePosition(depth, breadth)
 
 
-
-
   # Have to find another way to organize functions
   @staticmethod
   def removeSelectedField(nodeId, nodeDataSettings):
@@ -196,6 +193,50 @@ class Utils():
     if nodeSettings is not None:
       nodeDataSettings.pop(nodeId, None)
     return nodeDataSettings
+
+
+  # Mouse helpers
+  PLANE = Plane(Vec3(0, 0, 1), Point3(0, 0, 0))
+  CT = CollisionTraverser()
+  CHQ = CollisionHandlerQueue()
+  CN = CollisionNode('mouseRay')
+
+  NEW_CN = None
+  CR = CollisionRay()
+
+  @staticmethod
+  def getMousePosition(showBase):
+    Utils.initMouseFields(showBase)
+    return Utils.getMouseCollisionToPlane(showBase, Utils.PLANE)
+
+  @staticmethod
+  def initMouseFields(showBase):
+    if Utils.NEW_CN is None:
+      Utils.NEW_CN = showBase.camera.attachNewNode(Utils.CN)
+      Utils.CN.setFromCollideMask(BitMask32.bit(1))
+
+      Utils.CN.addSolid(Utils.CR)
+      Utils.CT.addCollider(Utils.NEW_CN, Utils.CHQ)
+    
+
+  @staticmethod
+  def getMouseCollisionToPlane(showBase, plane):
+    mouseWatcherNode = showBase.mouseWatcherNode
+    if mouseWatcherNode.hasMouse():
+      mpos = mouseWatcherNode.getMouse()
+
+      pos3d = Point3()
+      nearPoint = Point3()
+      farPoint = Point3()
+      showBase.camLens.extrude(mpos, nearPoint, farPoint)
+
+      render = showBase.render
+      camera = showBase.camera
+      if plane.intersectsLine(pos3d,
+        render.getRelativePoint(camera, nearPoint),
+        render.getRelativePoint(camera, farPoint)):
+        return pos3d
+    return None
 
   
   
