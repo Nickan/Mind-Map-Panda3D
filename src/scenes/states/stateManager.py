@@ -18,7 +18,7 @@ class StateManager():
     
     from scenes.states.nodeClickedState import NodeClickedState
     map.state = NodeClickedState(map)
-    map.state.enter(selectedNodeData)
+    map.state.enter()
     
   @staticmethod
   def switchToStaticMapState(currentState):

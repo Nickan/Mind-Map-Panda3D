@@ -16,17 +16,21 @@ class DragNodeMove():
 
 
   def initListeners(self):
+    print("init")
     showBase = self.map.showBase
     showBase.taskMgr.add(self.mouseMove, "mouseMove")
     showBase.accept("mouse1-up", self.mouse1Up)
 
   def mouseMove(self, task):
     self.setNodeDrawingPos()
+    # print("Updating")
     return Task.cont
 
   def mouse1Up(self):
     #Temp
-    self.removeListeners()
+    self.map.showBase.ignoreAll()
+    self.map.showBase.taskMgr.remove("mouseMove")
+    self.resetPosToDefault()
     self.onRelease()
 
   def setNodeDrawingPos(self):
@@ -37,8 +41,6 @@ class DragNodeMove():
       newNodePos = mPos + self.posDiff
       self.nodeDrawing.mainNode.setPos(newNodePos)
 
-  def removeListeners(self):
-    taskMgr = self.map.showBase.taskMgr
-    taskMgr.remove("mouse1-up")
-    taskMgr.remove("mouseMove")
+  def resetPosToDefault(self):
+    self.nodeDrawing.mainNode.setPos(self.defaultPos)
   
