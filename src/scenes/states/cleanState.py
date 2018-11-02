@@ -66,7 +66,7 @@ class CleanState(State):
     self.exit()
     from scenes.states.nodeClickedState import NodeClickedState
     map.state = NodeClickedState(self.map)
-    map.state.enter(selectedNodeData)
+    map.state.enter()
     
   def switchToScrollingState(self):
     self.map.state.exit()

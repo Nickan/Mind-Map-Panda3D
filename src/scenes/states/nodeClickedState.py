@@ -13,7 +13,8 @@ class NodeClickedState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, selectedNodeData):
+  def enter(self):
+    selectedNodeData = self.map.getSelectedNodeData()
     self.setNodeSelected(selectedNodeData)
     self.setupControls(selectedNodeData)
 

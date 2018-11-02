@@ -15,6 +15,7 @@ class DragNodeStartDetector():
     self.map = map
     self.onNodeDrag = onNodeDrag
     self.initEListener()
+    # self.firstUpdate = True
     
 
   def initEListener(self):
@@ -22,19 +23,19 @@ class DragNodeStartDetector():
     showBase.taskMgr.add(self.mouseMove, "mouseMove")
 
   def mouseMove(self, task):
+    # if self.firstUpdate:
+    #   self.firstUpdate = False
+    #   return Task.cont
+
     self.checkIfNodeIsDragged()
     return Task.cont
 
   def checkIfNodeIsDragged(self):
     nodeDrawingUnderMouse = self.map.cameraManager.getClickedNodePath()
     if nodeDrawingUnderMouse is not None:
-      self.removeEListener()
+      self.map.showBase.ignoreAll()
+      self.map.showBase.taskMgr.remove("mouseMove")
       self.onNodeDrag()
-
-  def removeEListener(self):
-    taskMgr = self.map.showBase.taskMgr
-    taskMgr.remove("mouse1-up")
-    taskMgr.remove("mouseMove")
 
 
   
