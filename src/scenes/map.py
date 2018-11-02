@@ -2,6 +2,7 @@ from scenes.cameramanager import CameraManager
 from scenes.mapComponents.lineDrawings import LineDrawings
 from scenes.mapComponents.nodeManager import NodeManager
 from scenes.mapComponents.dataContainer import DataContainer
+from scenes.states.state import State
 
 from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
@@ -100,6 +101,10 @@ class Map():
       return self.nodeManager.getNodeData(clickedNodePath)
     return None
 
+  def getSelectedNodeDrawing(self):
+    nodeData = self.getSelectedNodeData()
+    return self.nodeManager.getNodeDrawing(nodeData)
+
   def getActivatedNodeData(self):
     s = self.nodeManager.dataContainer.nodeDataSettings
     for key in s:
@@ -114,6 +119,11 @@ class Map():
     camManager = self.cameraManager
     return (camManager.getMouseCollisionToPlane(camManager.plane) is None or
       camManager.getClickedNodePath() is None)
+
+  def changeState(self, state):
+    self.state.exit()
+    self.state = state
+    self.state.enter()
     
     
     

@@ -1,5 +1,6 @@
-from scenes.states.components.dragNodeManager import DragNodeManager
+from scenes.states.components.dragNodeStartDetector import DragNodeStartDetector
 from state import State
+from dragNodeState import DragNodeState
 from stateManager import StateManager
 from utils.utils import Utils
 
@@ -49,7 +50,6 @@ class NodeClickedState(State):
       self.goToScrollingState()
       self.map.state.mouse1Down()
     else:
-      self.map.showBase.taskMgr.remove("mouseMove")
       self.setupDragNodeManager(selectedNodeData)
       self.setNodeSelected(selectedNodeData)
     
@@ -72,7 +72,7 @@ class NodeClickedState(State):
     StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
 
   def onNodeDrag(self):
-    print("Switch to Node Drag State")
+    self.map.changeState(DragNodeState(self.map))
     
   def onF3Down(self):
     from scenes.states.foldNode import FoldNode
@@ -95,8 +95,7 @@ class NodeClickedState(State):
 
   def setupDragNodeManager(self, selectedNodeData):
     nodeDrawing = self.map.nodeManager.getNodeDrawing(selectedNodeData)
-    showBase = self.map.showBase
-    DragNodeManager(nodeDrawing, showBase, self.onNodeDrag)
+    DragNodeStartDetector(nodeDrawing, self.map, self.onNodeDrag)
 
 
 
@@ -126,7 +125,6 @@ class NodeClickedState(State):
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
-  
     
     
     

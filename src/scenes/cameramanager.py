@@ -116,9 +116,10 @@ class CameraManager():
     camera.setPos(newPos)
     
   
-  # NodePath datection is manage internally in Panda3D, NodeManager shouod have been
-  # managing NodePath, but it can be handled by communication with Canera and 
+  # NodePath datection is manage internally in Panda3D, NodeManager should have been
+  # managing NodePath, but it can be handled by communication with Camera and 
   # Panda3D already, so NodeManager is not needed anymore here
+  # TODO: Refactor
   def getClickedNodePath(self):
     mouseWatcherNode = self.showBase.mouseWatcherNode
     if mouseWatcherNode.hasMouse():
