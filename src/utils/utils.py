@@ -2,7 +2,7 @@ from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
 from gui.textinput import TextInput
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
-from panda3d.core import LVecBase3f, BitMask32
+from panda3d.core import LVecBase3f, BitMask32, LPoint3
 
 import copy
 import json
@@ -225,9 +225,9 @@ class Utils():
     if mouseWatcherNode.hasMouse():
       mpos = mouseWatcherNode.getMouse()
 
-      pos3d = Point3()
-      nearPoint = Point3()
-      farPoint = Point3()
+      pos3d = LPoint3()
+      nearPoint = LPoint3()
+      farPoint = LPoint3()
       showBase.camLens.extrude(mpos, nearPoint, farPoint)
 
       render = showBase.render
