@@ -11,8 +11,6 @@ from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
 from platform import node
 
-import copy
-
 
 class NodeManager():
 

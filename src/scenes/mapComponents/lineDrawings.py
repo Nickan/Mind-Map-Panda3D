@@ -12,7 +12,7 @@ class LineDrawings():
     self.mainNodePath.reparentTo(parentNodePath)
     
     self.lineSegs = LineSegs()
-    self.lineSegs.setThickness(0.01)
+    self.lineSegs.setThickness(1)
     self.lineNodePaths = []
     self.points = []
 

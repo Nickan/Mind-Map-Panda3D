@@ -102,7 +102,7 @@ class Map():
     return None
 
   def getSelectedNodeDrawing(self):
-    nodeData = self.getSelectedNodeData()
+    nodeData = self.getSavedSelectedNodeData()
     return self.nodeManager.getNodeDrawing(nodeData)
 
   def getActivatedNodeData(self):
@@ -112,6 +112,13 @@ class Map():
       if nodeSettings.get(DataContainer.SELECTED) != None:
         return self.nodeManager.dataContainer.nodeDataList.get(key)
     return None
+
+  # Should be refactored later on
+  def getSavedSelectedNodeData(self):
+    node = self.getSelectedNodeData()
+    if node is None:
+      node = self.getActivatedNodeData()
+    return node
   
   
   # Utils
