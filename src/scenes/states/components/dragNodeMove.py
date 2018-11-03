@@ -26,11 +26,10 @@ class DragNodeMove():
     return Task.cont
 
   def mouse1Up(self):
-    #Temp
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
-    self.resetPosToDefault()
-    self.onRelease()
+    # self.resetPosToDefault()
+    self.onRelease(self.newParentVisualCue.nearestNodeDrawing)
 
   def setNodeDrawingPos(self):
     pos = self.nodeDrawing.mainNode.getPos()

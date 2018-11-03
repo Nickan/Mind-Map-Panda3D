@@ -103,7 +103,8 @@ class StaticMapState(State):
     
     
   def onNodeDataListLoaded(self, dataContainer):
-    StateManager.switchToLoadMapState(self, dataContainer)
+    self.map.nodeManager.dataContainer = dataContainer
+    StateManager.switchToLoadMapState(self)
   
   
   """ mouse1Down Helper """

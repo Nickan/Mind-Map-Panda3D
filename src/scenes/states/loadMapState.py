@@ -10,10 +10,10 @@ class LoadMapState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, dataContainer):
+  def enter(self):
     nodeManager = self.map.nodeManager
-    nodeManager.dataContainer = dataContainer
     nodeManager.selectedNodeData = None
+    dataContainer = nodeManager.dataContainer
     SaveManager.clearNodeDataList(dataContainer.nodeDataList)
     nodeManager.tree.getCoordinates(dataContainer.nodeDataList)
     

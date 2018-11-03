@@ -12,7 +12,7 @@ class NodeDrawing():
   
   ONE_LINE_TEXT_HEIGHT = 0
   
-  def __init__(self, text, loader, parentNodePath):
+  def __init__(self, text, loader, parentNodePath, id):
     self.scale = Utils.NODE_SCALE
     
     self.mainNode = NodePath("Node")
@@ -24,6 +24,7 @@ class NodeDrawing():
     self.mainNode.setTag("Node", self.textNode.getText())
     self.mainNode.setCollideMask(BitMask32.bit(1))
     self.keepTextCenter()
+    self.id = id
     
     
   def addModel(self, loader, nodePath):
