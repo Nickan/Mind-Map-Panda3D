@@ -32,7 +32,7 @@ class NodeManager():
     if nodeSettings is not None:
       selected = nodeSettings.get('selected')
     
-    nodeDrawing = NodeDrawing(text, loader, mapNode)
+    nodeDrawing = NodeDrawing(text, loader, mapNode, id)
     nodeDrawing.mainNode.setPos(pos)
     
     if selected is not None:

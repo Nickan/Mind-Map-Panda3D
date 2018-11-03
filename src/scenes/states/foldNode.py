@@ -42,7 +42,7 @@ class FoldNode(State):
 
     nodeDataFilter = NodeDataFilter()
     nodeDataList = nodeDataFilter.getFilteredNodeData(dataContainer)
-    StateManager.switchToLoadMapState(self, dataContainer)
+    StateManager.switchToLoadMapState(self)
 
 
   
