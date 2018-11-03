@@ -36,7 +36,7 @@ class NodeDrawing():
   def addText(self, text, nodePath):
     self.textNode = TextNode("Node 1") # This should be different for every instance?
     
-     #this is case-sensitive
+    #this is case-sensitive
     from scenes.map import Map
     
     textNode = self.textNode

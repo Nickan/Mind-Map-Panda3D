@@ -9,7 +9,6 @@ class DragNodeState(State):
     self.map = map
     
   def enter(self):
-    print("DragNodeState")
     self.dragNodeMove = DragNodeMove(self.map, self.onRelease)
 
   def exit(self):
@@ -17,7 +16,6 @@ class DragNodeState(State):
 
 
   def onRelease(self):
-    print("Release")
     from scenes.states.staticMapState import StaticMapState
     self.map.changeState(StaticMapState(self.map))
 

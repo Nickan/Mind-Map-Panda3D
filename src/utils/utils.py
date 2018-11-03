@@ -239,6 +239,19 @@ class Utils():
     return None
 
   
+  @staticmethod
+  def getDistSqr2D(point3d1, point3d2):
+    dx = point3d2.x - point3d1.x
+    dy = point3d2.y - point3d1.y
+    return (dx * dx) + (dy * dy)
+
+  @staticmethod
+  def isInRange(sqrDist, rangeDist):
+    if sqrDist < (rangeDist * rangeDist):
+      return True
+    return False
+
+  
   
   
   
