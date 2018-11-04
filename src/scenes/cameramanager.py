@@ -1,6 +1,7 @@
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
 from panda3d.core import LPoint3, LVector3, BitMask32
+from panda3d.core import OrthographicLens
 
 
 from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
@@ -23,7 +24,6 @@ class CameraManager():
     self.showBase.camera.setPos(50, 0, -180)
     self.camPos = self.showBase.camera.getPos()
     self.showBase.camera.setHpr(0, 90, 0)
-
     self.dragging = False  
   
   def initMouseRayCollision(self):

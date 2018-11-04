@@ -3,6 +3,7 @@ from gui.textinput import TextInput
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
 from panda3d.core import LVecBase3f, BitMask32, LPoint3
+from rect import Rect
 
 import copy
 import json
@@ -250,6 +251,16 @@ class Utils():
     if sqrDist < (rangeDist * rangeDist):
       return True
     return False
+
+  @staticmethod
+  def collidesRect(p1, p2, width, height):
+    r1 = Rect(p1.x, p1.y, width, height)
+    r2 = Rect(p2.x, p2.y, width, height)
+
+    result = r1.collidesWith(r2)
+    # print(str(result))
+    return result
+
 
   
   
