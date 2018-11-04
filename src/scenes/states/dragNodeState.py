@@ -21,29 +21,10 @@ class DragNodeState(State):
 
   def onRelease(self, nearestNodeDrawing):
     if nearestNodeDrawing is None:
-      from scenes.states.staticMapState import StaticMapState
-      self.map.changeState(StaticMapState(self.map))
+      self.switchToStaticMapState()
     else:
-      nodeList = self.map.nodeManager.dataContainer.nodeDataList
-
-      selectedNode = self.map.getActivatedNodeData()
-      parentNode = nodeList.get(selectedNode.get("parentId"))
-      newParent = nodeList.get(nearestNodeDrawing.id)
-
-      pIds = parentNode.get(NodeData.CHILDREN_IDS)
-      pIds.remove(selectedNode.get(NodeData.ID))
-      selectedNode[NodeData.PARENT_ID] = newParent.get("id")
-      self.setDepth(newParent.get("depth"), selectedNode, nodeList)
-
-      if newParent.get(NodeData.CHILDREN_IDS) is None:
-        newParent[NodeData.CHILDREN_IDS] = [selectedNode.get(NodeData.ID)]
-      else:
-        nIds = newParent.get(NodeData.CHILDREN_IDS)
-        nIds.append(selectedNode.get(NodeData.ID))
-
-      self.map.nodeManager.dataContainer.nodeDataList = nodeList
-      from scenes.states.loadMapState import LoadMapState
-      self.map.changeState(LoadMapState(self.map))
+      self.attachDraggedNodeToNearestNode(nearestNodeDrawing)
+      self.switchToLoadMapState()
 
   def setDepth(self, parentDepth, nodeData, nodeList):
     currentDepth = parentDepth + 1
@@ -52,6 +33,37 @@ class DragNodeState(State):
     if children is not None:
       for child in children:
         self.setDepth(currentDepth, child, nodeList)
+
+
+  def switchToStaticMapState(self):
+    from scenes.states.staticMapState import StaticMapState
+    self.map.changeState(StaticMapState(self.map))
+
+
+  def switchToLoadMapState(self):
+    from scenes.states.loadMapState import LoadMapState
+    self.map.changeState(LoadMapState(self.map))
+
+  def attachDraggedNodeTo(self, nodeDrawing):
+    nodeList = self.map.nodeManager.dataContainer.nodeDataList
+
+    selectedNode = self.map.getActivatedNodeData()
+    parentNode = nodeList.get(selectedNode.get("parentId"))
+    newParent = nodeList.get(nearestNodeDrawing.id)
+
+    pIds = parentNode.get(NodeData.CHILDREN_IDS)
+    pIds.remove(selectedNode.get(NodeData.ID))
+    selectedNode[NodeData.PARENT_ID] = newParent.get("id")
+    self.setDepth(newParent.get("depth"), selectedNode, nodeList)
+
+    if newParent.get(NodeData.CHILDREN_IDS) is None:
+      newParent[NodeData.CHILDREN_IDS] = [selectedNode.get(NodeData.ID)]
+    else:
+      nIds = newParent.get(NodeData.CHILDREN_IDS)
+      nIds.append(selectedNode.get(NodeData.ID))
+
+    self.map.nodeManager.dataContainer.nodeDataList = nodeList
+
 
 
 
