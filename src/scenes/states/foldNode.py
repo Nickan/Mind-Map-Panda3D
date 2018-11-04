@@ -2,7 +2,7 @@ from state import State
 from stateManager import StateManager
 
 from utils.saveManager import SaveManager
-from scenes.mapComponents.nodeDataFilter import NodeDataFilter
+
 
 class FoldNode(State):
 
@@ -36,12 +36,7 @@ class FoldNode(State):
         nodeSettings["folded"] = True
     else:
       nodeSettings = { "folded": True }
-
-    dataContainer = nodeManager.dataContainer
-    nodeDataList = dataContainer.nodeDataList
-
-    nodeDataFilter = NodeDataFilter()
-    nodeDataList = nodeDataFilter.getFilteredNodeData(dataContainer)
+      
     StateManager.switchToLoadMapState(self)
 
 
