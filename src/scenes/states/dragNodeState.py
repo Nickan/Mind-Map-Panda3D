@@ -23,7 +23,7 @@ class DragNodeState(State):
     if nearestNodeDrawing is None:
       self.switchToStaticMapState()
     else:
-      self.attachDraggedNodeToNearestNode(nearestNodeDrawing)
+      self.attachDraggedNodeTo(nearestNodeDrawing)
       self.switchToLoadMapState()
 
   def setDepth(self, parentDepth, nodeData, nodeList):
@@ -49,7 +49,7 @@ class DragNodeState(State):
 
     selectedNode = self.map.getActivatedNodeData()
     parentNode = nodeList.get(selectedNode.get("parentId"))
-    newParent = nodeList.get(nearestNodeDrawing.id)
+    newParent = nodeList.get(nodeDrawing.id)
 
     pIds = parentNode.get(NodeData.CHILDREN_IDS)
     pIds.remove(selectedNode.get(NodeData.ID))
