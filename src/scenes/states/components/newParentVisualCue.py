@@ -18,17 +18,29 @@ class NewParentVisualCue():
 
   # Loops to all potential new parents
   def getNearestNodeDrawing(self, map):
-    maxDist = 25
-    nearestDist = 999999
+    width = 35
+    height = 10
     nearest = None
+    nearestDist = 99999
     for n in self.potentialNewParentIds:
       node = map.nodeManager.nodeDrawings.get(n)
       nPos = node.mainNode.getPos()
       dPos = self.draggedDrawing.mainNode.getPos()
       curDist = Utils.getDistSqr2D(nPos, dPos)
-      if Utils.isInRange(curDist, maxDist) is True and curDist < nearestDist:
+      if ( (Utils.collidesRect(nPos, dPos, width, height) is True) and
+        (curDist < nearestDist) ):
         nearestDist = curDist
         nearest = node
+
+        # For debugging
+        xd = nPos.x - dPos.x
+        yd = nPos.y - dPos.y
+        dist = (xd * xd) + (yd * yd)
+        # print("xd: " + str(xd * xd) + " yd: " + str(yd * yd) + " dist: " + str(dist))
+
+        mPos, nearPoint = map.cameraManager.getCoordinates()
+        print("mPos: " + str(mPos) + " nearPoint: " + str(nearPoint))
+
     return nearest
 
     
