@@ -1,7 +1,9 @@
+from scenes.mapComponents.nodeDataFilter import NodeDataFilter
 from state import State
 from stateManager import StateManager
 
 from utils.saveManager import SaveManager
+
 
 
 class LoadMapState(State):
@@ -14,6 +16,10 @@ class LoadMapState(State):
     nodeManager = self.map.nodeManager
     nodeManager.selectedNodeData = None
     dataContainer = nodeManager.dataContainer
+
+    nodeDataFilter = NodeDataFilter()
+    dataContainer.nodeDataList = nodeDataFilter.getFilteredNodeData(dataContainer)
+
     SaveManager.clearNodeDataList(dataContainer.nodeDataList)
     nodeManager.tree.getCoordinates(dataContainer.nodeDataList)
     

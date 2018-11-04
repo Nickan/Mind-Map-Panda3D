@@ -15,7 +15,7 @@ class SaveManager():
   
   @staticmethod
   def saveDataContainer(dataContainer):
-    nodeDataList = dataContainer.nodeDataList
+    nodeDataList = dataContainer.unfilteredData
     SaveManager.clearNodeDataList(nodeDataList)
     
     Tk().withdraw()
