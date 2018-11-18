@@ -1,9 +1,9 @@
 
 
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 
-from scrollingMapState import ScrollingMapState
+from .scrollingMapState import ScrollingMapState
 from utils.saveManager import SaveManager
 from utils.utils import Utils
 

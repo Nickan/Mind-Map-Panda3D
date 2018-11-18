@@ -1,5 +1,5 @@
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 
 import sys
 

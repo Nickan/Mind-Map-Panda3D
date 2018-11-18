@@ -3,7 +3,7 @@ from gui.textinput import TextInput
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
 from panda3d.core import LVecBase3f, BitMask32, LPoint3
-from rect import Rect
+from .rect import Rect
 
 import copy
 import json
