@@ -1,5 +1,5 @@
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 from utils.utils import Utils
 
 from scenes.mapComponents.nodeDrawing import NodeDrawing

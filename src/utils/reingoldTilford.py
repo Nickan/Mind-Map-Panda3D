@@ -1,4 +1,4 @@
-from utils import Utils
+from .utils import Utils
 
 class ReingoldTilford():
   NODE_SIZE = 1.0
@@ -20,7 +20,7 @@ class ReingoldTilford():
   def calcFinalPos(self, node, nodeList, modSum):
     name = node.get("name")
     node["x"] += modSum
-    if node.has_key("mod") is False:
+    if "mod" not in node:
       node["mod"] = 0
     modSum += node.get("mod")
 
