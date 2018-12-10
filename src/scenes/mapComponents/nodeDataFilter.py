@@ -6,7 +6,7 @@ class NodeDataFilter():
   def getFilteredNodeData(self, dataContainer):
     self.manageData(dataContainer)
 
-    for key, value in dataContainer.unfilteredData.iteritems():
+    for key, value in dataContainer.unfilteredData.items():
       nodeId = value.get(NodeData.ID)
       nodeSettings = dataContainer.nodeDataSettings.get(nodeId)
       if nodeSettings is not None:
@@ -52,7 +52,7 @@ class NodeDataFilter():
 
   def getListAddressFrom(self, fromList):
     newList = {}
-    for key, value in fromList.iteritems():
+    for key, value in fromList.items():
       newList[value.get(NodeData.ID)] = value
     return newList
 

@@ -67,9 +67,9 @@ class NewParentVisualCue():
 
   def setAllNodeDrawingsNormal(self, map, draggedNode):
     drawings = map.nodeManager.nodeDrawings
-    for key, d in drawings.iteritems():
+    for key, d in drawings.items():
       if draggedNode != d:
         d.setSelected(False)
 
   def setAsPotentialParent(self, nodeDrawing):
-    nodeDrawing.setSelected(True)
+    nodeDrawing.setSelected(False, True)

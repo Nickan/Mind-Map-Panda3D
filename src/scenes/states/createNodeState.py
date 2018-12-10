@@ -1,5 +1,5 @@
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 
 from utils.keyManager import KeyManager
 from utils.saveManager import SaveManager

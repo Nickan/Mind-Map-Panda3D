@@ -1,4 +1,4 @@
-from state import State
+from .state import State
 from scenes.mapComponents.nodeDataFilter import NodeDataFilter
 from scenes.mapComponents.nodeData import NodeData
 from scenes.states.components.dragNodeMove import DragNodeMove
