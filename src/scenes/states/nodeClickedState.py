@@ -1,7 +1,7 @@
 from scenes.states.components.dragNodeStartDetector import DragNodeStartDetector
-from state import State
-from dragNodeState import DragNodeState
-from stateManager import StateManager
+from .state import State
+from .dragNodeState import DragNodeState
+from .stateManager import StateManager
 from utils.utils import Utils
 
 import sys

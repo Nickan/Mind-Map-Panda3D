@@ -1,6 +1,6 @@
 from scenes.mapComponents.nodeDataFilter import NodeDataFilter
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 
 from utils.saveManager import SaveManager
 

@@ -199,7 +199,7 @@ class ReingoldTilford():
     y = node.get("depth")
     x = node.get("x")
     # print("y " + str(y))
-    if contour.has_key(y):
+    if y in contour:
       contour[y] = min(contour[y], x + modSum)
     else:
       contour[y] = x + modSum
@@ -215,7 +215,7 @@ class ReingoldTilford():
   def getRightContour(self, node, nodeList, modSum, contour):
     y = node.get("depth")
     x = node.get("x")
-    if contour.has_key(y):
+    if y in contour:
       contour[y] = max(contour[y], x + modSum)
     else:
       contour[y] = x + modSum

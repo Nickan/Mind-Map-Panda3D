@@ -96,11 +96,14 @@ class NodeDrawing():
     return height
   
   
-  def setSelected(self, isSelected = False):
+  def setSelected(self, isSelected = False, asParent = False):
     if isSelected:
       self.model.setColor(0, 0, 1, 1)
     else:
       self.model.setColor(1, 1, 1, 1)
+
+    if asParent:
+      self.model.setColor(1, 0, 0, 1)
     
     
     
