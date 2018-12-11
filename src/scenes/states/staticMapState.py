@@ -45,6 +45,8 @@ class StaticMapState(State):
     # Temporary for fixing bug when folding
     map.showBase.accept("f5", self.clearAllDrawings)
 
+    map.showBase.accept("delete", self.onDelete)
+
   def clearAllDrawings(self):
     map = self.map
     map.nodeManager.tmpClearNodeDrawings()
@@ -66,7 +68,6 @@ class StaticMapState(State):
     else:
       StateManager.switchToNodeClickedState(self, selectedNodeData)
       
-      
   def mouse3Down(self):
     selectedNodeData = self.map.getSelectedNodeData()
     if selectedNodeData is None:
@@ -74,7 +75,6 @@ class StaticMapState(State):
     else:
       StateManager.switchToEditTextState(self, selectedNodeData)
       
-
   def mouse1Up(self):
     print("static move up")
     
@@ -100,6 +100,9 @@ class StaticMapState(State):
       self.map.state = FoldNode(self.map)
       self.map.state.enter()
 
+  def onDelete(self):
+    nodeManager = self.map.nodeManager
+    StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
     
     
   def onNodeDataListLoaded(self, dataContainer):
