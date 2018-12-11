@@ -18,8 +18,6 @@ class NodeClickedState(State):
     self.setNodeSelected(selectedNodeData)
     self.setupControls(selectedNodeData)
 
-  
-  
   def exit(self):
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
@@ -35,7 +33,6 @@ class NodeClickedState(State):
     showBase.accept("mouse3", self.mouse3Down)
     
     showBase.accept("tab", self.onTab)
-    showBase.accept("delete", self.onDelete)
     
     self.setupDragNodeDetector(selectedNodeData)
 
@@ -44,7 +41,6 @@ class NodeClickedState(State):
 
     """ Events """
   def mouse1Down(self):
-    print("NodeClickedState mouse1Down")
     nodeManager = self.map.nodeManager
     selectedNodeData = self.map.getSelectedNodeData()
     if selectedNodeData is None:
@@ -69,6 +65,7 @@ class NodeClickedState(State):
     selectedNodeData = self.map.nodeManager.selectedNodeData
     StateManager.switchToCreateNodeDataState(self, selectedNodeData)
 
+  # Have to refactor, as won't be triggered here
   def onDelete(self):
     nodeManager = self.map.nodeManager
     StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
@@ -127,9 +124,6 @@ class NodeClickedState(State):
     self.map.state.exit()
     self.map.state = ScrollingMapState(self.map)
     self.map.state.enter()
-    
-    
-    
     
     
     
