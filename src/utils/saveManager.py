@@ -16,7 +16,11 @@ class SaveManager():
   @staticmethod
   def saveDataContainer(dataContainer):
     nodeDataList = dataContainer.unfilteredData
+    if not nodeDataList:
+      nodeDataList = dataContainer.nodeDataList
+
     SaveManager.clearNodeDataList(nodeDataList)
+      
     
     Tk().withdraw()
     fileName = asksaveasfilename()

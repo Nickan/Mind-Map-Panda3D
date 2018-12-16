@@ -4,8 +4,10 @@ from utils.utils import Utils
 class NodeDataFilter():
 
   def getFilteredNodeData(self, dataContainer):
-    self.manageData(dataContainer)
+    self.initFilteredAndUnfilteredNodes(dataContainer)
+    return self.getFilteredNodes(dataContainer)
 
+  def getFilteredNodes(self, dataContainer):
     for key, value in dataContainer.unfilteredData.items():
       nodeId = value.get(NodeData.ID)
       nodeSettings = dataContainer.nodeDataSettings.get(nodeId)
@@ -38,7 +40,7 @@ class NodeDataFilter():
     return nodeDataList
 
 
-  def manageData(self, dataContainer):
+  def initFilteredAndUnfilteredNodes(self, dataContainer):
     unfilteredData = dataContainer.unfilteredData
     nodeDataList = dataContainer.nodeDataList
 
