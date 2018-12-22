@@ -7,12 +7,13 @@ class ReingoldTilford():
     self.checkedConflictedIds = {}
     self.deltaFn = deltaFn # Will be called when there is a change in mod and x
     
-
+  # REFACTOR: Should not modify the passed nodeList
   # Returns points to represent tree
   def getCoordinates(self, nodeList, enableCheckForConflicts = True):
     mainNode = nodeList.get(1)
     self.firstTraversal(mainNode, nodeList, enableCheckForConflicts)
     self.calcFinalPos(mainNode, nodeList, 0)
+    return nodeList
 
   def firstTraversal(self, mainNode, nodeList, enableCheckForConflicts = False):
     self.setInitialX(mainNode, nodeList, enableCheckForConflicts)
