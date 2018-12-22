@@ -2,6 +2,7 @@ import copy
 
 from scenes.cameramanager import CameraManager
 from scenes.mapComponents.lineDrawings import LineDrawings
+from scenes.mapComponents.nodeDrawing import NodeDrawing
 from scenes.mapComponents.nodeManager import NodeManager
 from scenes.mapComponents.dataContainer import DataContainer
 from scenes.states.state import State
@@ -58,22 +59,18 @@ class Map():
   #Has to be refactored: Should be encapsulated
   def drawNodeData(self, filteredData, settingsOfData):
     nodeManager = self.nodeManager   
-    nodeManager.tmpClearNodeDrawings()
+    nodeManager.clearDataDrawings()
     self.lineDrawings.clear()
     
     loader = self.showBase.loader
     mapNode = self.mapNode
-    for key in filteredData:
-      nodeData = filteredData[key]
-      nodeSettings = settingsOfData.get(key)
-      
-      breadth = nodeData.get("x")
-      depth = nodeData.get("depth")
-      
-      nodePos = Utils.getNodePosition(depth, breadth)
-      
-      nodeManager.renderNodeData(loader, mapNode, nodeData, nodeSettings, nodePos)
-      self.lineDrawings.drawLine(nodeData, filteredData)
+    nodeManager.drawData(filteredData, settingsOfData, loader, mapNode)
+    self.lineDrawings.drawLine(filteredData)
+
+  def setNodeDrawingHeight(self):
+    drawingNode = self.nodeManager.dataDrawings.get(1)
+    NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
+    drawingNode.keepTextCenter()
 
 #Others
 

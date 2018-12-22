@@ -17,7 +17,7 @@ class NodeManager():
   SELECTED = "selected"
 
   def __init__(self):
-    self.nodeDrawings = {}
+    self.dataDrawings = {}
     self.unfilteredData = {}
     self.filteredData = {}
     self.settingsOfData = {}
@@ -27,7 +27,7 @@ class NodeManager():
 
 #First level functions
   def createNodeData(self, parentId, name, unfilteredData, recheckLastId):
-    self.tmpClearNodeDrawings()
+    self.clearDataDrawings()
     
     newNodeData = {}
     newNodeData['parentId'] = parentId
@@ -43,11 +43,16 @@ class NodeManager():
     newFD[newNodeData['id']] = newNodeData
     return newNodeData, newFD
 
+  def drawData(self, filteredData, settingsOfData, loader, mapNode):
+    for key in filteredData:
+      nodeData = filteredData.get(key)
+      settings = settingsOfData.get(key)
 
+      breadth = nodeData.get("x")
+      depth = nodeData.get("depth")
+      pos = Utils.getNodePosition(depth, breadth)
 
-  def renderNodeData(self, loader, mapNode, nodeData, nodeSettings, pos):
-    self.addNodeDrawing(nodeData, nodeSettings, loader, mapNode, pos)
-
+      self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
 
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
@@ -62,15 +67,15 @@ class NodeManager():
     if selected is not None:
       nodeDrawing.setSelected(selected)
 
-    self.nodeDrawings[id] = nodeDrawing
+    self.dataDrawings[id] = nodeDrawing
     
   
   """ TODO, implementation needs to be changed """
   def getNodeData(self, nodePath):
     nodePath = nodePath.findNetTag("Node")
     
-    for key in self.nodeDrawings:
-      nodeDrawing = self.nodeDrawings[key]
+    for key in self.dataDrawings:
+      nodeDrawing = self.dataDrawings[key]
       if nodePath == nodeDrawing.mainNode:
         return self.dataContainer.nodeDataList[key]
     return None
@@ -121,15 +126,15 @@ class NodeManager():
 
   
   ##################### Utils  
-  def tmpClearNodeDrawings(self):
-    for key in self.nodeDrawings:
-      self.nodeDrawings[key].dispose()
-    self.nodeDrawings = {}
+  def clearDataDrawings(self):
+    for key in self.dataDrawings:
+      self.dataDrawings[key].dispose()
+    self.dataDrawings = {}
     
     
   
   def getNodeDrawing(self, nodeData):
-    return self.nodeDrawings[nodeData["id"]]
+    return self.dataDrawings[nodeData["id"]]
   
   def getNodeDrawingPos(self, nodeData):
     nodeDrawing = self.getNodeDrawing(nodeData)
@@ -142,8 +147,8 @@ class NodeManager():
     selectedNodeDrawing.setSelected(True)
     
   def setAllAsUnselected(self, nodeDataList = None):
-    for key in self.nodeDrawings:
-      nodeDrawing = self.nodeDrawings[key]
+    for key in self.dataDrawings:
+      nodeDrawing = self.dataDrawings[key]
       nodeDrawing.setSelected(False)
       
       if nodeDataList is None:

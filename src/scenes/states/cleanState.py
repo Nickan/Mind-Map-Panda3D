@@ -17,12 +17,11 @@ class CleanState(State):
     updatedUnfilteredData = map.getCoordinates(unfilteredData)
     
     map.drawNodeData(unfilteredData, {})
-    self.setNodeDrawingHeight()
+    map.setNodeDrawingHeight()
     self.initEvents()
     
     
   def exit(self):
-    print("exit clean state")
     self.map.showBase.ignoreAll()
     
     
@@ -30,14 +29,7 @@ class CleanState(State):
   def initEvents(self):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
-    
     map.showBase.accept("mouse3", self.mouse3Down)
-
-  def setNodeDrawingHeight(self):
-    nodeManager = self.map.nodeManager
-    nodeDrawing = nodeManager.nodeDrawings[1]
-    NodeDrawing.ONE_LINE_TEXT_HEIGHT = nodeDrawing.getActualTextHeight()
-    nodeDrawing.keepTextCenter()
 
   def mouse1Down(self):
     selectedNodeData = self.map.getSelectedNodeData()
