@@ -16,12 +16,14 @@ class LineDrawings():
     self.lineNodePaths = []
     self.points = []
 
-  def drawLine(self, nodeData, nodeDataList):
-    childrenIds = nodeData.get("childrenIds")
-     
-    if childrenIds is not None:
-      self.setParentPoint(nodeData)
-      self.setChildrenPoints(nodeData, childrenIds, nodeDataList)
+  def drawLine(sel, filteredData):
+    for key in filteredData:
+      nodeData = filteredData[key]
+      
+      childrenIds = nodeData.get("childrenIds")
+      if childrenIds is not None:
+        self.setParentPoint(nodeData)
+        self.setChildrenPoints(nodeData, childrenIds, filteredData)
       
   def setParentPoint(self, nodeData):
     parentPos = Utils.getNodeDataPointt(nodeData)
