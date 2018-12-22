@@ -7,6 +7,15 @@ class NodeDataFilter():
     self.initFilteredAndUnfilteredNodes(dataContainer)
     return self.getFilteredNodes(dataContainer)
 
+  def initFilteredAndUnfilteredNodes(self, dataContainer):
+    unfilteredData = dataContainer.unfilteredData
+    nodeDataList = dataContainer.nodeDataList
+
+    if self.listIsEmpty(unfilteredData):
+      dataContainer.unfilteredData = self.getListAddressFrom(nodeDataList)
+    else:
+      dataContainer.nodeDataList = self.getListAddressFrom(unfilteredData)
+
   def getFilteredNodes(self, dataContainer):
     for key, value in dataContainer.unfilteredData.items():
       nodeId = value.get(NodeData.ID)
@@ -17,6 +26,7 @@ class NodeDataFilter():
           dataContainer.nodeDataList = self.removeChildrenIds(
             dataContainer.nodeDataList, nodeId)
     return dataContainer.nodeDataList
+    
 
 
   def removeChildrenIds(self, nodeDataList, nodeId):
@@ -38,16 +48,6 @@ class NodeDataFilter():
       nodeData.pop("childrenIds", None)
     
     return nodeDataList
-
-
-  def initFilteredAndUnfilteredNodes(self, dataContainer):
-    unfilteredData = dataContainer.unfilteredData
-    nodeDataList = dataContainer.nodeDataList
-
-    if self.listIsEmpty(unfilteredData):
-      dataContainer.unfilteredData = self.getListAddressFrom(nodeDataList)
-    else:
-      dataContainer.nodeDataList = self.getListAddressFrom(unfilteredData)
 
   def listIsEmpty(self, list):
     return len(list) == 0

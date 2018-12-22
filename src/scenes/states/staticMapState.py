@@ -40,7 +40,7 @@ class StaticMapState(State):
     
     map.showBase.accept("f1", self.onSave)
     map.showBase.accept("f2", self.onOpenFile)
-    map.showBase.accept("f3", self.onF3Down)
+    map.showBase.accept("f3", self.onFoldNode)
 
     # Temporary for fixing bug when folding
     map.showBase.accept("f5", self.clearAllDrawings)
@@ -89,7 +89,7 @@ class StaticMapState(State):
   def onOpenFile(self):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)
 
-  def onF3Down(self):
+  def onFoldNode(self):
     nodeManager = self.map.nodeManager
     selectedNodeData = nodeManager.selectedNodeData
     nodeSavedFromSettings = nodeManager.getSelectedNodeData()

@@ -1,3 +1,5 @@
+import copy
+
 from scenes.cameramanager import CameraManager
 from scenes.mapComponents.lineDrawings import LineDrawings
 from scenes.mapComponents.nodeManager import NodeManager
@@ -9,18 +11,23 @@ from panda3d.core import NodePath
 
 from utils.utils import Utils
 from utils.saveManager import SaveManager
+from utils.reingoldTilford import ReingoldTilford
 
 class Map():
   
   FONT_UBUNTU = None
 
   def __init__(self, showBase):
+    self.initializeComponents(showBase)
+
+#Initialization
+  def initializeComponents(self, showBase):
     self.showBase = showBase
-    
     self.initCamera()
-    self.initMapNode(self.showBase)
+    self.initMapNode(showBase)
     self.initNodeManager()
-    self.initLineDrawings()    
+    self.initLineDrawings()
+    self.initReingoldTilford()
 
   def initCamera(self):
     self.cameraManager = CameraManager(self.showBase)
@@ -34,12 +41,43 @@ class Map():
   
   def initLineDrawings(self):
     self.lineDrawings = LineDrawings(self.mapNode)
-    
-    
+
+  def initReingoldTilford(self):
+    self.rTilford = ReingoldTilford()
+
+  
+#Interfaces for States
   def createNodeData(self, parentId, name, recheckLastId = False):
-    nodeManager = self.nodeManager
-    newNodeData = nodeManager.createNodeData(parentId, name, recheckLastId)
-    return newNodeData
+    nm = self.nodeManager
+    return nm.createNodeData(parentId, name, nm.unfilteredData, recheckLastId)
+
+  def getCoordinates(self, filteredData):
+    #Have to refactor rTilford.getCoordinates() to return copy of filteredData
+    return copy.deepcopy(self.rTilford.getCoordinates(filteredData))
+
+  #Has to be refactored: Should be encapsulated
+  def drawNodeData(self, filteredData, settingsOfData):
+    nodeManager = self.nodeManager   
+    nodeManager.tmpClearNodeDrawings()
+    self.lineDrawings.clear()
+    
+    loader = self.showBase.loader
+    mapNode = self.mapNode
+    for key in filteredData:
+      nodeData = filteredData[key]
+      nodeSettings = settingsOfData.get(key)
+      
+      breadth = nodeData.get("x")
+      depth = nodeData.get("depth")
+      
+      nodePos = Utils.getNodePosition(depth, breadth)
+      
+      nodeManager.renderNodeData(loader, mapNode, nodeData, nodeSettings, nodePos)
+      self.lineDrawings.drawLine(nodeData, filteredData)
+
+#Others
+
+  
     
   def editNodeData(self, nodeDataToEdit, newText):
     nodeManager = self.nodeManager
@@ -57,28 +95,7 @@ class Map():
     nodeManager.tree.getCoordinates(nodeDataList)
     self.drawNodeData(nodeManager.dataContainer)
       
-  def drawNodeData(self, dataContainer):
-    nodeManager = self.nodeManager
-    nodeManager.dataContainer = dataContainer
-    nodeDataList = nodeManager.dataContainer.nodeDataList
-    nodeDataSettings = dataContainer.nodeDataSettings
-    
-    nodeManager.tmpClearNodeDrawings()
-    self.lineDrawings.clear()
-    
-    loader = self.showBase.loader
-    mapNode = self.mapNode
-    for key in nodeDataList:
-      nodeData = nodeDataList[key]
-      nodeSettings = nodeDataSettings.get(key)
-      
-      breadth = nodeData.get("x")
-      depth = nodeData.get("depth")
-      
-      nodePos = Utils.getNodePosition(depth, breadth)
-      
-      nodeManager.renderNodeData(loader, mapNode, nodeData, nodeSettings, nodePos)
-      self.lineDrawings.drawLine(nodeData, nodeDataList)
+  
 
   def setCameraViewToSelectedNode(self):
     s = self.getActivatedNodeData()

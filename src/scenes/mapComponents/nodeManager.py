@@ -1,4 +1,6 @@
+import copy
 import itertools
+
 from collections import defaultdict
 from pprint import pprint
 
@@ -6,19 +8,41 @@ from direct.showbase.ShowBase import Vec3
 from scenes.mapComponents.nodeDrawing import NodeDrawing
 from scenes.mapComponents.dataContainer import DataContainer
 
-
 from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
 from platform import node
 
 
 class NodeManager():
+  SELECTED = "selected"
 
   def __init__(self):
     self.nodeDrawings = {}
-    self.dataContainer = DataContainer({}, {})
+    self.unfilteredData = {}
+    self.filteredData = {}
+    self.settingsOfData = {}
     self.tree = ReingoldTilford()
     self.selectedNodeData = None
+
+
+#First level functions
+  def createNodeData(self, parentId, name, unfilteredData, recheckLastId):
+    self.tmpClearNodeDrawings()
+    
+    newNodeData = {}
+    newNodeData['parentId'] = parentId
+    #Have to check Utils.getUniqueId() later on
+    newNodeData['id'] = Utils.getUniqueId(unfilteredData, recheckLastId)
+    newNodeData['name'] = name
+
+    parentData = unfilteredData.get(parentId)
+    self.addToParent(newNodeData, parentData)
+    self.setDepth(newNodeData, parentData)
+
+    newFD = copy.deepcopy(unfilteredData)
+    newFD[newNodeData['id']] = newNodeData
+    return newNodeData, newFD
+
 
 
   def renderNodeData(self, loader, mapNode, nodeData, nodeSettings, pos):
@@ -64,33 +88,6 @@ class NodeManager():
         print("point " + str(depth) + ": " + str(coordBreadth))
         
   
-  
-  def createNodeData(self, parentId, name, recheckLastId):
-    self.tmpClearNodeDrawings()
-    
-    newNodeData = {}
-    
-    if parentId is not None:
-      newNodeData['parentId'] = parentId
-      
-    nodeDataList = self.dataContainer.nodeDataList
-    newNodeData['id'] = Utils.getUniqueId(nodeDataList, recheckLastId)
-    newNodeData['name'] = name
-    nodeDataList[newNodeData['id']] = newNodeData
-    
-    parentData = nodeDataList.get(parentId)
-    if parentData is not None:
-      newNodeData["depth"] = parentData.get("depth") + 1
-      
-      children = parentData.get('childrenIds')
-      if children is None:
-        parentData['childrenIds'] = []
-      parentData['childrenIds'].append(newNodeData['id'])
-    else:
-      newNodeData["depth"] = 1
-    
-    return newNodeData
-  
   def deleteNodeData(self, nodeDataToDelete):
     if nodeDataToDelete["id"] == 1:
       print("Can't delete Main node")
@@ -121,9 +118,7 @@ class NodeManager():
       for childId in childrenIds:
         childData = nodeDataList[childId]
         self.deleteNodeAndChildren(childData)
-        
-        
-        
+
   
   ##################### Utils  
   def tmpClearNodeDrawings(self):
@@ -164,6 +159,23 @@ class NodeManager():
       if setting.get("selected") != None:
         return self.dataContainer.nodeDataList.get(key)
     return None
+
+
+#Second Level functions
+  def addToParent(self, nodeData, parentData):
+    if parentData is None:
+      return
+
+    children = parentData.get('childrenIds')
+    if children is None:
+      parentData['childrenIds'] = []
+    parentData['childrenIds'].append(nodeData['id'])
+
+  def setDepth(self, nodeData, parentData):
+    if parentData is not None:
+      nodeData["depth"] = parentData.get("depth") + 1
+    else:
+      nodeData["depth"] = 1
 
 
 

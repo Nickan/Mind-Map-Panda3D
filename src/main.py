@@ -11,7 +11,6 @@ class Main():
   def __init__(self):
     epiphany = Epiphany()
     epiphany.map.setState(CleanState(epiphany.map))
-#     epiphany.map.setState(DebuggingState(epiphany.map))
     epiphany.run()
     
 main = Main()
