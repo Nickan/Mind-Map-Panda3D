@@ -15,9 +15,11 @@ class NodeClickedState(State):
     
   def enter(self):
     map = self.map
-    map.setSelectedNodeData()
-    selectedNodeData = map.getSavedSelectedNodeData()
-    self.setupControls(selectedNodeData)
+    # map.setSelectedNodeData()
+    data = map.getSelectedNodeData()
+    map.setStatusAsSelected(data)
+    map.drawData()
+    self.setupControls(data)
 
   def exit(self):
     self.map.showBase.ignoreAll()
@@ -25,20 +27,19 @@ class NodeClickedState(State):
     
 
   # mouse1Down() helpers
-  def setNodeSelected(self, selectedNodeData):
+  def setNodeSelected(self, data):
     nodeManager = self.map.nodeManager
 
     nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
     self.removeAllSelectedField(nodeDataSettings)
 
-    nodeManager.selectedNodeData = selectedNodeData
-    nodeManager.setNodeSelected(selectedNodeData)
+    nodeManager.setNodeSelected(data)
     
-    nodeId = selectedNodeData.get("id")
+    nodeId = data.get("id")
     self.setSelected(nodeDataSettings, nodeId)
     
   """ enter helper """
-  def setupControls(self, selectedNodeData):
+  def setupControls(self, data):
     showBase = self.map.showBase
     showBase.accept('escape', sys.exit)
 
@@ -48,7 +49,7 @@ class NodeClickedState(State):
     
     showBase.accept("tab", self.onTab)
     
-    self.setupDragNodeDetector(selectedNodeData)
+    self.setupDragNodeDetector(data)
 
     # Temporary, have to change the control later on
     showBase.accept("f3", self.onF3Down)
@@ -56,33 +57,33 @@ class NodeClickedState(State):
   """ Events """
   def mouse1Down(self):
     nodeManager = self.map.nodeManager
-    selectedNodeData = self.map.getSelectedNodeData()
-    if selectedNodeData is None:
+    data = self.map.getSelectedNodeData()
+    if data is None:
       self.goToScrollingState()
       self.map.state.mouse1Down()
     else:
-      self.setupDragNodeDetector(selectedNodeData)
-      self.setNodeSelected(selectedNodeData)
+      self.setupDragNodeDetector(data)
+      self.setNodeSelected(data)
     
   def mouse1Up(self):
     from scenes.states.staticMapState import StaticMapState
     self.map.changeState(StaticMapState(self.map))
 
   def mouse3Down(self):
-    selectedNodeData = self.map.getSelectedNodeData()
-    if selectedNodeData is None:
+    data = self.map.getSelectedNodeData()
+    if data is None:
       print("None selected")
     else:
-      StateManager.switchToEditTextState(self, selectedNodeData)
+      StateManager.switchToEditTextState(self, data)
     
   def onTab(self):
-    selectedNodeData = self.map.nodeManager.selectedNodeData
-    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+    data = self.map.nodeManager.data
+    StateManager.switchToCreateNodeDataState(self, data)
 
   # Have to refactor, as won't be triggered here
   def onDelete(self):
     nodeManager = self.map.nodeManager
-    StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
+    StateManager.switchToDeleteNodeDataState(self, nodeManager.data)
 
   def onNodeDrag(self):
     self.map.changeState(DragNodeState(self.map))
@@ -93,8 +94,8 @@ class NodeClickedState(State):
     self.map.state = FoldNode(self.map)
     self.map.state.enter()
 
-  def setupDragNodeDetector(self, selectedNodeData):
-    nodeDrawing = self.map.nodeManager.getNodeDrawing(selectedNodeData)
+  def setupDragNodeDetector(self, data):
+    nodeDrawing = self.map.nodeManager.getNodeDrawing(data)
     DragNodeStartDetector(nodeDrawing, self.map, self.onNodeDrag)
 
 
