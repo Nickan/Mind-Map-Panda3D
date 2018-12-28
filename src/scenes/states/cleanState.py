@@ -14,12 +14,6 @@ class CleanState(State):
     map = self.map
     map.createNodeData(None, "Main")
     map.drawData()
-
-    # filteredData = map.getFilteredData(allData)
-    # updatedallData = map.getCoordinates(allData)
-    
-    # map.drawNodeData(allData, {})
-    # map.setNodeDrawingHeight()
     self.initEvents()
     
     
