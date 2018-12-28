@@ -16,6 +16,7 @@ from .nodeDataFilter import NodeDataFilter
 
 class NodeManager():
   ID = 'id'
+  NAME = 'name'
 
   #Status field
   SELECTED = "selected"
@@ -234,7 +235,7 @@ class NodeManager():
     for key in allStatusData:
       status = allStatusData.get(key)
       if status.get(NodeManager.LATEST_CREATED_DATA) is not None:
-        return allDrawingData.get(key)
+        return allDrawingData.get(key), key
     return None
 
 
