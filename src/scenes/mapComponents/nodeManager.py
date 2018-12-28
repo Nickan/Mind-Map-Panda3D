@@ -11,59 +11,77 @@ from scenes.mapComponents.dataContainer import DataContainer
 from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
 from platform import node
+from .nodeDataFilter import NodeDataFilter
 
 
 class NodeManager():
   SELECTED = "selected"
 
   def __init__(self):
-    self.dataDrawings = {}
-    self.unfilteredData = {}
-    self.filteredData = {}
-    self.settingsOfData = {}
+    # Will be mutated
+    self.allDrawingData = {}
+    self.allData = {}
+    self.allStatusData = {}
+
     self.tree = ReingoldTilford()
-    self.selectedNodeData = None
 
 
 #First level functions
-  def createNodeData(self, parentId, name, unfilteredData, recheckLastId):
-    self.clearDataDrawings()
+  def createNodeData(self, parentId, name, recheckLastId, allData,
+    getUniqueId):
+
+    newData = {}
+    newData['parentId'] = parentId
+    newData['name'] = name
+    parentData = allData.get(parentId)
+    self.addToParent(newData, parentData)
+    self.setDepth(newData, parentData)
+
+    newData['id'] = getUniqueId(allData, recheckLastId)
+    return newData
+    # allData[newData['id']] = newData
+    # return newData, allData
+
+  def getFilteredData(self, allData, allStatusData):
+    return NodeDataFilter.getFilteredData(allData, allStatusData)
     
-    newNodeData = {}
-    newNodeData['parentId'] = parentId
-    #Have to check Utils.getUniqueId() later on
-    newNodeData['id'] = Utils.getUniqueId(unfilteredData, recheckLastId)
-    newNodeData['name'] = name
 
-    parentData = unfilteredData.get(parentId)
-    self.addToParent(newNodeData, parentData)
-    self.setDepth(newNodeData, parentData)
-
-    newFD = copy.deepcopy(unfilteredData)
-    newFD[newNodeData['id']] = newNodeData
-    return newNodeData, newFD
-
-  def drawData(self, filteredData, settingsOfData, loader, mapNode):
+  def drawData(self, filteredData, allStatusData, loader, mapNode,
+    getNodePosition):
     for key in filteredData:
       nodeData = filteredData.get(key)
-      settings = settingsOfData.get(key)
+      settings = allStatusData.get(key)
 
       breadth = nodeData.get("x")
       depth = nodeData.get("depth")
-      pos = Utils.getNodePosition(depth, breadth)
+      pos = getNodePosition(depth, breadth)
 
       self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
 
-  def removeAllSelectedField(settingsOfData):
-    nSettingsOfData = copy.deepcopy(settingsOfData)
-    for key in nSettingsOfData:
-      nodeSettings = nSettingsOfData.get(key)
-      if nSettingsOfData.get("selected") is not None:
-        nSettingsOfData.pop("selected", None)
-    return nSettingsOfData
+  def removeAllSelectedField(allStatusData):
+    nallStatusData = copy.deepcopy(allStatusData)
+    for key in nallStatusData:
+      nodeSettings = nallStatusData.get(key)
+      if nallStatusData.get("selected") is not None:
+        nallStatusData.pop("selected", None)
+    return nallStatusData
 
+  
+#createNodeData()
+  def addToParent(self, nodeData, parentData):
+    if parentData is None:
+      return
 
+    children = parentData.get('childrenIds')
+    if children is None:
+      parentData['childrenIds'] = []
+    parentData['childrenIds'].append(nodeData['id'])
 
+  def setDepth(self, nodeData, parentData):
+    if parentData is not None:
+      nodeData["depth"] = parentData.get("depth") + 1
+    else:
+      nodeData["depth"] = 1
 
 #Second Level Functions
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
@@ -79,15 +97,15 @@ class NodeManager():
     if selected is not None:
       nodeDrawing.setSelected(selected)
 
-    self.dataDrawings[id] = nodeDrawing
+    self.allDrawingData[id] = nodeDrawing
     
   
   """ TODO, implementation needs to be changed """
-  def getNodeData(self, nodePath, dataDrawings, filteredData):
+  def getNodeData(self, nodePath, allDrawingData, filteredData):
     nodePath = nodePath.findNetTag("Node")
     
-    for key in dataDrawings:
-      nodeDrawing = dataDrawings.get(key)
+    for key in allDrawingData:
+      nodeDrawing = allDrawingData.get(key)
       if nodePath == nodeDrawing.mainNode:
         return filteredData.get(key)
     return None
@@ -138,15 +156,15 @@ class NodeManager():
 
   
   ##################### Utils  
-  def clearDataDrawings(self):
-    for key in self.dataDrawings:
-      self.dataDrawings[key].dispose()
-    self.dataDrawings = {}
+  def clearAllDrawingData(self):
+    for key in self.allDrawingData:
+      self.allDrawingData[key].dispose()
+    return {}
     
     
   
   def getNodeDrawing(self, nodeData):
-    return self.dataDrawings[nodeData["id"]]
+    return self.allDrawingData[nodeData["id"]]
   
   def getNodeDrawingPos(self, nodeData):
     nodeDrawing = self.getNodeDrawing(nodeData)
@@ -159,8 +177,8 @@ class NodeManager():
     selectedNodeDrawing.setSelected(True)
     
   def setAllAsUnselected(self, nodeDataList = None):
-    for key in self.dataDrawings:
-      nodeDrawing = self.dataDrawings[key]
+    for key in self.allDrawingData:
+      nodeDrawing = self.allDrawingData[key]
       nodeDrawing.setSelected(False)
       
       if nodeDataList is None:
@@ -177,27 +195,6 @@ class NodeManager():
         return self.dataContainer.nodeDataList.get(key)
     return None
 
-
-#Second Level functions
-  def addToParent(self, nodeData, parentData):
-    if parentData is None:
-      return
-
-    children = parentData.get('childrenIds')
-    if children is None:
-      parentData['childrenIds'] = []
-    parentData['childrenIds'].append(nodeData['id'])
-
-  def setDepth(self, nodeData, parentData):
-    if parentData is not None:
-      nodeData["depth"] = parentData.get("depth") + 1
-    else:
-      nodeData["depth"] = 1
-
-
-
-    
-        
         
         
         
