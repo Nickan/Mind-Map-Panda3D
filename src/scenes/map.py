@@ -48,11 +48,16 @@ class Map():
 
   
 #Interfaces for States
+  # Have to review the purpose of the recheckLastId
   def createNodeData(self, parentId, name, recheckLastId = False):
     nm = self.nodeManager
     newData = nm.createNodeData(parentId, name, recheckLastId, nm.allData,
       Utils.getUniqueId)
-    nm.allData[newData['id']] = newData
+    id = newData['id']
+    nm.allData[id] = newData
+
+    modAllStatusData = nm.removeAllLatestCreatedDataField(nm.allStatusData)
+    nm.allStatusData = nm.setAsLatestCreatedData(id, modAllStatusData)
 
   def drawData(self):
     loader = self.showBase.loader
@@ -71,6 +76,7 @@ class Map():
     nm = self.nodeManager
     nm.allStatusData = nm.setStatusAsSelected(data.get('id'), 
     nm.allStatusData)
+
 
 
   def getCoordinates(self, filteredData):
@@ -153,8 +159,7 @@ class Map():
   def setState(self, state):
     self.state = state
     self.state.enter()
-  
-  
+
 
   def getSelectedNodeDrawing(self):
     nodeData = self.getSavedSelectedNodeData()

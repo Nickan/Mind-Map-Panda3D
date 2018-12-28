@@ -39,13 +39,13 @@ class StateManager():
     map.state.enter(selectedNodeData)
     
   @staticmethod
-  def switchToCreateNodeDataState(currentState, selectedNodeData):
+  def switchToCreateNodeDataState(currentState):
     map = currentState.map
     currentState.exit()
-    
-    from scenes.states.createNodeState import CreateNodeState
+
+    from .createNodeState import CreateNodeState
     map.state = CreateNodeState(map)
-    map.state.enter(map.nodeManager.selectedNodeData)
+    map.state.enter()
     
   @staticmethod
   def switchToLoadMapState(currentState):
