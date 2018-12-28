@@ -54,6 +54,18 @@ class NodeManager():
 
       self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
 
+  def removeAllSelectedField(settingsOfData):
+    nSettingsOfData = copy.deepcopy(settingsOfData)
+    for key in nSettingsOfData:
+      nodeSettings = nSettingsOfData.get(key)
+      if nSettingsOfData.get("selected") is not None:
+        nSettingsOfData.pop("selected", None)
+    return nSettingsOfData
+
+
+
+
+#Second Level Functions
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
@@ -71,13 +83,13 @@ class NodeManager():
     
   
   """ TODO, implementation needs to be changed """
-  def getNodeData(self, nodePath):
+  def getNodeData(self, nodePath, dataDrawings, filteredData):
     nodePath = nodePath.findNetTag("Node")
     
-    for key in self.dataDrawings:
-      nodeDrawing = self.dataDrawings[key]
+    for key in dataDrawings:
+      nodeDrawing = dataDrawings.get(key)
       if nodePath == nodeDrawing.mainNode:
-        return self.dataContainer.nodeDataList[key]
+        return filteredData.get(key)
     return None
   
   def getNodeDataId(self, nodeData):

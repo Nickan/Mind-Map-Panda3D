@@ -14,14 +14,28 @@ class NodeClickedState(State):
     self.map = map
     
   def enter(self):
-    selectedNodeData = self.map.getSavedSelectedNodeData()
-    self.setNodeSelected(selectedNodeData)
+    map = self.map
+    map.setSelectedNodeData()
+    selectedNodeData = map.getSavedSelectedNodeData()
     self.setupControls(selectedNodeData)
 
   def exit(self):
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
     
+
+  # mouse1Down() helpers
+  def setNodeSelected(self, selectedNodeData):
+    nodeManager = self.map.nodeManager
+
+    nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
+    self.removeAllSelectedField(nodeDataSettings)
+
+    nodeManager.selectedNodeData = selectedNodeData
+    nodeManager.setNodeSelected(selectedNodeData)
+    
+    nodeId = selectedNodeData.get("id")
+    self.setSelected(nodeDataSettings, nodeId)
     
   """ enter helper """
   def setupControls(self, selectedNodeData):
@@ -39,7 +53,7 @@ class NodeClickedState(State):
     # Temporary, have to change the control later on
     showBase.accept("f3", self.onF3Down)
 
-    """ Events """
+  """ Events """
   def mouse1Down(self):
     nodeManager = self.map.nodeManager
     selectedNodeData = self.map.getSelectedNodeData()
@@ -79,19 +93,6 @@ class NodeClickedState(State):
     self.map.state = FoldNode(self.map)
     self.map.state.enter()
 
-  # mouse1Down() helpers
-  def setNodeSelected(self, selectedNodeData):
-    nodeManager = self.map.nodeManager
-
-    nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
-    self.clearSelectedField(nodeDataSettings)
-
-    nodeManager.selectedNodeData = selectedNodeData
-    nodeManager.setNodeSelected(selectedNodeData)
-    
-    nodeId = selectedNodeData.get("id")
-    self.setSelected(nodeDataSettings, nodeId)
-
   def setupDragNodeDetector(self, selectedNodeData):
     nodeDrawing = self.map.nodeManager.getNodeDrawing(selectedNodeData)
     DragNodeStartDetector(nodeDrawing, self.map, self.onNodeDrag)
@@ -107,12 +108,12 @@ class NodeClickedState(State):
       else:
         nodeDataSettings.get(nodeId)["selected"] = True
 
-  def clearSelectedField(self, nodeDict):
-    for key in nodeDict:
-      nodeSettings = nodeDict.get(key)
-      if nodeSettings.get("selected") is not None:
-        nodeSettings.pop("selected", None)
-    return nodeDict
+  # def removeAllSelectedField(self, nodeDict):
+  #   for key in nodeDict:
+  #     nodeSettings = nodeDict.get(key)
+  #     if nodeSettings.get("selected") is not None:
+  #       nodeSettings.pop("selected", None)
+  #   return nodeDict
 
   
 
