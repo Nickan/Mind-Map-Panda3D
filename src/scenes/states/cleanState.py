@@ -14,6 +14,7 @@ class CleanState(State):
     map = self.map
     nodeManager = map.nodeManager
     nodeData, unfilteredData = map.createNodeData(None, "Main")
+    filteredData = map.getFilteredData(unfilteredData)
     updatedUnfilteredData = map.getCoordinates(unfilteredData)
     
     map.drawNodeData(unfilteredData, {})

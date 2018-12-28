@@ -72,6 +72,33 @@ class Map():
     NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
     drawingNode.keepTextCenter()
 
+  def setSelectedNodeData(self):
+    selectedN = self.getSavedSelectedNodeData()
+    settingsOfData = self.nodeManager.settingsOfData
+    self.nodeManager.settingsOfData = self.nodeManager.removeAllSelectedField(settingsOfData)
+
+  # Has to be refactored later
+  def getSelectedNodeData(self):
+    # Requires interaction between camera and nodemanager, so it is put in map class
+    clickedNodePath = self.cameraManager.getClickedNodePath()
+    if clickedNodePath is not None:
+      dDrawing = self.nodeManager.dataDrawings
+      filteredData = self.nodeManager.filteredData
+      return self.nodeManager.getNodeData(clickedNodePath, dDrawing, 
+        filteredData)
+    return None
+
+
+#2nd Level interfaces
+  # Should be refactored later on
+  def getSavedSelectedNodeData(self):
+    node = self.getSelectedNodeData()
+    if node is None:
+      node = self.getActivatedNodeData()
+    return node
+
+#3rd Level Interfaces
+  
 #Others
 
   
@@ -107,13 +134,7 @@ class Map():
     self.state = state
     self.state.enter()
   
-  # Has to be refactored later
-  def getSelectedNodeData(self):
-    # Requires interaction between camera and nodemanager, so it is put in map class
-    clickedNodePath = self.cameraManager.getClickedNodePath()
-    if clickedNodePath is not None:
-      return self.nodeManager.getNodeData(clickedNodePath)
-    return None
+  
 
   def getSelectedNodeDrawing(self):
     nodeData = self.getSavedSelectedNodeData()
@@ -127,13 +148,6 @@ class Map():
         return self.nodeManager.dataContainer.nodeDataList.get(key)
     return None
 
-  # Should be refactored later on
-  def getSavedSelectedNodeData(self):
-    node = self.getSelectedNodeData()
-    if node is None:
-      node = self.getActivatedNodeData()
-    return node
-  
   
   # Utils
   def clickedOnMapBg(self):
