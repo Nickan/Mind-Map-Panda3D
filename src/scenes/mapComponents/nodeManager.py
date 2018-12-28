@@ -39,8 +39,6 @@ class NodeManager():
 
     newData['id'] = getUniqueId(allData, recheckLastId)
     return newData
-    # allData[newData['id']] = newData
-    # return newData, allData
 
   def getFilteredData(self, allData, allStatusData):
     return NodeDataFilter.getFilteredData(allData, allStatusData)
@@ -98,6 +96,11 @@ class NodeManager():
       nodeDrawing.setSelected(selected)
 
     self.allDrawingData[id] = nodeDrawing
+    self.setNodeDrawingHeight(nodeDrawing)
+
+  def setNodeDrawingHeight(self, drawingNode):
+    NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
+    drawingNode.keepTextCenter()
     
   
   """ TODO, implementation needs to be changed """

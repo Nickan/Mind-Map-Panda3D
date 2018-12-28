@@ -86,8 +86,7 @@ class Map():
     nodeManager.drawData(filteredData, settingsOfData, loader, mapNode)
     self.lineDrawings.drawLine(filteredData)
 
-  def setNodeDrawingHeight(self):
-    drawingNode = self.nodeManager.dataDrawings.get(1)
+  def setNodeDrawingHeight(self, drawingNode):
     NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
     drawingNode.keepTextCenter()
 
