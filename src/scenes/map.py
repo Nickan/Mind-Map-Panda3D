@@ -50,8 +50,6 @@ class Map():
 #Interfaces for States
   def createNodeData(self, parentId, name, recheckLastId = False):
     nm = self.nodeManager
-    nm.allDrawingData = nm.clearAllDrawingData()
-
     newData = nm.createNodeData(parentId, name, recheckLastId, nm.allData,
       Utils.getUniqueId)
     nm.allData[newData['id']] = newData
@@ -61,6 +59,7 @@ class Map():
     mapNode = self.mapNode
 
     nm = self.nodeManager
+    nm.allDrawingData = nm.clearAllDrawingData()
     filteredData = nm.getFilteredData(nm.allData, nm.allStatusData)
 
     filteredDataWithCoords = self.rTilford.getCoordinates(filteredData)
@@ -68,7 +67,10 @@ class Map():
     nm.drawData(filteredDataWithCoords, nm.allStatusData, 
       loader, mapNode, Utils.getNodePosition)
 
-
+  def setStatusAsSelected(self, data):
+    nm = self.nodeManager
+    nm.allStatusData = nm.setStatusAsSelected(data.get('id'), 
+    nm.allStatusData)
 
 
   def getCoordinates(self, filteredData):
@@ -76,14 +78,14 @@ class Map():
     return copy.deepcopy(self.rTilford.getCoordinates(filteredData))
 
   #Has to be refactored: Should be encapsulated
-  def drawNodeData(self, filteredData, settingsOfData):
+  def drawNodeData(self, filteredData, allStatusData):
     nodeManager = self.nodeManager   
     nodeManager.clearDataDrawings()
     self.lineDrawings.clear()
     
     loader = self.showBase.loader
     mapNode = self.mapNode
-    nodeManager.drawData(filteredData, settingsOfData, loader, mapNode)
+    nodeManager.drawData(filteredData, allStatusData, loader, mapNode)
     self.lineDrawings.drawLine(filteredData)
 
   def setNodeDrawingHeight(self, drawingNode):
@@ -92,16 +94,16 @@ class Map():
 
   def setSelectedNodeData(self):
     selectedN = self.getSavedSelectedNodeData()
-    settingsOfData = self.nodeManager.settingsOfData
-    self.nodeManager.settingsOfData = self.nodeManager.removeAllSelectedField(settingsOfData)
+    allStatusData = self.nodeManager.allStatusData
+    self.nodeManager.allStatusData = self.nodeManager.removeAllSelectedField(allStatusData)
 
   # Has to be refactored later
   def getSelectedNodeData(self):
     # Requires interaction between camera and nodemanager, so it is put in map class
     clickedNodePath = self.cameraManager.getClickedNodePath()
     if clickedNodePath is not None:
-      dDrawing = self.nodeManager.dataDrawings
-      filteredData = self.nodeManager.filteredData
+      dDrawing = self.nodeManager.allDrawingData
+      filteredData = self.nodeManager.allData
       return self.nodeManager.getNodeData(clickedNodePath, dDrawing, 
         filteredData)
     return None
@@ -159,11 +161,11 @@ class Map():
     return self.nodeManager.getNodeDrawing(nodeData)
 
   def getActivatedNodeData(self):
-    s = self.nodeManager.dataContainer.nodeDataSettings
+    s = self.nodeManager.allStatusData
     for key in s:
-      nodeSettings = s.get(key)
-      if nodeSettings.get(DataContainer.SELECTED) != None:
-        return self.nodeManager.dataContainer.nodeDataList.get(key)
+      statusData = s.get(key)
+      if statusData.get(DataContainer.SELECTED) != None:
+        return self.nodeManager.allData.get(key)
     return None
 
   

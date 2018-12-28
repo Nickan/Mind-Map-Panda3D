@@ -56,7 +56,15 @@ class NodeManager():
 
       self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
 
-  def removeAllSelectedField(allStatusData):
+  def setStatusAsSelected(self, dataId, allStatusData):
+    newStatus = self.removeAllSelectedField(allStatusData)
+    newStatus[dataId] = { NodeManager.SELECTED: True }
+    return newStatus 
+
+
+
+
+  def removeAllSelectedField(self, allStatusData):
     nallStatusData = copy.deepcopy(allStatusData)
     for key in nallStatusData:
       nodeSettings = nallStatusData.get(key)
