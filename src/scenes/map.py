@@ -129,12 +129,12 @@ class Map():
 
   
     
-  def editNodeData(self, nodeDataToEdit, newText):
-    nodeManager = self.nodeManager
-    nodeDataToEdit["name"] = newText
+  def editNodeData(self, dataId, newText):
+    nm = self.nodeManager
+    nm.allData.get(dataId)[NodeManager.NAME] = newText
     
 
-    self.drawNodeData(nodeManager.dataContainer)
+    # self.drawNodeData(nodeManager.dataContainer)
     
   def deleteNodeData(self, nodeDataToDelete):
     nodeManager = self.nodeManager

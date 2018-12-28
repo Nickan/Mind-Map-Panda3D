@@ -19,13 +19,13 @@ class KeyManager():
     KeyManager.ON_KEY_DOWN_FN(keyname)
     
   @staticmethod
-  def getModifiedKeyFromKeyInput(text, keyname, dataDrawing, onEnterDown):
+  def getModifiedKeyFromKeyInput(text, keyname, dataId, onEnterDown):
     if keyname == "\b": # Backspace
       text = text[:-1]
     else:
         
       if keyname == "\r": # Enter
-        onEnterDown(dataDrawing, text)
+        onEnterDown(dataId, text)
         
       if keyname != "\t": # As long as keyname is not a tab
         text += keyname
