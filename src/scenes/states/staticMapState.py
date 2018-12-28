@@ -79,8 +79,7 @@ class StaticMapState(State):
     print("static move up")
     
   def onTab(self):
-    selectedNodeData = self.map.nodeManager.selectedNodeData
-    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+    StateManager.switchToCreateNodeDataState(self)
     
   def onSave(self):
     nodeManager = self.map.nodeManager

@@ -15,7 +15,11 @@ from .nodeDataFilter import NodeDataFilter
 
 
 class NodeManager():
+  ID = 'id'
+
+  #Status field
   SELECTED = "selected"
+  LATEST_CREATED_DATA = "latestCreatedData"
 
   def __init__(self):
     # Will be mutated
@@ -33,11 +37,11 @@ class NodeManager():
     newData = {}
     newData['parentId'] = parentId
     newData['name'] = name
+    newData['id'] = getUniqueId(allData, recheckLastId)
+
     parentData = allData.get(parentId)
     self.addToParent(newData, parentData)
     self.setDepth(newData, parentData)
-
-    newData['id'] = getUniqueId(allData, recheckLastId)
     return newData
 
   def getFilteredData(self, allData, allStatusData):
@@ -205,6 +209,35 @@ class NodeManager():
       if setting.get("selected") != None:
         return self.dataContainer.nodeDataList.get(key)
     return None
+
+#Getter and setter
+  def setAsLatestCreatedData(self, dataId, allStatusData):
+    newAllStatus = copy.deepcopy(allStatusData)
+    statusData = newAllStatus.get(dataId)
+
+    if statusData is None:
+      newAllStatus[dataId] = { NodeManager.LATEST_CREATED_DATA: True }
+    else:
+      statusData[NodeManager.LATEST_CREATED_DATA] = True
+    return newAllStatus
+
+  def removeAllLatestCreatedDataField(self, allStatusData):
+    newAllStatus = copy.deepcopy(allStatusData)
+
+    for key in newAllStatus:
+      status = newAllStatus.get(key)
+      status.pop(NodeManager.LATEST_CREATED_DATA, None)
+
+    return newAllStatus
+
+  def getLatestDrawingNode(self, allDrawingData, allStatusData):
+    for key in allStatusData:
+      status = allStatusData.get(key)
+      if status.get(NodeManager.LATEST_CREATED_DATA) is not None:
+        return allDrawingData.get(key)
+    return None
+
+
 
         
         

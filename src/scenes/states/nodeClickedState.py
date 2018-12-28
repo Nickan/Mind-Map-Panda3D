@@ -15,7 +15,6 @@ class NodeClickedState(State):
     
   def enter(self):
     map = self.map
-    # map.setSelectedNodeData()
     data = map.getSelectedNodeData()
     map.setStatusAsSelected(data)
     map.drawData()
@@ -77,8 +76,7 @@ class NodeClickedState(State):
       StateManager.switchToEditTextState(self, data)
     
   def onTab(self):
-    data = self.map.nodeManager.data
-    StateManager.switchToCreateNodeDataState(self, data)
+    StateManager.switchToCreateNodeDataState(self)
 
   # Have to refactor, as won't be triggered here
   def onDelete(self):

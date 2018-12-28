@@ -1,6 +1,8 @@
 from .state import State
 from .stateManager import StateManager
 
+from scenes.mapComponents.nodeManager import NodeManager
+
 from utils.keyManager import KeyManager
 from utils.saveManager import SaveManager
 from utils.utils import Utils
@@ -13,31 +15,37 @@ class CreateNodeState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, selectedNodeData):
+  def enter(self):
     self.setupControls()
-    nodeManager = self.map.nodeManager
-    nodeManager.selectedNodeData = selectedNodeData
-    
-    self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, selectedNodeData)
-    nodeDataList = nodeManager.dataContainer.nodeDataList
-    SaveManager.clearNodeDataList(nodeDataList)
-    
-    nodeManager.tree.getCoordinates(nodeDataList)
-    self.map.drawNodeData(nodeManager.dataContainer)
+    map = self.map
+    nodeManager = map.nodeManager
+    data = map.getSavedSelectedNodeData()
+    map.createNodeData(data.get(NodeManager.ID), "")
+    map.drawData()
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
     
-  def onKeyDown(self, keyname):
-    nodeManager = self.map.nodeManager
-    self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
-    text = self.tmpNodeDrawing.textNode.getText()
-    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, self.onEnterDown)
-        
-    textNode = self.tmpNodeDrawing.textNode
-    textNode.setText(text)
-    self.tmpNodeDrawing.keepTextCenter()
+    # self.tmpNewNodeData = self.tmpCreatePotentialNewNode(nodeManager, data)
+    # nodeDataList = nodeManager.dataContainer.nodeDataList
+    # SaveManager.clearNodeDataList(nodeDataList)
     
-  def onEnterDown(self, text):
-    self.map.editNodeData(self.tmpNewNodeData, text)
+    # nodeManager.tree.getCoordinates(nodeDataList)
+    # self.map.drawNodeData(nodeManager.dataContainer)
+    # KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
+    
+  def onKeyDown(self, keyname):
+    nm = self.map.nodeManager
+    dataDrawing = nm.getLatestDrawingNode(nm.allDrawingData, nm.allStatusData)
+
+    # self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
+    text = dataDrawing.textNode.getText()
+    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, dataDrawing, 
+      self.onEnterDown)
+        
+    textNode = dataDrawing.textNode
+    textNode.setText(text)
+    dataDrawing.keepTextCenter()
+    
+  def onEnterDown(self, dataDrawing, text):
     StateManager.switchToStaticMapState(self)
     
     
@@ -70,8 +78,8 @@ class CreateNodeState(State):
     StateManager.switchToStaticMapState(self)
     
     
-  def tmpCreatePotentialNewNode(self, nodeManager, selectedNodeData):
-    id = nodeManager.getNodeDataId(nodeManager.selectedNodeData)
+  def tmpCreatePotentialNewNode(self, nodeManager, data):
+    id = nodeManager.getNodeDataId(nodeManager.data)
     self.tmpNewNodeData = nodeManager.createNodeData(id, "", False)
     return self.tmpNewNodeData
 
