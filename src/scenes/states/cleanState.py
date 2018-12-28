@@ -12,13 +12,14 @@ class CleanState(State):
     
   def enter(self):
     map = self.map
-    nodeManager = map.nodeManager
-    nodeData, unfilteredData = map.createNodeData(None, "Main")
-    filteredData = map.getFilteredData(unfilteredData)
-    updatedUnfilteredData = map.getCoordinates(unfilteredData)
+    map.createNodeData(None, "Main")
+    map.drawData()
+
+    # filteredData = map.getFilteredData(allData)
+    # updatedallData = map.getCoordinates(allData)
     
-    map.drawNodeData(unfilteredData, {})
-    map.setNodeDrawingHeight()
+    # map.drawNodeData(allData, {})
+    # map.setNodeDrawingHeight()
     self.initEvents()
     
     

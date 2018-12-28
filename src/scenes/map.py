@@ -50,7 +50,26 @@ class Map():
 #Interfaces for States
   def createNodeData(self, parentId, name, recheckLastId = False):
     nm = self.nodeManager
-    return nm.createNodeData(parentId, name, nm.unfilteredData, recheckLastId)
+    nm.allDrawingData = nm.clearAllDrawingData()
+
+    newData = nm.createNodeData(parentId, name, recheckLastId, nm.allData,
+      Utils.getUniqueId)
+    nm.allData[newData['id']] = newData
+
+  def drawData(self):
+    loader = self.showBase.loader
+    mapNode = self.mapNode
+
+    nm = self.nodeManager
+    filteredData = nm.getFilteredData(nm.allData, nm.allStatusData)
+
+    filteredDataWithCoords = self.rTilford.getCoordinates(filteredData)
+
+    nm.drawData(filteredDataWithCoords, nm.allStatusData, 
+      loader, mapNode, Utils.getNodePosition)
+
+
+
 
   def getCoordinates(self, filteredData):
     #Have to refactor rTilford.getCoordinates() to return copy of filteredData

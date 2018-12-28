@@ -1,47 +1,40 @@
 from scenes.mapComponents.nodeData import NodeData
 from utils.utils import Utils
 
+import copy
+
 class NodeDataFilter():
 
-  def getFilteredNodeData(self, dataContainer):
-    self.initFilteredAndUnfilteredNodes(dataContainer)
-    return self.getFilteredNodes(dataContainer)
+  @staticmethod
+  def getFilteredData(allData, allStatusData):
+    filteredData = copy.deepcopy(allData)
 
-  def initFilteredAndUnfilteredNodes(self, dataContainer):
-    unfilteredData = dataContainer.unfilteredData
-    nodeDataList = dataContainer.nodeDataList
-
-    if self.listIsEmpty(unfilteredData):
-      dataContainer.unfilteredData = self.getListAddressFrom(nodeDataList)
-    else:
-      dataContainer.nodeDataList = self.getListAddressFrom(unfilteredData)
-
-  def getFilteredNodes(self, dataContainer):
-    for key, value in dataContainer.unfilteredData.items():
+    for key, value in allData.items():
       nodeId = value.get(NodeData.ID)
-      nodeSettings = dataContainer.nodeDataSettings.get(nodeId)
+      nodeSettings = allStatusData.get(nodeId)
       if nodeSettings is not None:
         folded = nodeSettings.get("folded")
         if folded is not None and folded is True:
-          dataContainer.nodeDataList = self.removeChildrenIds(
-            dataContainer.nodeDataList, nodeId)
-    return dataContainer.nodeDataList
+          filteredData = NodeDataFilter.removeChildrenIds(
+            filteredData, nodeId)
+    return filteredData
     
 
-
-  def removeChildrenIds(self, nodeDataList, nodeId):
+  @staticmethod
+  def removeChildrenIds(nodeDataList, nodeId):
     nodeData = nodeDataList.get(nodeId)
     if nodeData != None:
-      nodeDataList = self.removeChildren(nodeData, nodeDataList,
+      nodeDataList = NodeDataFilter.removeChildren(nodeData, nodeDataList,
         False)
 
     return nodeDataList
 
-  def removeChildren(self, nodeData, nodeDataList, includeSelf = True):
+  @staticmethod
+  def removeChildren(nodeData, nodeDataList, includeSelf = True):
     childNodes = Utils.getChildren(nodeData, nodeDataList)
     if childNodes != None:
       for childNode in childNodes:
-        self.removeChildren(childNode, nodeDataList)
+        NodeDataFilter.removeChildren(childNode, nodeDataList)
     if includeSelf:
       nodeDataList.pop(nodeData.get("id"), None)
     else:
