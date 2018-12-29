@@ -87,6 +87,12 @@ class Map():
     #Have to refactor rTilford.getCoordinates() to return copy of filteredData
     return copy.deepcopy(self.rTilford.getCoordinates(filteredData))
 
+  def foldNode(self, data):
+    nm = self.nodeManager
+    return copy.deepcopy(nm.allData), nm.setAsFoldedDataStatus(
+      data.get(NodeManager.ID), nm.allStatusData),
+      
+
   #Has to be refactored: Should be encapsulated
   def drawNodeData(self, filteredData, allStatusData):
     nodeManager = self.nodeManager   
@@ -138,9 +144,6 @@ class Map():
 #3rd Level Interfaces
   
 #Others
-
-  
-    
   def editNodeData(self, dataId, newText):
     nm = self.nodeManager
     nm.allData.get(dataId)[NodeManager.NAME] = newText

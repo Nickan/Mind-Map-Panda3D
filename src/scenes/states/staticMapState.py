@@ -89,15 +89,11 @@ class StaticMapState(State):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)
 
   def onFoldNode(self):
-    nodeManager = self.map.nodeManager
-    selectedNodeData = nodeManager.selectedNodeData
-    nodeSavedFromSettings = nodeManager.getSelectedNodeData()
-    if selectedNodeData != None or nodeSavedFromSettings != None:
-      nodeManager.selectedNodeData = nodeSavedFromSettings
-      from scenes.states.foldNode import FoldNode
-      self.map.state.exit()
-      self.map.state = FoldNode(self.map)
-      self.map.state.enter()
+    map = self.map
+    data = map.getActivatedNodeData()
+    allData, allStatusData = map.foldNode(data)
+
+    StateManager.switchToLoadMapState(self, allData, allStatusData)
 
   def onDelete(self):
     nodeManager = self.map.nodeManager
