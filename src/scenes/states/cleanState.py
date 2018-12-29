@@ -8,9 +8,9 @@ from scenes.mapComponents.nodeDrawing import NodeDrawing
 
 class CleanState(State):
   
-  def __init__(self, showBase, allData, allStatusData):
+  def __init__(self, showBase):
     State.__init__(self)
-    self.map = Map(showBase, allData, allStatusData)
+    self.map = Map(showBase, {}, {})
     
   # Refactor, should start from scratch
   def enter(self):

@@ -14,23 +14,18 @@ class SaveManager():
   
   
   @staticmethod
-  def saveDataContainer(dataContainer):
-    nodeDataList = dataContainer.unfilteredData
-    if not nodeDataList:
-      nodeDataList = dataContainer.nodeDataList
-
-    SaveManager.clearNodeDataList(nodeDataList)
-      
-    
+  def saveData(allData, allStatusData):
     Tk().withdraw()
     fileName = asksaveasfilename()
-    
     if len(fileName) < 1:
       return
 
-    SaveManager.saveSettingJson(fileName)
+    if '.json' not in fileName:
+      fileName += '.json'
+
+    SaveManager.saveSettingJson(fileName, allStatusData)
     with open(fileName, 'w') as fp:
-      json.dump(nodeDataList, fp)
+      json.dump(allData, fp)
       
   @staticmethod
   def loadDataContainer(onLoadFilePathCb):
@@ -87,14 +82,13 @@ class SaveManager():
 
   # For loading the settings
   @staticmethod
-  def saveSettingJson(filename):
+  def saveSettingJson(filename, allStatusData):
     SaveManager.mainJson = filename
 
     modFilename = filename.replace(".json", "")
     SaveManager.settingJson = modFilename + "-setting.json"
     SaveManager.createSettingJsonData(SaveManager.settingJson,
-      SaveManager.settingJsonMap)
-    return SaveManager.settingJsonMap
+      allStatusData)
 
   
   @staticmethod
