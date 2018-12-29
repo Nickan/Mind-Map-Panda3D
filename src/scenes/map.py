@@ -56,7 +56,8 @@ class Map():
     id = newData['id']
     nm.allData[id] = newData
 
-    modAllStatusData = nm.removeAllLatestCreatedDataField(nm.allStatusData)
+    modAllStatusData = nm.removeFieldFromDataMap(nm.allStatusData, 
+      NodeManager.LATEST_CREATED_DATA)
     nm.allStatusData = nm.setAsLatestCreatedData(id, modAllStatusData)
 
   def drawData(self):
@@ -72,9 +73,12 @@ class Map():
     nm.drawData(filteredDataWithCoords, nm.allStatusData, 
       loader, mapNode, Utils.getNodePosition)
 
+    self.lineDrawings.clear()
+    self.lineDrawings.drawLine(filteredDataWithCoords)
+
   def setStatusAsSelected(self, data):
     nm = self.nodeManager
-    removedSelected = nm.removeField(nm.allStatusData, NodeManager.SELECTED)
+    removedSelected = nm.removeFieldFromDataMap(nm.allStatusData, NodeManager.SELECTED)
     nm.allStatusData = nm.setStatusAsSelected(data.get('id'), removedSelected)
 
 
