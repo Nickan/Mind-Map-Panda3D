@@ -62,6 +62,7 @@ class NodeManager():
       self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
 
   def setStatusAsSelected(self, dataId, allStatusData):
+    newStatus = {}
     newStatus[dataId] = { NodeManager.SELECTED: True }
     return newStatus 
 
