@@ -19,7 +19,7 @@ class CreateNodeState(State):
     self.setupControls()
     map = self.map
     nodeManager = map.nodeManager
-    data = map.getSavedSelectedNodeData()
+    data = map.getActivatedNodeData()
     map.createNodeData(data.get(NodeManager.ID), "")
     map.drawData()
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
@@ -72,10 +72,6 @@ class CreateNodeState(State):
     map.removeData(lastCreatedData)
     map.drawData()
     StateManager.switchToStaticMapState(self)
-    # map.drawData()
-    # self.map.deleteNodeData(self.tmpNewNodeData)
-    # self.tmpNewNodeData = None
-    # StateManager.switchToStaticMapState(self)
     
     
   def tmpCreatePotentialNewNode(self, nodeManager, data):
