@@ -16,7 +16,7 @@ class LineDrawings():
     self.lineNodePaths = []
     self.points = []
 
-  def drawLine(sel, filteredData):
+  def drawLine(self, filteredData):
     for key in filteredData:
       nodeData = filteredData[key]
       

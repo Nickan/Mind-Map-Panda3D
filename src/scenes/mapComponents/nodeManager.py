@@ -213,23 +213,7 @@ class NodeManager():
 
 #Getter and setter
   def setAsLatestCreatedData(self, dataId, allStatusData):
-    newAllStatus = copy.deepcopy(allStatusData)
-    statusData = newAllStatus.get(dataId)
-
-    if statusData is None:
-      newAllStatus[dataId] = { NodeManager.LATEST_CREATED_DATA: True }
-    else:
-      statusData[NodeManager.LATEST_CREATED_DATA] = True
-    return newAllStatus
-
-  def removeAllLatestCreatedDataField(self, allStatusData):
-    newAllStatus = copy.deepcopy(allStatusData)
-
-    for key in newAllStatus:
-      status = newAllStatus.get(key)
-      status.pop(NodeManager.LATEST_CREATED_DATA, None)
-
-    return newAllStatus
+    return self.addFieldToDataMap(dataId, allStatusData)
 
   def getLatestDrawingNode(self, allDrawingData, allStatusData):
     for key in allStatusData:
@@ -238,12 +222,22 @@ class NodeManager():
         return allDrawingData.get(key), key
     return None
 
-  def removeField(self, dataMap, fieldName):
+  def removeFieldFromDataMap(self, dataMap, fieldName):
     newMap = copy.deepcopy(dataMap)
 
     for key in newMap:
       data = newMap.get(key)
       data.pop(fieldName, None)
+    return newMap
+
+  def addFieldToDataMap(self, dataId, dataMap):
+    newMap = copy.deepcopy(dataMap)
+    data = newMap.get(dataId)
+
+    if data is None:
+      newMap[dataId] = { NodeManager.LATEST_CREATED_DATA: True }
+    else:
+      data[NodeManager.LATEST_CREATED_DATA] = True
     return newMap
 
 
