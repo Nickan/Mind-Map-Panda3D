@@ -17,6 +17,8 @@ from .nodeDataFilter import NodeDataFilter
 class NodeManager():
   ID = 'id'
   NAME = 'name'
+  PARENT_ID = 'parentId'
+  CHILDREN_IDS = 'childrenIds'
 
   #Status field
   SELECTED = "selected"
@@ -239,6 +241,36 @@ class NodeManager():
     else:
       data[NodeManager.LATEST_CREATED_DATA] = True
     return newMap
+
+  def getDataWithStatus(self, statusName, allData, allStatusData):
+    for key in allStatusData:
+      status = allStatusData.get(key)
+      if status.get(statusName) is not None:
+        return allData.get(key)
+    return None
+
+  def removeData(self, data, allData):
+    newAllData = copy.deepcopy(allData)
+    newAllData.pop(data.get(NodeManager.ID), None)
+
+    return self.removeIdFromParent(data, newAllData)
+
+  def removeIdFromParent(self, data, allData):
+    detachedToParent = copy.deepcopy(allData)
+
+    parentId = data.get(NodeManager.PARENT_ID)
+    parentData = detachedToParent.get(parentId)
+
+    childrenIds = parentData.get(NodeManager.CHILDREN_IDS)
+    indexInChildList = childrenIds.index(data.get(NodeManager.ID))
+
+    del childrenIds[indexInChildList]
+    if len(childrenIds) == 0:
+      parentData.pop(NodeManager.CHILDREN_IDS, None)
+    else:
+      parentData[NodeManager.CHILDREN_IDS] = childrenIds
+
+    return detachedToParent
 
 
 

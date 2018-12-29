@@ -117,6 +117,14 @@ class Map():
         filteredData)
     return None
 
+  def getLatestCreatedData(self):
+    nm = self.nodeManager
+    return nm.getDataWithStatus(NodeManager.LATEST_CREATED_DATA,
+      nm.allData, nm.allStatusData)
+
+  def removeData(self, data):
+    nm = self.nodeManager
+    nm.allData = nm.removeData(data, nm.allData)
 
 #2nd Level interfaces
   # Should be refactored later on

@@ -10,6 +10,7 @@ class CleanState(State):
     State.__init__(self)
     self.map = map
     
+  # Refactor, should start from scratch
   def enter(self):
     map = self.map
     map.createNodeData(None, "Main")
