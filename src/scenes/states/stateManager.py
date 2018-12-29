@@ -50,11 +50,22 @@ class StateManager():
   @staticmethod
   def switchToLoadMapState(currentState, allData, allStatusData):
     map = currentState.map
+    map.dispose()
     currentState.exit()
     
     from scenes.states.loadMapState import LoadMapState
-    map.state = LoadMapState(map, allData, allStatusData)
+    state = LoadMapState(map.showBase, allData, allStatusData)
+    state.enter()
+
+  @staticmethod
+  def switchToScrollingState(currentState):
+    map = currentState.map
+    currentState.exit()
+    
+    from scenes.states.scrollingMapState import ScrollingMapState
+    map.state = ScrollingMapState(map)
     map.state.enter()
+    map.state.mouse1Down()
     
     
     

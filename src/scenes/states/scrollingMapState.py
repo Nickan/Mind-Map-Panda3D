@@ -5,7 +5,6 @@ import sys
 
 class ScrollingMapState(State):
   
-
   def __init__(self, map):
     State.__init__(self)
     self.map = map

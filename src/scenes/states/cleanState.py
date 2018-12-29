@@ -1,20 +1,27 @@
 from .state import State
 from .stateManager import StateManager
+
+from scenes.map import Map
 from utils.utils import Utils
 
 from scenes.mapComponents.nodeDrawing import NodeDrawing
 
 class CleanState(State):
   
-  def __init__(self, map):
+  def __init__(self, showBase, allData, allStatusData):
     State.__init__(self)
-    self.map = map
+    self.map = Map(showBase, allData, allStatusData)
     
   # Refactor, should start from scratch
   def enter(self):
     map = self.map
-    map.createNodeData(None, "Main")
+    allData, allStatusData = map.createNodeData(None, "Main")
+
+    # I don't know why the screen size is different when activating this
+    # StateManager.switchToLoadMapState(self, allData, allStatusData)
+
     map.drawData()
+    map.state = self
     self.initEvents()
     
     
@@ -29,9 +36,12 @@ class CleanState(State):
     map.showBase.accept("mouse3", self.mouse3Down)
 
   def mouse1Down(self):
-    selectedNodeData = self.map.getSelectedNodeData()
+    map = self.map
+    
+    selectedNodeData = map.getSelectedNodeData()
     if selectedNodeData is None:
-      self.switchToScrollingState()
+      # self.switchToScrollingState()
+      StateManager.switchToScrollingState(self)
     else:
       self.switchToNodeClickedState(selectedNodeData)
         
@@ -55,13 +65,13 @@ class CleanState(State):
     map.state = NodeClickedState(self.map)
     map.state.enter()
     
-  def switchToScrollingState(self):
-    self.map.state.exit()
+  # def switchToScrollingState(self):
+  #   self.map.state.exit()
     
-    from scenes.states.scrollingMapState import ScrollingMapState
-    self.map.state = ScrollingMapState(self.map)
-    self.map.state.enter()
-    self.map.state.mouse1Down()
+  #   from scenes.states.scrollingMapState import ScrollingMapState
+  #   self.map.state = ScrollingMapState(self.map)
+  #   self.map.state.enter()
+  #   self.map.state.mouse1Down()
     
     
     
