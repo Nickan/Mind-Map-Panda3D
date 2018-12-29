@@ -91,6 +91,11 @@ class Map():
     nm = self.nodeManager
     return copy.deepcopy(nm.allData), nm.toggleFoldState(
       data.get(NodeManager.ID), nm.allStateData),
+
+  def removeFoldedState(self, data):
+    nm = self.nodeManager
+    newState = nm.removeFoldedState(data, nm.allStateData)
+    nm.allStateData[data.get(NodeManager.ID)] = newState
       
 
   #Has to be refactored: Should be encapsulated
@@ -132,6 +137,7 @@ class Map():
   def removeData(self, data):
     nm = self.nodeManager
     nm.allData = nm.removeData(data, nm.allData)
+
 
 #2nd Level interfaces
   # Should be refactored later on
