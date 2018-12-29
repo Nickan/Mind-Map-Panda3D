@@ -17,6 +17,7 @@ class CreateNodeState(State):
     map = self.map
     nodeManager = map.nodeManager
     data = map.getActivatedNodeData()
+    map.removeFoldedState(data)
     map.createNodeData(data.get(NodeManager.ID), "")
     map.drawData()
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)

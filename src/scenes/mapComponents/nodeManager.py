@@ -236,6 +236,12 @@ class NodeManager():
     else:
       data[statusName] = True
     return newMap
+
+  def removeFoldedState(self, data, allStateData):
+    state = allStateData.get(data.get(NodeManager.ID))
+    newState = copy.deepcopy(state)
+    newState.pop(NodeManager.FOLDED, None)
+    return newState
   
 #Getter and setter
   def getLatestDrawingNode(self, allDrawingData, allStateData):
