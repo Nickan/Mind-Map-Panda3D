@@ -104,9 +104,8 @@ class StaticMapState(State):
     StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
     
     
-  def onNodeDataListLoaded(self, dataContainer):
-    self.map.nodeManager.dataContainer = dataContainer
-    StateManager.switchToLoadMapState(self)
+  def onNodeDataListLoaded(self, allData, allStatusData):
+    StateManager.switchToLoadMapState(self, allData, allStatusData)
   
   
   """ mouse1Down Helper """

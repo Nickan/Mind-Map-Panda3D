@@ -30,7 +30,6 @@ class CreateNodeState(State):
     dataDrawing, dataId = nm.getLatestDrawingNode(nm.allDrawingData,
       nm.allStatusData)
 
-    # self.tmpNodeDrawing = nodeManager.getNodeDrawing(self.tmpNewNodeData)
     text = dataDrawing.textNode.getText()
     text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, dataId, 
       self.onEnterDown)
@@ -52,14 +51,6 @@ class CreateNodeState(State):
   def exit(self):
     KeyManager.clear()
     self.map.showBase.ignoreAll()
-    
-    
-  """ enter() Helpers """
-  def onEnterText(self, text):
-    if text is not None:
-      self.map.editNodeData(self.tmpNewNodeData, text)
-      
-    StateManager.switchToStaticMapState(self)
     
   def mouse1Down(self):
     if self.map.clickedOnMapBg():

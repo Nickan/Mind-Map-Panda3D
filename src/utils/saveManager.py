@@ -40,10 +40,9 @@ class SaveManager():
     if len(fileName) < 1:
       return
 
-    nodeDataSettings = SaveManager.loadSettingJson(fileName)
-    nodeDataList = SaveManager.convertKeyTypeToInt(fileName)
-    dataContainer = DataContainer(nodeDataList, nodeDataSettings)
-    onLoadFilePathCb(dataContainer)
+    allStatusData = SaveManager.loadSettingJson(fileName)
+    allData = SaveManager.convertKeyTypeToInt(fileName)
+    onLoadFilePathCb(allData, allStatusData)
     
   @staticmethod
   def convertKeyTypeToInt(fileName):
