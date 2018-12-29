@@ -178,11 +178,11 @@ class Map():
     return self.nodeManager.getNodeDrawing(nodeData)
 
   def getActivatedNodeData(self):
-    s = self.nodeManager.allStatusData
-    for key in s:
-      statusData = s.get(key)
+    nm = self.nodeManager
+    for key in nm.allStatusData:
+      statusData = nm.allStatusData.get(key)
       if statusData.get(DataContainer.SELECTED) != None:
-        return self.nodeManager.allData.get(key)
+        return nm.allData.get(key)
     return None
 
   
@@ -204,6 +204,7 @@ class Map():
 
   def dispose(self):
     self.nodeManager.clearAllDrawingData()
+    self.lineDrawings.clear()
     
     
     
