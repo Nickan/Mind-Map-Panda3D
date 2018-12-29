@@ -107,15 +107,6 @@ class NodeClickedState(State):
       else:
         nodeDataSettings.get(nodeId)["selected"] = True
 
-  # def removeAllSelectedField(self, nodeDict):
-  #   for key in nodeDict:
-  #     nodeSettings = nodeDict.get(key)
-  #     if nodeSettings.get("selected") is not None:
-  #       nodeSettings.pop("selected", None)
-  #   return nodeDict
-
-  
-
     
   """ mouse1Down Helper """
   def goToScrollingState(self):
