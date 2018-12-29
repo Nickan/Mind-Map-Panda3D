@@ -82,8 +82,8 @@ class StaticMapState(State):
     StateManager.switchToCreateNodeDataState(self)
     
   def onSave(self):
-    nodeManager = self.map.nodeManager
-    SaveManager.saveDataContainer(nodeManager.dataContainer)
+    nm = self.map.nodeManager
+    SaveManager.saveData(nm.allData, nm.allStatusData)
     
   def onOpenFile(self):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)

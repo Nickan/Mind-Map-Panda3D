@@ -9,7 +9,7 @@ class Main():
  
   def __init__(self):
     epiphany = Epiphany()
-    state = CleanState(epiphany, {}, {})
+    state = CleanState(epiphany)
     state.enter()
     epiphany.run()
     
