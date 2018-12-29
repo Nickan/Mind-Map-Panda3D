@@ -6,12 +6,12 @@ import copy
 class NodeDataFilter():
 
   @staticmethod
-  def getFilteredData(allData, allStatusData):
+  def getFilteredData(allData, allStateData):
     filteredData = copy.deepcopy(allData)
 
     for key, value in allData.items():
       nodeId = value.get(NodeData.ID)
-      nodeSettings = allStatusData.get(nodeId)
+      nodeSettings = allStateData.get(nodeId)
       if nodeSettings is not None:
         folded = nodeSettings.get("folded")
         if folded is not None and folded is True:

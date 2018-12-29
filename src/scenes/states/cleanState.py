@@ -15,10 +15,10 @@ class CleanState(State):
   # Refactor, should start from scratch
   def enter(self):
     map = self.map
-    allData, allStatusData = map.createNodeData(None, "Main")
+    allData, allStateData = map.createNodeData(None, "Main")
     map.setStatusAsSelected(allData.get(1))
     # I don't know why the screen size is different when activating this
-    # StateManager.switchToLoadMapState(self, allData, allStatusData)
+    # StateManager.switchToLoadMapState(self, allData, allStateData)
 
     map.drawData()
     map.state = self

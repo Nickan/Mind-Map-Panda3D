@@ -83,7 +83,7 @@ class StaticMapState(State):
     
   def onSave(self):
     nm = self.map.nodeManager
-    SaveManager.saveData(nm.allData, nm.allStatusData)
+    SaveManager.saveData(nm.allData, nm.allStateData)
     
   def onOpenFile(self):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)
@@ -91,17 +91,17 @@ class StaticMapState(State):
   def onFoldNode(self):
     map = self.map
     data = map.getActivatedNodeData()
-    allData, allStatusData = map.foldNode(data)
+    allData, allStateData = map.toggleFold(data)
 
-    StateManager.switchToLoadMapState(self, allData, allStatusData)
+    StateManager.switchToLoadMapState(self, allData, allStateData)
 
   def onDelete(self):
     nodeManager = self.map.nodeManager
     StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
     
     
-  def onNodeDataListLoaded(self, allData, allStatusData):
-    StateManager.switchToLoadMapState(self, allData, allStatusData)
+  def onNodeDataListLoaded(self, allData, allStateData):
+    StateManager.switchToLoadMapState(self, allData, allStateData)
   
   
   """ mouse1Down Helper """
