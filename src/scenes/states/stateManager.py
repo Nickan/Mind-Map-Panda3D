@@ -48,12 +48,12 @@ class StateManager():
     map.state.enter()
     
   @staticmethod
-  def switchToLoadMapState(currentState):
+  def switchToLoadMapState(currentState, allData, allStatusData):
     map = currentState.map
     currentState.exit()
     
     from scenes.states.loadMapState import LoadMapState
-    map.state = LoadMapState(map)
+    map.state = LoadMapState(map, allData, allStatusData)
     map.state.enter()
     
     

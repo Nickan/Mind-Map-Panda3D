@@ -18,15 +18,15 @@ class Map():
   
   FONT_UBUNTU = None
 
-  def __init__(self, showBase):
-    self.initializeComponents(showBase)
+  def __init__(self, showBase, allData, allStatusData):
+    self.initializeComponents(showBase, allData, allStatusData)
 
 #Initialization
-  def initializeComponents(self, showBase):
+  def initializeComponents(self, showBase, allData, allStatusData):
     self.showBase = showBase
     self.initCamera()
     self.initMapNode(showBase)
-    self.initNodeManager()
+    self.initNodeManager(allData, allStatusData)
     self.initLineDrawings()
     self.initReingoldTilford()
 
@@ -37,8 +37,8 @@ class Map():
     self.mapNode = NodePath("Map")
     self.mapNode.reparentTo(self.showBase.render)
 
-  def initNodeManager(self):
-    self.nodeManager = NodeManager()
+  def initNodeManager(self, allData, allStatusData):
+    self.nodeManager = NodeManager(allData, allStatusData)
   
   def initLineDrawings(self):
     self.lineDrawings = LineDrawings(self.mapNode)
@@ -195,6 +195,11 @@ class Map():
     self.state.exit()
     self.state = state
     self.state.enter()
+
+
+
+  def dispose(self):
+    self.nodeManager.clearAllDrawingData()
     
     
     

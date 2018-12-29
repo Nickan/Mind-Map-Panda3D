@@ -35,7 +35,7 @@ class Epiphany(ShowBase):
     self.setScreenSize()
 
   def initMap(self):
-    self.map = Map(self)
+    self.map = Map(self, {}, {})
     
   def setScreenSize(self):
     w, h = 1366, 750 

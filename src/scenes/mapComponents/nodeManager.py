@@ -24,11 +24,11 @@ class NodeManager():
   SELECTED = "selected"
   LATEST_CREATED_DATA = "latestCreatedData"
 
-  def __init__(self):
+  def __init__(self, allData, allStatusData):
     # Will be mutated
     self.allDrawingData = {}
-    self.allData = {}
-    self.allStatusData = {}
+    self.allData = allData
+    self.allStatusData = allStatusData
 
     self.tree = ReingoldTilford()
 
