@@ -63,15 +63,7 @@ class NodeManager():
       pos = getNodePosition(depth, breadth)
 
       self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
-
-  def setStatusAsSelected(self, dataId, allStatusData):
-    newStatus = {}
-    newStatus[dataId] = { NodeManager.SELECTED: True }
-    return newStatus 
-
-
-
-
+  
   def removeAllSelectedField(self, allStatusData):
     nallStatusData = copy.deepcopy(allStatusData)
     for key in nallStatusData:
@@ -217,6 +209,10 @@ class NodeManager():
 
 
 # Setting the status of the data
+  def setStatusAsSelected(self, dataId, allStatusData):
+    return self.addFieldToDataMap(dataId, allStatusData, 
+      NodeManager.SELECTED)
+
   def setAsLatestCreatedData(self, dataId, allStatusData):
     return self.addFieldToDataMap(dataId, allStatusData, 
       NodeManager.LATEST_CREATED_DATA)
@@ -233,6 +229,7 @@ class NodeManager():
     else:
       data[statusName] = True
     return newMap
+  
 #Getter and setter
   def getLatestDrawingNode(self, allDrawingData, allStatusData):
     for key in allStatusData:
@@ -241,15 +238,13 @@ class NodeManager():
         return allDrawingData.get(key), key
     return None
 
-  def removeFieldFromDataMap(self, dataMap, fieldName):
+  def removeAllFieldFromDataMap(self, dataMap, fieldName):
     newMap = copy.deepcopy(dataMap)
 
     for key in newMap:
       data = newMap.get(key)
       data.pop(fieldName, None)
     return newMap
-
-  
 
   def getDataWithStatus(self, statusName, allData, allStatusData):
     for key in allStatusData:

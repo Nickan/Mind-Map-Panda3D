@@ -2,12 +2,9 @@ from .state import State
 from .stateManager import StateManager
 
 from scenes.mapComponents.nodeManager import NodeManager
-
 from utils.keyManager import KeyManager
 from utils.saveManager import SaveManager
 from utils.utils import Utils
-
-
 
 class CreateNodeState(State):
   
@@ -42,8 +39,7 @@ class CreateNodeState(State):
     self.map.editNodeData(dataId, text)
     StateManager.switchToStaticMapState(self)
     
-    
-    
+  
   def setupControls(self):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
@@ -56,19 +52,12 @@ class CreateNodeState(State):
     if self.map.clickedOnMapBg():
       self.onClickedOutsideTextInput()
     
-    
   def onClickedOutsideTextInput(self):
     map = self.map
     lastCreatedData = map.getLatestCreatedData()
     map.removeData(lastCreatedData)
     map.drawData()
     StateManager.switchToStaticMapState(self)
-    
-    
-  def tmpCreatePotentialNewNode(self, nodeManager, data):
-    id = nodeManager.getNodeDataId(nodeManager.data)
-    self.tmpNewNodeData = nodeManager.createNodeData(id, "", False)
-    return self.tmpNewNodeData
 
 
 

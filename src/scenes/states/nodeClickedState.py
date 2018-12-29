@@ -26,16 +26,19 @@ class NodeClickedState(State):
     
 
   # mouse1Down() helpers
-  def setNodeSelected(self, data):
-    nodeManager = self.map.nodeManager
+  # def setNodeSelected(self, data):
+  #   nm = self.map.nodeManager
 
-    nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
-    self.removeAllSelectedField(nodeDataSettings)
 
-    nodeManager.setNodeSelected(data)
+  #   # nodeManager = self.map.nodeManager
+
+  #   # nodeDataSettings = nodeManager.dataContainer.nodeDataSettings
+  #   # self.removeAllSelectedField(nodeDataSettings)
+
+  #   # nodeManager.setNodeSelected(data)
     
-    nodeId = data.get("id")
-    self.setSelected(nodeDataSettings, nodeId)
+  #   # nodeId = data.get("id")
+  #   # self.setSelected(nodeDataSettings, nodeId)
     
   """ enter helper """
   def setupControls(self, data):
@@ -60,9 +63,9 @@ class NodeClickedState(State):
     if data is None:
       self.goToScrollingState()
       self.map.state.mouse1Down()
-    else:
-      self.setupDragNodeDetector(data)
-      self.setNodeSelected(data)
+    # else:
+    #   self.setupDragNodeDetector(data)
+    #   self.setNodeSelected(data)
     
   def mouse1Up(self):
     from scenes.states.staticMapState import StaticMapState
