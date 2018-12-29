@@ -74,9 +74,8 @@ class Map():
 
   def setStatusAsSelected(self, data):
     nm = self.nodeManager
-    nm.allStatusData = nm.setStatusAsSelected(data.get('id'), 
-    nm.allStatusData)
-
+    removedSelected = nm.removeField(nm.allStatusData, NodeManager.SELECTED)
+    nm.allStatusData = nm.setStatusAsSelected(data.get('id'), newAllSD)
 
 
   def getCoordinates(self, filteredData):
