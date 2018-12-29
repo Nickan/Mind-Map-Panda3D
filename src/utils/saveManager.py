@@ -1,17 +1,13 @@
-
-
 import json
 import os.path
+
 from builtins import staticmethod
-
 from scenes.mapComponents.dataContainer import DataContainer
-
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 
 class SaveManager():
-  
   
   @staticmethod
   def saveData(allData, allStatusData):

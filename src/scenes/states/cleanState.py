@@ -16,7 +16,7 @@ class CleanState(State):
   def enter(self):
     map = self.map
     allData, allStatusData = map.createNodeData(None, "Main")
-
+    map.setStatusAsSelected(allData.get(1))
     # I don't know why the screen size is different when activating this
     # StateManager.switchToLoadMapState(self, allData, allStatusData)
 
