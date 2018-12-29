@@ -20,7 +20,7 @@ class Epiphany(ShowBase):
     ShowBase.__init__(self)
     self.map = None
     self.loadTtf()
-    self.initMap()
+    # self.initMap()
     
   def loadTtf(self):
     file = "../../assets/fonts/ubuntu.regular.ttf"

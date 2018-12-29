@@ -24,14 +24,14 @@ class Map():
 #Initialization
   def initializeComponents(self, showBase, allData, allStatusData):
     self.showBase = showBase
-    self.initCamera()
+    self.initCamera(showBase)
     self.initMapNode(showBase)
     self.initNodeManager(allData, allStatusData)
     self.initLineDrawings()
     self.initReingoldTilford()
 
-  def initCamera(self):
-    self.cameraManager = CameraManager(self.showBase)
+  def initCamera(self, showBase):
+    self.cameraManager = CameraManager(showBase)
 
   def initMapNode(self, showBase):
     self.mapNode = NodePath("Map")
@@ -59,6 +59,7 @@ class Map():
     modAllStatusData = nm.removeFieldFromDataMap(nm.allStatusData, 
       NodeManager.LATEST_CREATED_DATA)
     nm.allStatusData = nm.setAsLatestCreatedData(id, modAllStatusData)
+    return nm.allData, nm.allStatusData
 
   def drawData(self):
     loader = self.showBase.loader
@@ -196,6 +197,9 @@ class Map():
     self.state = state
     self.state.enter()
 
+  def getAllData(self):
+    nm = self.nodeManager
+    return copy.deepcopy(nm.allData), copy.deepcopy(nm.allStatusData)
 
 
   def dispose(self):
