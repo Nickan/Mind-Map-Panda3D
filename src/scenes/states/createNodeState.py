@@ -25,7 +25,7 @@ class CreateNodeState(State):
   def onKeyDown(self, keyname):
     nm = self.map.nodeManager
     dataDrawing, dataId = nm.getLatestDrawingNode(nm.allDrawingData,
-      nm.allStatusData)
+      nm.allStateData)
 
     text = dataDrawing.textNode.getText()
     text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, dataId, 

@@ -25,11 +25,11 @@ class NodeManager():
   LATEST_CREATED_DATA = "latestCreatedData"
   FOLDED = 'folded'
 
-  def __init__(self, allData, allStatusData):
+  def __init__(self, allData, allStateData):
     # Will be mutated
     self.allDrawingData = {}
     self.allData = allData
-    self.allStatusData = allStatusData
+    self.allStateData = allStateData
 
     self.tree = ReingoldTilford()
 
@@ -48,15 +48,15 @@ class NodeManager():
     self.setDepth(newData, parentData)
     return newData
 
-  def getFilteredData(self, allData, allStatusData):
-    return NodeDataFilter.getFilteredData(allData, allStatusData)
+  def getFilteredData(self, allData, allStateData):
+    return NodeDataFilter.getFilteredData(allData, allStateData)
     
 
-  def drawData(self, filteredData, allStatusData, loader, mapNode,
+  def drawData(self, filteredData, allStateData, loader, mapNode,
     getNodePosition):
     for key in filteredData:
       nodeData = filteredData.get(key)
-      settings = allStatusData.get(key)
+      settings = allStateData.get(key)
 
       breadth = nodeData.get("x")
       depth = nodeData.get("depth")
@@ -64,8 +64,8 @@ class NodeManager():
 
       self.addNodeDrawing(nodeData, settings, loader, mapNode, pos)
   
-  def removeAllSelectedField(self, allStatusData):
-    nallStatusData = copy.deepcopy(allStatusData)
+  def removeAllSelectedField(self, allStateData):
+    nallStatusData = copy.deepcopy(allStateData)
     for key in nallStatusData:
       nodeSettings = nallStatusData.get(key)
       if nallStatusData.get("selected") is not None:
@@ -209,16 +209,23 @@ class NodeManager():
 
 
 # Setting the status of the data
-  def setStatusAsSelected(self, dataId, allStatusData):
-    return self.addFieldToDataMap(dataId, allStatusData, 
+  def setStatusAsSelected(self, dataId, allStateData):
+    return self.addFieldToDataMap(dataId, allStateData, 
       NodeManager.SELECTED)
 
-  def setAsLatestCreatedData(self, dataId, allStatusData):
-    return self.addFieldToDataMap(dataId, allStatusData, 
+  def setAsLatestCreatedData(self, dataId, allStateData):
+    return self.addFieldToDataMap(dataId, allStateData, 
       NodeManager.LATEST_CREATED_DATA)
 
-  def setAsFoldedDataStatus(self, dataId, allStatusData):
-    return self.addFieldToDataMap(dataId, allStatusData, NodeManager.FOLDED)
+  def toggleFoldState(self, dataId, allStateData):
+    state = allStateData.get(dataId)
+    if state.get(NodeManager.FOLDED) is None:
+      return self.addFieldToDataMap(dataId, allStateData, NodeManager.FOLDED)
+    else:
+      newStateData = copy.deepcopy(allStateData)
+      newState = newStateData.get(dataId)
+      newState.pop(NodeManager.FOLDED, None)
+      return newStateData
 
   def addFieldToDataMap(self, dataId, dataMap, statusName):
     newMap = copy.deepcopy(dataMap)
@@ -231,9 +238,9 @@ class NodeManager():
     return newMap
   
 #Getter and setter
-  def getLatestDrawingNode(self, allDrawingData, allStatusData):
-    for key in allStatusData:
-      status = allStatusData.get(key)
+  def getLatestDrawingNode(self, allDrawingData, allStateData):
+    for key in allStateData:
+      status = allStateData.get(key)
       if status.get(NodeManager.LATEST_CREATED_DATA) is not None:
         return allDrawingData.get(key), key
     return None
@@ -246,9 +253,9 @@ class NodeManager():
       data.pop(fieldName, None)
     return newMap
 
-  def getDataWithStatus(self, statusName, allData, allStatusData):
-    for key in allStatusData:
-      status = allStatusData.get(key)
+  def getDataWithStatus(self, statusName, allData, allStateData):
+    for key in allStateData:
+      status = allStateData.get(key)
       if status.get(statusName) is not None:
         return allData.get(key)
     return None

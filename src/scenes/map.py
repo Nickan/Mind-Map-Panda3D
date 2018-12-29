@@ -18,15 +18,15 @@ class Map():
   
   FONT_UBUNTU = None
 
-  def __init__(self, showBase, allData, allStatusData):
-    self.initializeComponents(showBase, allData, allStatusData)
+  def __init__(self, showBase, allData, allStateData):
+    self.initializeComponents(showBase, allData, allStateData)
 
 #Initialization
-  def initializeComponents(self, showBase, allData, allStatusData):
+  def initializeComponents(self, showBase, allData, allStateData):
     self.showBase = showBase
     self.initCamera(showBase)
     self.initMapNode(showBase)
-    self.initNodeManager(allData, allStatusData)
+    self.initNodeManager(allData, allStateData)
     self.initLineDrawings()
     self.initReingoldTilford()
 
@@ -37,8 +37,8 @@ class Map():
     self.mapNode = NodePath("Map")
     self.mapNode.reparentTo(self.showBase.render)
 
-  def initNodeManager(self, allData, allStatusData):
-    self.nodeManager = NodeManager(allData, allStatusData)
+  def initNodeManager(self, allData, allStateData):
+    self.nodeManager = NodeManager(allData, allStateData)
   
   def initLineDrawings(self):
     self.lineDrawings = LineDrawings(self.mapNode)
@@ -56,10 +56,10 @@ class Map():
     id = newData['id']
     nm.allData[id] = newData
 
-    modAllStatusData = nm.removeFieldFromDataMap(nm.allStatusData, 
+    modAllStatusData = nm.removeAllFieldFromDataMap(nm.allStateData, 
       NodeManager.LATEST_CREATED_DATA)
-    nm.allStatusData = nm.setAsLatestCreatedData(id, modAllStatusData)
-    return nm.allData, nm.allStatusData
+    nm.allStateData = nm.setAsLatestCreatedData(id, modAllStatusData)
+    return nm.allData, nm.allStateData
 
   def drawData(self):
     loader = self.showBase.loader
@@ -67,11 +67,11 @@ class Map():
 
     nm = self.nodeManager
     nm.allDrawingData = nm.clearAllDrawingData()
-    filteredData = nm.getFilteredData(nm.allData, nm.allStatusData)
+    filteredData = nm.getFilteredData(nm.allData, nm.allStateData)
 
     filteredDataWithCoords = self.rTilford.getCoordinates(filteredData)
 
-    nm.drawData(filteredDataWithCoords, nm.allStatusData, 
+    nm.drawData(filteredDataWithCoords, nm.allStateData, 
       loader, mapNode, Utils.getNodePosition)
 
     self.lineDrawings.clear()
@@ -79,29 +79,29 @@ class Map():
 
   def setStatusAsSelected(self, data):
     nm = self.nodeManager
-    removedSelected = nm.removeFieldFromDataMap(nm.allStatusData, NodeManager.SELECTED)
-    nm.allStatusData = nm.setStatusAsSelected(data.get('id'), removedSelected)
+    removedSelected = nm.removeAllFieldFromDataMap(nm.allStateData, NodeManager.SELECTED)
+    nm.allStateData = nm.setStatusAsSelected(data.get('id'), removedSelected)
 
 
   def getCoordinates(self, filteredData):
     #Have to refactor rTilford.getCoordinates() to return copy of filteredData
     return copy.deepcopy(self.rTilford.getCoordinates(filteredData))
 
-  def foldNode(self, data):
+  def toggleFold(self, data):
     nm = self.nodeManager
-    return copy.deepcopy(nm.allData), nm.setAsFoldedDataStatus(
-      data.get(NodeManager.ID), nm.allStatusData),
+    return copy.deepcopy(nm.allData), nm.toggleFoldState(
+      data.get(NodeManager.ID), nm.allStateData),
       
 
   #Has to be refactored: Should be encapsulated
-  def drawNodeData(self, filteredData, allStatusData):
+  def drawNodeData(self, filteredData, allStateData):
     nodeManager = self.nodeManager   
     nodeManager.clearDataDrawings()
     self.lineDrawings.clear()
     
     loader = self.showBase.loader
     mapNode = self.mapNode
-    nodeManager.drawData(filteredData, allStatusData, loader, mapNode)
+    nodeManager.drawData(filteredData, allStateData, loader, mapNode)
     self.lineDrawings.drawLine(filteredData)
 
   def setNodeDrawingHeight(self, drawingNode):
@@ -110,8 +110,8 @@ class Map():
 
   def setSelectedNodeData(self):
     selectedN = self.getSavedSelectedNodeData()
-    allStatusData = self.nodeManager.allStatusData
-    self.nodeManager.allStatusData = self.nodeManager.removeAllSelectedField(allStatusData)
+    allStateData = self.nodeManager.allStateData
+    self.nodeManager.allStateData = self.nodeManager.removeAllSelectedField(allStateData)
 
   # Has to be refactored later
   def getSelectedNodeData(self):
@@ -127,7 +127,7 @@ class Map():
   def getLatestCreatedData(self):
     nm = self.nodeManager
     return nm.getDataWithStatus(NodeManager.LATEST_CREATED_DATA,
-      nm.allData, nm.allStatusData)
+      nm.allData, nm.allStateData)
 
   def removeData(self, data):
     nm = self.nodeManager
@@ -182,8 +182,8 @@ class Map():
 
   def getActivatedNodeData(self):
     nm = self.nodeManager
-    for key in nm.allStatusData:
-      statusData = nm.allStatusData.get(key)
+    for key in nm.allStateData:
+      statusData = nm.allStateData.get(key)
       if statusData.get(DataContainer.SELECTED) != None:
         return nm.allData.get(key)
     return None
@@ -202,7 +202,7 @@ class Map():
 
   def getAllData(self):
     nm = self.nodeManager
-    return copy.deepcopy(nm.allData), copy.deepcopy(nm.allStatusData)
+    return copy.deepcopy(nm.allData), copy.deepcopy(nm.allStateData)
 
 
   def dispose(self):
