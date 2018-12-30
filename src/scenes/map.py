@@ -157,21 +157,7 @@ class Map():
   def editNodeData(self, dataId, newText):
     nm = self.nodeManager
     nm.allData.get(dataId)[NodeManager.NAME] = newText
-    
-
-    # self.drawNodeData(nodeManager.dataContainer)
-    
-  def deleteNodeData(self, nodeDataToDelete):
-    nodeManager = self.nodeManager
-    nodeManager.deleteNodeData(nodeDataToDelete)
-
-    nodeDataList = nodeManager.dataContainer.nodeDataList
-    SaveManager.clearNodeDataList(nodeDataList)
-    nodeManager.tree.getCoordinates(nodeDataList)
-    self.drawNodeData(nodeManager.dataContainer)
-      
-  
-
+          
   def setCameraViewToSelectedNode(self):
     s = self.getActivatedNodeData()
     if s != None:
