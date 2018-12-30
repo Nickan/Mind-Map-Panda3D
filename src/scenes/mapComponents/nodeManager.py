@@ -25,6 +25,9 @@ class NodeManager():
   LATEST_CREATED_DATA = "latestCreatedData"
   FOLDED = 'folded'
 
+  # Main ID
+  MAIN_ID = 1
+
   def __init__(self, allData, allStateData):
     # Will be mutated
     self.allDrawingData = {}
@@ -145,7 +148,7 @@ class NodeManager():
     
   def removeFromParentChildrenIdList(self, nodeDataToDelete):
     parentId = nodeDataToDelete["parentId"]
-    nodeDataList = self.dataContainer.nodeDataList
+    # nodeDataList = self.dataContainer.nodeDataList
     parentNodeData = nodeDataList[parentId]
     
     childrenIds = parentNodeData.get('childrenIds')
@@ -267,10 +270,22 @@ class NodeManager():
     return None
 
   def removeData(self, data, allData):
-    newAllData = copy.deepcopy(allData)
+    nData = copy.deepcopy(allData)
+    removed = self.removeChildren(data, nData)
+
+    newAllData = copy.deepcopy(removed)
     newAllData.pop(data.get(NodeManager.ID), None)
 
     return self.removeIdFromParent(data, newAllData)
+
+  def removeChildren(self, data, allData):
+    childrenIds = data.get(NodeManager.CHILDREN_IDS)
+    if childrenIds is not None:
+      for id in childrenIds:
+        childData = allData.get(id)
+        allData.pop(id, None)
+        self.removeChildren(childData, allData)
+    return allData
 
   def removeIdFromParent(self, data, allData):
     detachedToParent = copy.deepcopy(allData)
