@@ -107,10 +107,11 @@ class NodeManager():
       nodeDrawing.setSelected(selected)
 
     self.allDrawingData[id] = nodeDrawing
-    self.setNodeDrawingHeight(nodeDrawing)
+    self.setNodeDrawingHeight(nodeData, nodeDrawing)
 
-  def setNodeDrawingHeight(self, drawingNode):
-    NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
+  def setNodeDrawingHeight(self, nodeData, drawingNode):
+    if nodeData.get(NodeManager.ID) == NodeManager.MAIN_ID:
+      NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
     drawingNode.keepTextCenter()
     
   
