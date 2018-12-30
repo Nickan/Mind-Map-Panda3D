@@ -135,8 +135,12 @@ class Map():
       nm.allData, nm.allStateData)
 
   def removeData(self, data):
+    if data.get(NodeManager.ID) == NodeManager.MAIN_ID:
+      return None
+
     nm = self.nodeManager
     nm.allData = nm.removeData(data, nm.allData)
+    return nm.allData
 
 
 #2nd Level interfaces
