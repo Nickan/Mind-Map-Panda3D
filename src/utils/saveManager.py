@@ -1,5 +1,6 @@
 import json
 import os.path
+import copy
 
 from builtins import staticmethod
 from scenes.mapComponents.dataContainer import DataContainer
@@ -42,11 +43,12 @@ class SaveManager():
     
   @staticmethod
   def setKeyAsInt(nodeList):
+    newData = {}
+
     for key in nodeList:
       nodeData = nodeList[key]
-      del nodeList[key]
-      nodeList[int(key)] = nodeData
-    return nodeList
+      newData[int(key)] = nodeData
+    return newData
       
       
   @staticmethod
