@@ -9,15 +9,17 @@ class DragNodeMove():
     self.posDiff = self.defaultPos - mPos
 
   def mouse1Up(self):
-    self.map.showBase.ignoreAll()
-    self.map.showBase.taskMgr.remove("mouseMove")
-    # self.resetPosToDefault()
     nearestNodeDrawing = self.newParentVisualCue.getNearestNodeDrawing(self.map)
     self.onRelease(nearestNodeDrawing)
     if nearestNodeDrawing is None:
       self.nodeDrawing.mainNode.setPos(self.defaultPos)
 
-  def setNodeDrawingPos(self, drawing, mPos):
+  def dragSelectedDrawing(self, map):
+    drawing = map.getSelectedNodeDrawing()
+    mPos = Utils.getMousePosition(map.showBase)
+    self.dragSelectedDrawingImpl(drawing, mPos)
+
+  def dragSelectedDrawingImpl(self, drawing, mPos):
     if mPos is not None:
       newNodePos = mPos + self.posDiff
       drawing.mainNode.setPos(newNodePos)

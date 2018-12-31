@@ -10,9 +10,10 @@ class NewParentVisualCue():
     # self.draggedDrawing = map.nodeManager.getNodeDrawing(self.draggedNode)
     # self.potentialNewParentIds = self.getPotentialNewParentIds(map)
 
-  def draw(self, mPos, allDrawingData):
+  def draw(self, mPos, allDrawingData, potentialNewParentIds):
     if mPos is not None:
-      print('in progress')
+      nearestNodeDrawing = self.getNearestNodeDrawing(allDrawingData,
+      potentialNewParentIds)
       
     # nearestNodeDrawing = self.getNearestNodeDrawing(map)
     # self.setAllNodeDrawingsNormal(map, self.draggedNode)
@@ -20,15 +21,14 @@ class NewParentVisualCue():
     #   self.setAsPotentialParent(nearestNodeDrawing)
 
   # Loops to all potential new parents
-  def getNearestNodeDrawing(self, map):
-    allDrawings = map.nodeManager.allDrawingData
+  def getNearestNodeDrawing(self, allDrawings, potentialNewParentIds):
 
     width = 35
     height = 10
     nearest = None
     nearestDist = 99999
-    for n in self.potentialNewParentIds:
-      node = allDrawings.get(n)
+    for pId in potentialNewParentIds:
+      node = allDrawings.get(pId)
       nPos = node.mainNode.getPos()
       dPos = self.draggedDrawing.mainNode.getPos()
       curDist = Utils.getDistSqr2D(nPos, dPos)
