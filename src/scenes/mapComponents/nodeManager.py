@@ -59,7 +59,7 @@ class NodeManager():
     parentData = nAllData.get(parentId)
     addDepth = self.setDepth(newData, parentData)
     nAllData[newData.get(NodeManager.ID)] = addDepth
-    nAllData = self.addToParent(newData, parentData, nAllData)
+    nAllData = self.addToParentAllData(newData, parentData, nAllData)
     
     return nAllData, nAllData.get(newData.get(NodeManager.ID))
 
@@ -87,29 +87,33 @@ class NodeManager():
     return nallStatusData
 
 #createNodeData()
-  def addToParent(self, nodeData, parentData, allData):
+  def addToParentAllData(self, nodeData, parentData, allData):
     if parentData is None:
       return allData
 
     nAllData = copy.deepcopy(allData)
     pData = nAllData.get(parentData.get(NodeManager.ID))
     if pData is None:
-      return
+      return nAllData
 
     children = pData.get('childrenIds')
     if children is None:
       pData['childrenIds'] = []
 
     nData = nAllData.get(nodeData.get(NodeManager.ID))
+    nData[NodeManager.PARENT_ID] = pData.get(NodeManager.ID)
+
+    self.setDepthAndChildren(pData.get(NodeManager.DEPTH), nData, nAllData)
     pData['childrenIds'].append(nData.get(NodeManager.ID))
     return nAllData
 
   def setDepth(self, nodeData, parentData):
+    nData = copy.deepcopy(nodeData)
     if parentData is not None:
-      nodeData["depth"] = parentData.get("depth") + 1
+      nData["depth"] = parentData.get("depth") + 1
     else:
-      nodeData["depth"] = 1
-    return nodeData
+      nData["depth"] = 1
+    return nData
 
 #Second Level Functions
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
@@ -305,28 +309,13 @@ class NodeManager():
 
 
   def attachDraggedNodeToImpl(self, nearestDrawing, selectedData, allData):
-    nAllData = self.removeIdFromParent(selectedData, nAllData)
-    parentData = nAllData.get(selectedData.get(NodeManager.ID))
-    nSelData = nAllData.get(selectedData.get(NodeManager.ID))
-    addToParent = self.addToParent(nSelData, parentData, nAllData)
+    nAllData = self.removeIdFromParent(selectedData, allData)
 
-    # nSelData = nAllData.get(selectedData.get(NodeManager.ID))
+    parentData = nAllData.get(nearestDrawing.id)
+    selData = nAllData.get(selectedData.get(NodeManager.ID))
+    addPData = self.addToParentAllData(selData, parentData, nAllData)
 
-    # parentNode = nAllData.get(nSelData.get("parentId"))
-    # newParent = nAllData.get(nearestDrawing.id)
-
-    # nAllData = self.removeIdFromParent(selectedData, nAllData)
-
-    # nSelData[NodeManager.PARENT_ID] = newParent.get("id")
-    # self.setDepthAndChildren(newParent.get("depth"), nSelData, nAllData)
-
-    # if newParent.get(NodeManager.CHILDREN_IDS) is None:
-    #   newParent[NodeManager.CHILDREN_IDS] = [nSelData.get(NodeManager.ID)]
-    # else:
-    #   nIds = newParent.get(NodeManager.CHILDREN_IDS)
-    #   nIds.append(nSelData.get(NodeManager.ID))
-
-    return addToParent
+    return addPData
 
   # Have to convert into recursion
   def setDepthAndChildren(self, parentDepth, nodeData, allData):

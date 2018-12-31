@@ -41,7 +41,7 @@ class NewParentVisualCue():
         # print("xd: " + str(xd * xd) + " yd: " + str(yd * yd) + " dist: " + str(dist))
 
         mPos, nearPoint = map.cameraManager.getCoordinates()
-        print("mPos: " + str(mPos) + " nearPoint: " + str(nearPoint))
+        # print("mPos: " + str(mPos) + " nearPoint: " + str(nearPoint))
 
     return nearest
 
