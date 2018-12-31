@@ -54,9 +54,12 @@ class Map():
     # return self.nodeManager.createNodeData(parentId, name, recheckLastId)
     nm = self.nodeManager
     allData, newData = nm.createNodeData(parentId, name, recheckLastId)
-    nm.allData = allData
-    nm.allStateData = nm.setAsLatestCreatedData(id, nm.allStateData)
+
+    nAllState = nm.removeAllLatestCreatedField()
+    nm.allStateData = nm.setAsLatestCreatedData(newData.get(NodeManager.ID),
+      nAllState)
     
+    nm.allData = allData
     return nm.allData, nm.allStateData
 
   def drawData(self):
@@ -104,12 +107,13 @@ class Map():
   # Has to be refactored later
   def getSelectedNodeData(self):
     # Requires interaction between camera and nodemanager, so it is put in map class
+    nm = self.nodeManager
+
     clickedNodePath = self.cameraManager.getClickedNodePath()
     if clickedNodePath is not None:
-      dDrawing = self.nodeManager.allDrawingData
-      filteredData = self.nodeManager.allData
-      return self.nodeManager.getNodeData(clickedNodePath, dDrawing, 
-        filteredData)
+      dDrawing = nm.allDrawingData
+      filteredData = nm.allData
+      return nm.getNodeData(clickedNodePath, dDrawing, filteredData)
     return None
 
   def getLatestCreatedData(self):

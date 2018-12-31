@@ -19,13 +19,14 @@ class CreateNodeState(State):
     data = map.getActivatedNodeData()
     map.removeFoldedState(data)
     map.createNodeData(data.get(NodeManager.ID), "")
+
     map.drawData()
     KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
 
     
   def onKeyDown(self, keyname):
     nm = self.map.nodeManager
-    dataDrawing, dataId = nm.getLatestDrawingNode(nm.allDrawingData,
+    dataDrawing, dataId = nm.getLatestDrawingNode(nm.allDrawingData,    
       nm.allStateData)
 
     text = dataDrawing.textNode.getText()
