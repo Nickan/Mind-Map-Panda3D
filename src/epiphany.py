@@ -20,7 +20,6 @@ class Epiphany(ShowBase):
     ShowBase.__init__(self)
     self.map = None
     self.loadTtf()
-    # self.initMap()
     
   def loadTtf(self):
     file = "../../assets/fonts/ubuntu.regular.ttf"
@@ -33,9 +32,6 @@ class Epiphany(ShowBase):
 #     Map.FONT_UBUNTU.setRenderMode(TextFont.RMSolid)
     Map.FONT_UBUNTU.setPageSize(256,256)
     self.setScreenSize()
-
-  def initMap(self):
-    self.map = Map(self, {}, {})
     
   def setScreenSize(self):
     w, h = 1366, 750 

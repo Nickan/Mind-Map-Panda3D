@@ -19,6 +19,7 @@ class NodeManager():
   NAME = 'name'
   PARENT_ID = 'parentId'
   CHILDREN_IDS = 'childrenIds'
+  DEPTH = "depth"
 
   #Status field
   SELECTED = "selected"
@@ -38,18 +39,29 @@ class NodeManager():
 
 
 #First level functions
-  def createNodeData(self, parentId, name, recheckLastId, allData,
-    getUniqueId):
+  def createNodeData(self, parentId, name, recheckLastId):
+    allData = self.allData
+    getUniqueIdFn = Utils.getUniqueId
 
+    allData, newData = self.createNodeDataImpl(parentId, name, recheckLastId,
+      allData, getUniqueIdFn)
+    return allData, newData
+
+  def createNodeDataImpl(self, parentId, name, recheckLastId, allData, 
+    getUniqueIdFn):
+
+    nAllData = copy.deepcopy(allData)
     newData = {}
+    newData['id'] = getUniqueIdFn(nAllData, recheckLastId)
+    
     newData['parentId'] = parentId
     newData['name'] = name
-    newData['id'] = getUniqueId(allData, recheckLastId)
-
-    parentData = allData.get(parentId)
-    self.addToParent(newData, parentData)
-    self.setDepth(newData, parentData)
-    return newData
+    parentData = nAllData.get(parentId)
+    addDepth = self.setDepth(newData, parentData)
+    nAllData[newData.get(NodeManager.ID)] = addDepth
+    nAllData = self.addToParent(newData, parentData, nAllData)
+    
+    return nAllData, nAllData.get(newData.get(NodeManager.ID))
 
   def getFilteredData(self, allData, allStateData):
     return NodeDataFilter.getFilteredData(allData, allStateData)
@@ -77,20 +89,29 @@ class NodeManager():
 
   
 #createNodeData()
-  def addToParent(self, nodeData, parentData):
+  def addToParent(self, nodeData, parentData, allData):
     if parentData is None:
+      return allData
+
+    nAllData = copy.deepcopy(allData)
+    pData = nAllData.get(parentData.get(NodeManager.ID))
+    if pData is None:
       return
 
-    children = parentData.get('childrenIds')
+    children = pData.get('childrenIds')
     if children is None:
-      parentData['childrenIds'] = []
-    parentData['childrenIds'].append(nodeData['id'])
+      pData['childrenIds'] = []
+
+    nData = nAllData.get(nodeData.get(NodeManager.ID))
+    pData['childrenIds'].append(nData.get(NodeManager.ID))
+    return nAllData
 
   def setDepth(self, nodeData, parentData):
     if parentData is not None:
       nodeData["depth"] = parentData.get("depth") + 1
     else:
       nodeData["depth"] = 1
+    return nodeData
 
 #Second Level Functions
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
@@ -149,7 +170,6 @@ class NodeManager():
     
   def removeFromParentChildrenIdList(self, nodeDataToDelete):
     parentId = nodeDataToDelete["parentId"]
-    # nodeDataList = self.dataContainer.nodeDataList
     parentNodeData = nodeDataList[parentId]
     
     childrenIds = parentNodeData.get('childrenIds')
@@ -185,35 +205,18 @@ class NodeManager():
     nodeDrawing = self.getNodeDrawing(nodeData)
     return nodeDrawing.mainNode.getPos()
   
-  
-  def setNodeSelected(self, nodeData, nodeDataList = None):
-    self.setAllAsUnselected(nodeDataList)
-    selectedNodeDrawing = self.getNodeDrawing(nodeData)
-    selectedNodeDrawing.setSelected(True)
-    
-  def setAllAsUnselected(self, nodeDataList = None):
-    for key in self.allDrawingData:
-      nodeDrawing = self.allDrawingData[key]
-      nodeDrawing.setSelected(False)
-      
-      if nodeDataList is None:
-        nodeData = self.dataContainer.nodeDataList[key]
-      else:
-        nodeData = nodeDataList[key]
-      nodeData['selected'] = False
-
   def getSelectedNodeData(self):
-    settings = self.dataContainer.nodeDataSettings
-    for key in settings:
-      setting = settings.get(key)
-      if setting.get("selected") != None:
-        return self.dataContainer.nodeDataList.get(key)
+    for key in self.allStateData:
+      setting = self.allStateData.get(key)
+      if setting.get(NodeManager.SELECTED) != None:
+        return self.allData.get(key)
     return None
 
 
 
 # Setting the status of the data
   def setStatusAsSelected(self, dataId, allStateData):
+    
     return self.addFieldToDataMap(dataId, allStateData, 
       NodeManager.SELECTED)
 
@@ -305,6 +308,52 @@ class NodeManager():
 
     return detachedToParent
 
+  def getActivatedNodeData(self):
+    for key in self.allStateData:
+      statusData = self.allStateData.get(key)
+      if statusData.get(DataContainer.SELECTED) != None:
+        return self.allData.get(key)
+    return None
+
+
+#DragNodeState
+  def attachDraggedNodeTo(self, nearestDrawing):
+    selData = self.getActivatedNodeData()
+    return self.attachDraggedNodeToImpl(nearestDrawing, selData, self.allData)
+
+
+  def attachDraggedNodeToImpl(self, nearestDrawing, selectedData, allData):
+    nAllData = self.removeIdFromParent(selectedData, nAllData)
+    parentData = nAllData.get(selectedData.get(NodeManager.ID))
+    nSelData = nAllData.get(selectedData.get(NodeManager.ID))
+    addToParent = self.addToParent(nSelData, parentData, nAllData)
+
+    # nSelData = nAllData.get(selectedData.get(NodeManager.ID))
+
+    # parentNode = nAllData.get(nSelData.get("parentId"))
+    # newParent = nAllData.get(nearestDrawing.id)
+
+    # nAllData = self.removeIdFromParent(selectedData, nAllData)
+
+    # nSelData[NodeManager.PARENT_ID] = newParent.get("id")
+    # self.setDepthAndChildren(newParent.get("depth"), nSelData, nAllData)
+
+    # if newParent.get(NodeManager.CHILDREN_IDS) is None:
+    #   newParent[NodeManager.CHILDREN_IDS] = [nSelData.get(NodeManager.ID)]
+    # else:
+    #   nIds = newParent.get(NodeManager.CHILDREN_IDS)
+    #   nIds.append(nSelData.get(NodeManager.ID))
+
+    return addToParent
+
+  # Have to convert into recursion
+  def setDepthAndChildren(self, parentDepth, nodeData, allData):
+    currentDepth = parentDepth + 1
+    nodeData[NodeManager.DEPTH] = currentDepth
+    children = Utils.getChildren(nodeData, allData)
+    if children is not None:
+      for child in children:
+        self.setDepthAndChildren(currentDepth, child, allData)
 
 
         
