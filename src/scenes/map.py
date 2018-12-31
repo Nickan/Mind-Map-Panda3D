@@ -5,6 +5,9 @@ from scenes.mapComponents.lineDrawings import LineDrawings
 from scenes.mapComponents.nodeDrawing import NodeDrawing
 from scenes.mapComponents.nodeManager import NodeManager
 from scenes.mapComponents.dataContainer import DataContainer
+
+from scenes.states.components.dragNodeMove import DragNodeMove
+from scenes.states.components.newParentVisualCue import NewParentVisualCue
 from scenes.states.state import State
 from scenes.states.stateManager import StateManager
 
@@ -188,6 +191,19 @@ class Map():
     self.lineDrawings.clear()
 
 #DragNodeState
+  def initDragNodeState(self):
+    self.initDragNodeMove()
+
+  def initDragNodeMove(self):
+    drawing = self.getSelectedNodeDrawing()
+    drawingPos = drawing.mainNode.getPos()
+    mPos = Utils.getMousePosition(self.showBase)
+    self.dragNodeMove = DragNodeMove(drawingPos, mPos)
+
+  def dragNode(self):
+    self.dragNodeMove.dragSelectedDrawing(self)
+
+
   def dragOnRelease(self, nearestDrawing, curState):
     if nearestDrawing is None:
       StateManager.switchToStaticMapState(curState)
@@ -196,6 +212,9 @@ class Map():
       allData = nm.attachDraggedNodeTo(nearestDrawing)
       allStateData = nm.allStateData
       StateManager.switchToLoadMapState(curState, allData, allStateData)
+
+  
+
 
     
     

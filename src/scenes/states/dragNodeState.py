@@ -16,17 +16,8 @@ class DragNodeState(State):
     self.map = map
     
   def enter(self):
-    self.newParentVisualCue = NewParentVisualCue()
-
-    self.initDragNodeMove()
+    self.map.initDragNodeMove()
     self.initControls()
-
-  def initDragNodeMove(self):
-    map = self.map
-    drawing = map.getSelectedNodeDrawing()
-    drawingPos = drawing.mainNode.getPos()
-    mPos = Utils.getMousePosition(map.showBase)
-    self.dragNodeMove = DragNodeMove(drawingPos, mPos)
 
   def initControls(self):
     showBase = self.map.showBase
@@ -34,14 +25,7 @@ class DragNodeState(State):
     showBase.accept("mouse1-up", self.mouse1Up)
 
   def mouseMove(self, task):
-    map = self.map
-    drawing = map.getSelectedNodeDrawing()
-
-    mPos = Utils.getMousePosition(map.showBase)
-    self.dragNodeMove.setNodeDrawingPos(drawing, mPos)
-
-    nm = map.nodeManager
-    # self.newParentVisualCue.draw(mPos, nm.allDrawingData)
+    self.map.dragNode()
     return Task.cont
 
   def mouse1Up(self):
