@@ -142,37 +142,6 @@ class NodeManager():
       for coordBreadth in coordDepth:
         print("point " + str(depth) + ": " + str(coordBreadth))
   
-  # Refactor later on
-  def deleteNodeData(self, nodeDataToDelete):
-    if nodeDataToDelete["id"] == 1:
-      print("Can't delete Main node")
-      return
-    
-    self.removeFromParentChildrenIdList(nodeDataToDelete)
-    self.deleteNodeAndChildren(nodeDataToDelete)
-    
-  def removeFromParentChildrenIdList(self, nodeDataToDelete):
-    parentId = nodeDataToDelete["parentId"]
-    parentNodeData = nodeDataList[parentId]
-    
-    childrenIds = parentNodeData.get('childrenIds')
-    if childrenIds is not None:
-      childrenIds.remove(nodeDataToDelete["id"])
-      # Remove the childrenIds field if there is no childrenIds left
-      if len(childrenIds) == 0:
-        parentNodeData.pop('childrenIds')
-    
-  def deleteNodeAndChildren(self, nodeData):
-    nodeDataList = self.dataContainer.nodeDataList
-    nodeDataList.pop(nodeData["id"])
-    childrenIds = nodeData.get("childrenIds")
-    
-    if childrenIds is not None:
-      for childId in childrenIds:
-        childData = nodeDataList[childId]
-        self.deleteNodeAndChildren(childData)
-
-  
   ##################### Utils  
   def clearAllDrawingData(self):
     for key in self.allDrawingData:
@@ -258,21 +227,28 @@ class NodeManager():
 
   def removeData(self, data, allData):
     nData = copy.deepcopy(allData)
-    removed = self.removeChildren(data, nData)
+    removed = self.removeChildren(data, nData, True)
 
-    newAllData = copy.deepcopy(removed)
-    newAllData.pop(data.get(NodeManager.ID), None)
+    removed.pop(data.get(NodeManager.ID), None)
 
-    return self.removeIdFromParent(data, newAllData)
+    return self.removeIdFromParent(data, removed)
 
-  def removeChildren(self, data, allData):
-    childrenIds = data.get(NodeManager.CHILDREN_IDS)
+  def removeChildren(self, data, allData, mutateData = False):
+    nAllData = allData
+    if mutateData is False:
+      nAllData = copy.deepcopy(allData)
+
+    nData = nAllData.get(data.get(NodeManager.ID))
+    if nData is None:
+      return
+
+    childrenIds = nData.get(NodeManager.CHILDREN_IDS)
     if childrenIds is not None:
       for id in childrenIds:
-        childData = allData.get(id)
-        allData.pop(id, None)
-        self.removeChildren(childData, allData)
-    return allData
+        childData = nAllData.get(id)
+        nAllData.pop(id, None)
+        self.removeChildren(childData, nAllData)
+    return nAllData
 
   def removeIdFromParent(self, data, allData):
     detachedToParent = copy.deepcopy(allData)
