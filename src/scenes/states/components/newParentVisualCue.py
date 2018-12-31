@@ -47,8 +47,10 @@ class NewParentVisualCue():
 
     
   def getPotentialNewParentIds(self, map):
-    return self.removeDragNodeAndChildren(self.draggedNode,
-      map.nodeManager.allData)
+    # return self.removeDragNodeAndChildren(self.draggedNode,
+    #   map.nodeManager.allData)
+    nm = map.nodeManager
+    return nm.removeChildren(self.draggedNode, nm.allData)
 
   def removeDragNodeAndChildren(self, draggedNode, allData):
     return self.removeFromList(draggedNode, allData)
