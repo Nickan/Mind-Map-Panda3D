@@ -6,6 +6,7 @@ from scenes.mapComponents.nodeDrawing import NodeDrawing
 from scenes.mapComponents.nodeManager import NodeManager
 from scenes.mapComponents.dataContainer import DataContainer
 from scenes.states.state import State
+from scenes.states.stateManager import StateManager
 
 from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
@@ -50,15 +51,12 @@ class Map():
 #Interfaces for States
   # Have to review the purpose of the recheckLastId
   def createNodeData(self, parentId, name, recheckLastId = False):
+    # return self.nodeManager.createNodeData(parentId, name, recheckLastId)
     nm = self.nodeManager
-    newData = nm.createNodeData(parentId, name, recheckLastId, nm.allData,
-      Utils.getUniqueId)
-    id = newData['id']
-    nm.allData[id] = newData
-
-    modAllStatusData = nm.removeAllFieldFromDataMap(nm.allStateData, 
-      NodeManager.LATEST_CREATED_DATA)
-    nm.allStateData = nm.setAsLatestCreatedData(id, modAllStatusData)
+    allData, newData = nm.createNodeData(parentId, name, recheckLastId)
+    nm.allData = allData
+    nm.allStateData = nm.setAsLatestCreatedData(id, nm.allStateData)
+    
     return nm.allData, nm.allStateData
 
   def drawData(self):
@@ -97,21 +95,6 @@ class Map():
     newState = nm.removeFoldedState(data, nm.allStateData)
     nm.allStateData[data.get(NodeManager.ID)] = newState
       
-
-  #Has to be refactored: Should be encapsulated
-  def drawNodeData(self, filteredData, allStateData):
-    nodeManager = self.nodeManager   
-    nodeManager.clearDataDrawings()
-    self.lineDrawings.clear()
-    
-    loader = self.showBase.loader
-    mapNode = self.mapNode
-    nodeManager.drawData(filteredData, allStateData, loader, mapNode)
-    self.lineDrawings.drawLine(filteredData)
-
-  def setNodeDrawingHeight(self, drawingNode):
-    NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
-    drawingNode.keepTextCenter()
 
   def setSelectedNodeData(self):
     selectedN = self.getSavedSelectedNodeData()
@@ -177,12 +160,7 @@ class Map():
     return self.nodeManager.getNodeDrawing(nodeData)
 
   def getActivatedNodeData(self):
-    nm = self.nodeManager
-    for key in nm.allStateData:
-      statusData = nm.allStateData.get(key)
-      if statusData.get(DataContainer.SELECTED) != None:
-        return nm.allData.get(key)
-    return None
+    return self.nodeManager.getActivatedNodeData()
 
   
   # Utils
@@ -204,7 +182,17 @@ class Map():
   def dispose(self):
     self.nodeManager.clearAllDrawingData()
     self.lineDrawings.clear()
-    
+
+#DragNodeState
+  def dragOnRelease(self, nearestDrawing, curState):
+    if nearestDrawing is None:
+      StateManager.switchToStaticMapState(curState)
+    else:
+      nm = self.nodeManager
+      allData = nm.attachDraggedNodeTo(nearestDrawing)
+      allStateData = nm.allStateData
+      StateManager.switchToLoadMapState(curState, allData, allStateData)
+
     
     
     

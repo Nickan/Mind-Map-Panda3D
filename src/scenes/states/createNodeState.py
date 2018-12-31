@@ -34,7 +34,8 @@ class CreateNodeState(State):
         
     textNode = dataDrawing.textNode
     textNode.setText(text)
-    # nm.setNodeDrawingHeight(dataDrawing)
+    data = nm.allData.get(dataId)
+    nm.setNodeDrawingHeight(data, dataDrawing)
     
   def onEnterDown(self, dataId, text):
     self.map.editNodeData(dataId, text)

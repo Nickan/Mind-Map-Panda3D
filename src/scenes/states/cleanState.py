@@ -2,6 +2,7 @@ from .state import State
 from .stateManager import StateManager
 
 from scenes.map import Map
+from scenes.mapComponents.nodeManager import NodeManager
 from utils.utils import Utils
 
 from scenes.mapComponents.nodeDrawing import NodeDrawing
@@ -16,7 +17,7 @@ class CleanState(State):
   def enter(self):
     map = self.map
     allData, allStateData = map.createNodeData(None, "Main")
-    map.setStatusAsSelected(allData.get(1))
+    map.setStatusAsSelected(allData.get(NodeManager.MAIN_ID))
     # I don't know why the screen size is different when activating this
     # StateManager.switchToLoadMapState(self, allData, allStateData)
 

@@ -18,12 +18,14 @@ class NewParentVisualCue():
 
   # Loops to all potential new parents
   def getNearestNodeDrawing(self, map):
+    allDrawings = map.nodeManager.allDrawingData
+
     width = 35
     height = 10
     nearest = None
     nearestDist = 99999
     for n in self.potentialNewParentIds:
-      node = map.nodeManager.nodeDrawings.get(n)
+      node = allDrawings.get(n)
       nPos = node.mainNode.getPos()
       dPos = self.draggedDrawing.mainNode.getPos()
       curDist = Utils.getDistSqr2D(nPos, dPos)
@@ -45,28 +47,26 @@ class NewParentVisualCue():
 
     
   def getPotentialNewParentIds(self, map):
-    nList = map.nodeManager.dataContainer.nodeDataList
-    newList = {}
-    for key in nList:
-      newList[key] = nList.get(key)
-    return self.removeDragNodeAndChildren(self.draggedNode, newList)
+    return self.removeDragNodeAndChildren(self.draggedNode,
+      map.nodeManager.allData)
 
-
-  def removeDragNodeAndChildren(self, draggedNode, nodeList):
-    return self.removeFromList(draggedNode, nodeList)
+  def removeDragNodeAndChildren(self, draggedNode, allData):
+    return self.removeFromList(draggedNode, allData)
       
-  def removeFromList(self, nodeData, nodeList):
-    children = Utils.getChildren(nodeData, nodeList)
+  def removeFromList(self, nodeData, allData):
+    newList = copy.deepcopy(allData)
+
+    children = Utils.getChildren(nodeData, newList)
     if children is not None:
       for child in children:
-        self.removeFromList(child, nodeList)
+        self.removeFromList(child, newList)
 
-    del nodeList[nodeData.get("id")]
-    return nodeList
+    del newList[nodeData.get("id")]
+    return newList
 
 
   def setAllNodeDrawingsNormal(self, map, draggedNode):
-    drawings = map.nodeManager.nodeDrawings
+    drawings = map.nodeManager.allDrawingData
     for key, d in drawings.items():
       if draggedNode != d:
         d.setSelected(False)

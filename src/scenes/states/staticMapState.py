@@ -103,9 +103,6 @@ class StaticMapState(State):
       return
     allStateData = map.nodeManager.allStateData
     StateManager.switchToLoadMapState(self, allData, allStateData)
-    # nodeManager = self.map.nodeManager
-    # StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
-    
     
   def onNodeDataListLoaded(self, allData, allStateData):
     StateManager.switchToLoadMapState(self, allData, allStateData)

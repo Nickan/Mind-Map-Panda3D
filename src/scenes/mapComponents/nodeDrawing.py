@@ -43,7 +43,7 @@ class NodeDrawing():
     textNode = self.textNode
     self.textNode.setFont(Map.FONT_UBUNTU)
     self.textNode.setAlign(TextProperties.A_center)
-#     self.textNode.setAlign(TextProperties.A_boxed_center )
+    # self.textNode.setAlign(TextProperties.A_boxed_center )
     textNode.setWordwrap(Utils.NODE_SCALE.x * 1.4)
     
     self.textNode.setText(text)
@@ -57,7 +57,7 @@ class NodeDrawing():
     self.text3d.setTwoSided(True)
 
     self.text3d.setScale(2, 0.1, 2)
-#     self.text3d.setScale(1, 1, 1)
+    # self.text3d.setScale(1, 1, 1)
     self.text3d.setAntialias(AntialiasAttrib.MAuto)
     
   
