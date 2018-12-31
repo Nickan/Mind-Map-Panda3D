@@ -13,7 +13,6 @@ class ScrollingMapState(State):
     self.setupControls()
 
   def exit(self):
-    print("exit ScrollingMapState")
     map = self.map
     map.showBase.ignoreAll()
     map.showBase.taskMgr.remove("mouseMove")
