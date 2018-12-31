@@ -66,7 +66,6 @@ class NodeManager():
   def getFilteredData(self, allData, allStateData):
     return NodeDataFilter.getFilteredData(allData, allStateData)
     
-
   def drawData(self, filteredData, allStateData, loader, mapNode,
     getNodePosition):
     for key in filteredData:
@@ -87,7 +86,6 @@ class NodeManager():
         nallStatusData.pop("selected", None)
     return nallStatusData
 
-  
 #createNodeData()
   def addToParent(self, nodeData, parentData, allData):
     if parentData is None:
@@ -134,31 +132,13 @@ class NodeManager():
     if nodeData.get(NodeManager.ID) == NodeManager.MAIN_ID:
       NodeDrawing.ONE_LINE_TEXT_HEIGHT = drawingNode.getActualTextHeight()
     drawingNode.keepTextCenter()
-    
-  
-  """ TODO, implementation needs to be changed """
-  def getNodeData(self, nodePath, allDrawingData, filteredData):
-    nodePath = nodePath.findNetTag("Node")
-    
-    for key in allDrawingData:
-      nodeDrawing = allDrawingData.get(key)
-      if nodePath == nodeDrawing.mainNode:
-        return filteredData.get(key)
-    return None
-  
-  def getNodeDataId(self, nodeData):
-    nodeDataList = self.dataContainer.nodeDataList
-    for key in nodeDataList:
-      if nodeData == nodeDataList[key]:
-        return key
-    
-    
+     
   def showCoords(self, coords):
     for depth, coordDepth in enumerate(dummyCoords):
       for coordBreadth in coordDepth:
         print("point " + str(depth) + ": " + str(coordBreadth))
-        
   
+  # Refactor later on
   def deleteNodeData(self, nodeDataToDelete):
     if nodeDataToDelete["id"] == 1:
       print("Can't delete Main node")
@@ -166,7 +146,6 @@ class NodeManager():
     
     self.removeFromParentChildrenIdList(nodeDataToDelete)
     self.deleteNodeAndChildren(nodeDataToDelete)
-    
     
   def removeFromParentChildrenIdList(self, nodeDataToDelete):
     parentId = nodeDataToDelete["parentId"]
@@ -315,6 +294,9 @@ class NodeManager():
         return self.allData.get(key)
     return None
 
+  def removeAllLatestCreatedField(self):
+    return self.removeAllFieldFromDataMap(self.allStateData, 
+      NodeManager.LATEST_CREATED_DATA)
 
 #DragNodeState
   def attachDraggedNodeTo(self, nearestDrawing):
@@ -354,6 +336,16 @@ class NodeManager():
     if children is not None:
       for child in children:
         self.setDepthAndChildren(currentDepth, child, allData)
+
+# Common
+  def getNodeData(self, nodePath, allDrawingData, filteredData):
+    nodePath = nodePath.findNetTag("Node")
+    
+    for key in allDrawingData:
+      nodeDrawing = allDrawingData.get(key)
+      if nodePath == nodeDrawing.mainNode:
+        return filteredData.get(key)
+    return None
 
 
         
