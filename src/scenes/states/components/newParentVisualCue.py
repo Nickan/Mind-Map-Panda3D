@@ -5,16 +5,19 @@ import copy
 #Have to refactor later on
 class NewParentVisualCue():
 
-  def __init__(self, map):
-    self.draggedNode = map.nodeManager.getSelectedNodeData()
-    self.draggedDrawing = map.nodeManager.getNodeDrawing(self.draggedNode)
-    self.potentialNewParentIds = self.getPotentialNewParentIds(map)
+  # def __init__(self, map):
+    # self.draggedNode = map.nodeManager.getSelectedNodeData()
+    # self.draggedDrawing = map.nodeManager.getNodeDrawing(self.draggedNode)
+    # self.potentialNewParentIds = self.getPotentialNewParentIds(map)
 
-  def draw(self, map):
-    nearestNodeDrawing = self.getNearestNodeDrawing(map)
-    self.setAllNodeDrawingsNormal(map, self.draggedNode)
-    if nearestNodeDrawing is not None:
-      self.setAsPotentialParent(nearestNodeDrawing)
+  def draw(self, mPos, allDrawingData):
+    if mPos is not None:
+      print('in progress')
+      
+    # nearestNodeDrawing = self.getNearestNodeDrawing(map)
+    # self.setAllNodeDrawingsNormal(map, self.draggedNode)
+    # if nearestNodeDrawing is not None:
+    #   self.setAsPotentialParent(nearestNodeDrawing)
 
   # Loops to all potential new parents
   def getNearestNodeDrawing(self, map):

@@ -160,7 +160,7 @@ class Map():
 
 
   def getSelectedNodeDrawing(self):
-    nodeData = self.getSavedSelectedNodeData()
+    nodeData = self.getActivatedNodeData()
     return self.nodeManager.getNodeDrawing(nodeData)
 
   def getActivatedNodeData(self):
