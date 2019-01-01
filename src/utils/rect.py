@@ -13,11 +13,11 @@ class Rect():
 
 
   def collidesWith(self, rect):
-    print(str(self.left) + " " + str(self.right) + " " +
-      str(self.top) + " " + str(self.bottom))
+    # print(collidesWith + str(self.left) + " " + str(self.right) + " " +
+    #   str(self.top) + " " + str(self.bottom))
 
-    print(str(rect.left) + " " + str(rect.right) + " " +
-      str(rect.top) + " " + str(rect.bottom))
+    # print(collidesWith + str(rect.left) + " " + str(rect.right) + " " +
+    #   str(rect.top) + " " + str(rect.bottom))
 
     return ( 
       ( (rect.left > self.left) and (rect.left < self.right) or
