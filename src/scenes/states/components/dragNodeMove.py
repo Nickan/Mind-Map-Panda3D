@@ -20,10 +20,14 @@ class DragNodeMove():
         defaultPosBeforeDragging)
       StateManager.switchToStaticMapState(currentState)
     else:
-      nm = map.nodeManager
-      allData = nm.attachDraggedNodeTo(newParentDrawing)
-      allStateData = nm.allStateData
-      StateManager.switchToLoadMapState(currentState, allData, allStateData)
+      self.changeParentAndLoadMap(map, newParentDrawing, currentState)
+      
+  def changeParentAndLoadMap(self, map, newParentDrawing, currentState):
+    nm = map.nodeManager
+    allData = nm.switchSelectedNodeDrawingParentTo(newParentDrawing)
+    allStateData = nm.allStateData
+    StateManager.switchToLoadMapState(currentState, allData, allStateData)
+
 
   def restoreDraggedNodePosToDefault(self, selectedDrawing, 
     defaultPosBeforeDragging):

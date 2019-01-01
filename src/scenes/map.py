@@ -195,7 +195,7 @@ class Map():
     self.dragNodeMove = DragNodeMove.newInstance(self)
     self.newParentVisualCue = NewParentVisualCue.newInstance(self)
 
-  def dragNode(self):
+  def draggingNode(self):
     self.dragNodeMove.dragSelectedDrawing(self)
     self.newParentVisualCue.draw(self)
 

@@ -25,7 +25,7 @@ class DragNodeState(State):
     showBase.accept("mouse1-up", self.mouse1Up)
 
   def mouseMove(self, task):
-    self.map.dragNode()
+    self.map.draggingNode()
     return Task.cont
 
   def mouse1Up(self):
