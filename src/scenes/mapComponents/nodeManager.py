@@ -279,12 +279,13 @@ class NodeManager():
       NodeManager.LATEST_CREATED_DATA)
 
 #DragNodeState
-  def attachDraggedNodeTo(self, nearestDrawing):
+  def switchSelectedNodeDrawingParentTo(self, drawing):
     selData = self.getActivatedNodeData()
-    return self.attachDraggedNodeToImpl(nearestDrawing, selData, self.allData)
+    return self.switchSelectedNodeDrawingParentToImpl(drawing, selData, self.allData)
 
 
-  def attachDraggedNodeToImpl(self, nearestDrawing, selectedData, allData):
+  def switchSelectedNodeDrawingParentToImpl(self, nearestDrawing, selectedData,
+    allData):
     nAllData = self.removeIdFromParent(selectedData, allData)
 
     parentData = nAllData.get(nearestDrawing.id)
