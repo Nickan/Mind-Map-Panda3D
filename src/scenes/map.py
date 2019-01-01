@@ -195,14 +195,10 @@ class Map():
     self.initDragNodeMove()
 
   def initDragNodeMove(self):
-    drawing = self.getSelectedNodeDrawing()
-    drawingPos = drawing.mainNode.getPos()
-    mPos = Utils.getMousePosition(self.showBase)
-    self.dragNodeMove = DragNodeMove(drawingPos, mPos)
+    self.dragNodeMove = DragNodeMove.newInstance(self)
 
   def dragNode(self):
     self.dragNodeMove.dragSelectedDrawing(self)
-
 
   def dragOnRelease(self, nearestDrawing, curState):
     if nearestDrawing is None:

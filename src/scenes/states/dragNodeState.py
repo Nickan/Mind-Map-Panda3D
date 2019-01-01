@@ -29,11 +29,12 @@ class DragNodeState(State):
     return Task.cont
 
   def mouse1Up(self):
-    self.map.dragOnRelease(nearestDrawing, self)
+    self.map.dragOnRelease()
 
   def exit(self):
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
+
 
 
 
