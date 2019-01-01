@@ -192,15 +192,16 @@ class Map():
 
 #DragNodeState
   def initDragNodeState(self):
-    self.initDragNodeMove()
-
-  def initDragNodeMove(self):
     self.dragNodeMove = DragNodeMove.newInstance(self)
+    self.newParentVisualCue = NewParentVisualCue.newInstance(self)
 
   def dragNode(self):
     self.dragNodeMove.dragSelectedDrawing(self)
+    self.newParentVisualCue.draw(self)
 
-  def dragOnRelease(self, nearestDrawing, curState):
+  def dragNodeMouseUp(self):
+
+
     if nearestDrawing is None:
       StateManager.switchToStaticMapState(curState)
     else:

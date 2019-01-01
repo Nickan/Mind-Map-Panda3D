@@ -27,6 +27,8 @@ class DragNodeMove():
   def resetPosToDefault(self):
     self.nodeDrawing.mainNode.setPos(self.defaultPos)
 
+
+
   @staticmethod
   def newInstance(map):
     drawing = map.getSelectedNodeDrawing()
