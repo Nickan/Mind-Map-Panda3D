@@ -6,7 +6,7 @@ import copy
 class NewParentVisualCue():
 
   def __init__(self, map):
-    self.potentialNewParentIds = None
+    self.potentialNewParentData = None
 
   def draw(self, map):
     mPos = Utils.getMousePosition(map.showBase)
@@ -15,8 +15,8 @@ class NewParentVisualCue():
     allDrawingData = map.nodeManager.allDrawingData
 
     aNode = map.getActivatedNodeData()
-    if self.potentialNewParentIds is None:
-      self.potentialNewParentIds = self.getPotentialNewParentIds(map, aNode)
+    if self.potentialNewParentData is None:
+      self.potentialNewParentData = self.getPotentialNewParentData(map, aNode)
     
     getDistSql2DFn = Utils.getDistSqr2D
     collidesRectFn = Utils.collidesRect
@@ -25,29 +25,27 @@ class NewParentVisualCue():
     pNewParentFn = map.potentialNewParentNode
 
     self.drawImpl(mPos, draggedNode, draggedDrawing, allDrawingData, 
-      self.potentialNewParentIds, getDistSql2DFn, collidesRectFn,
+      self.potentialNewParentData, getDistSql2DFn, collidesRectFn,
       getCoordsFn, pNewParentFn)
 
   def drawImpl(self, mPos, draggedNode, draggedDrawing, allDrawingData, 
-    potentialNewParentIds, getDistSql2DFn, collidesRectFn, getCoordsFn,
+    potentialNewParentData, getDistSql2DFn, collidesRectFn, getCoordsFn,
     pNewParentFn):
     if mPos is not None:
       nearestNodeDrawing = self.getNearestNodeDrawingImpl(draggedNode, 
-        draggedDrawing, allDrawingData, potentialNewParentIds, getDistSql2DFn,
+        draggedDrawing, allDrawingData, potentialNewParentData, getDistSql2DFn,
         collidesRectFn, getCoordsFn)
       self.setAllNodeDrawingsNormal(allDrawingData, draggedNode)
       if nearestNodeDrawing is not None:
         pNewParentFn(nearestNodeDrawing)
-      # self.setAsPotentialParent(nearestNodeDrawing)
 
-    # nearestNodeDrawing = self.getNearestNodeDrawing(map)
-    # self.setAllNodeDrawingsNormal(map, self.draggedNode)
-    # if nearestNodeDrawing is not None:
-    #   self.setAsPotentialParent(nearestNodeDrawing)
-
-  def getPotentialNewParentIds(self, map, selectedNode):
+  def getPotentialNewParentData(self, map, selectedNode):
     nm = map.nodeManager
-    return nm.removeChildren(selectedNode, nm.allData)
+    removedChildren = nm.removeChildren(selectedNode, nm.allData)
+    hiddenData = nm.removeHiddenDataByFoldedState(nm.allData, nm.allStateData)
+    return hiddenData
+    
+
 
   # Loops to all potential new parents
   def getNearestNodeDrawing(self, map):
@@ -57,26 +55,28 @@ class NewParentVisualCue():
     allDrawingData = map.nodeManager.allDrawingData
 
     aNode = map.getActivatedNodeData()
-    potentialNewParentIds = self.getPotentialNewParentIds(map, aNode)
+    potentialNewParentData = self.getPotentialNewParentData(map, aNode)
     
     getDistSql2DFn = Utils.getDistSqr2D
     collidesRectFn = Utils.collidesRect
     getCoordsFn = map.cameraManager.getCoordinates
     return self.getNearestNodeDrawingImpl(draggedNode, 
-      draggedDrawing, allDrawingData, potentialNewParentIds, getDistSql2DFn,
+      draggedDrawing, allDrawingData, potentialNewParentData, getDistSql2DFn,
       collidesRectFn, getCoordsFn)
 
 
   def getNearestNodeDrawingImpl(self, draggedNode, draggedDrawing, allDrawings, 
-    potentialNewParentIds, getDistSql2DFn, collidesRectFn,
+    potentialNewParentData, getDistSql2DFn, collidesRectFn,
     getCoordsFn):
 
     width = 35
     height = 10
     nearest = None
     nearestDist = 99999
-    for pId in potentialNewParentIds:
+    for pId in potentialNewParentData:
       node = allDrawings.get(pId)
+      if node is None:
+        print("pId " + str(pId))
       nPos = node.mainNode.getPos()
       dPos = draggedDrawing.mainNode.getPos()
       curDist = getDistSql2DFn(nPos, dPos)

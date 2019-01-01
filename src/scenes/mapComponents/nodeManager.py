@@ -313,6 +313,63 @@ class NodeManager():
         return filteredData.get(key)
     return None
 
+  def removeHiddenDataByFoldedState(self, allData, allStateData):
+    nAllData = {}
+    for dataId, state in allStateData.items():
+      if state.get(NodeManager.FOLDED) is not None:
+        nAllData = self.removeChildrenByDepth(allData.get(dataId), nAllData,
+          NodeManager.ID, NodeManager.CHILDREN_IDS)
+    return nAllData
+
+  # Will implement depth later on
+  def removeChildrenByDepth(self, data, allData, dataIdName, childrenIdsName,
+    depth):
+
+    if conditionIsMet:
+      return allData
+    else:
+      return removeChildrenByDepth()
+
+    if chilrenIds is None:
+      return allData
+    else
+      if len(childrenData) < index:
+        self.removeData()
+
+      data, allData, dataIdName, childrenIdsName, depth
+      childrenData = getChildrenData
+      removeChildrenByDepth(data, allData, dataIdName, childrenIdsName, depth)
+      
+      self.removeData
+
+  def removeData(self, data, allData):
+    nAllData = copy.deepcopy(allData)
+    nAllData.pop(data, None)
+    return nAllData
+    
+    # Condition
+    # Not assigned to a variable
+    # Just return a new value
+    # New value will be passed as parameter
+
+    # nAllData = copy.deepcopy(allData)
+
+    # nData = nAllData.get(data.get(NodeManager.ID))
+    # if nData is None:
+    #   return nAllData
+
+    # childrenIds = nData.get(NodeManager.CHILDREN_IDS)
+    # if childrenIds is not None:
+    #   for id in childrenIds:
+    #     childData = nAllData.get(id)
+    #     nAllData.pop(id, None)
+    #     removed = self.removeChildren(childData, nAllData)
+
+  
+        
+
+
+
 
         
         
