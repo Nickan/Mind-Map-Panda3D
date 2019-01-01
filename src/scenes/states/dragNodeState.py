@@ -16,7 +16,7 @@ class DragNodeState(State):
     self.map = map
     
   def enter(self):
-    self.map.initDragNodeMove()
+    self.map.initDragNodeState()
     self.initControls()
 
   def initControls(self):
@@ -29,7 +29,7 @@ class DragNodeState(State):
     return Task.cont
 
   def mouse1Up(self):
-    self.map.dragOnRelease()
+    self.map.dragNodeMouseUp()
 
   def exit(self):
     self.map.showBase.ignoreAll()
