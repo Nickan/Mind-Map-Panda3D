@@ -200,15 +200,10 @@ class Map():
     self.newParentVisualCue.draw(self)
 
   def dragNodeMouseUp(self):
+    self.dragNodeMove.mouseUp(self)
 
-
-    if nearestDrawing is None:
-      StateManager.switchToStaticMapState(curState)
-    else:
-      nm = self.nodeManager
-      allData = nm.attachDraggedNodeTo(nearestDrawing)
-      allStateData = nm.allStateData
-      StateManager.switchToLoadMapState(curState, allData, allStateData)
+  def potentialNewParentNode(self, newParentDrawing):
+    self.newParentVisualCue.setAsPotentialParent(newParentDrawing)
 
   
 

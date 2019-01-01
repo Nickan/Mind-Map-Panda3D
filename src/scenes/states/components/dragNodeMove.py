@@ -1,3 +1,4 @@
+from scenes.states.stateManager import StateManager
 from scenes.states.components.newParentVisualCue import NewParentVisualCue
 from direct.task.Task import Task
 from utils.utils import Utils
@@ -8,11 +9,26 @@ class DragNodeMove():
     self.defaultPos = drawingPos
     self.posDiff = self.defaultPos - mPos
 
-  def mouse1Up(self):
-    nearestNodeDrawing = self.newParentVisualCue.getNearestNodeDrawing(self.map)
-    self.onRelease(nearestNodeDrawing)
-    if nearestNodeDrawing is None:
-      self.nodeDrawing.mainNode.setPos(self.defaultPos)
+  def mouseUp(self, map):
+    newParentDrawing = map.newParentVisualCue.getNearestNodeDrawing(map)
+    selectedDrawing = map.getSelectedNodeDrawing()
+    defaultPosBeforeDragging = self.defaultPos
+
+    currentState = map.state
+    if newParentDrawing is None:
+      self.restoreDraggedNodePosToDefault(selectedDrawing, 
+        defaultPosBeforeDragging)
+      StateManager.switchToStaticMapState(currentState)
+    else:
+      nm = map.nodeManager
+      allData = nm.attachDraggedNodeTo(newParentDrawing)
+      allStateData = nm.allStateData
+      StateManager.switchToLoadMapState(currentState, allData, allStateData)
+
+  def restoreDraggedNodePosToDefault(self, selectedDrawing, 
+    defaultPosBeforeDragging):
+    selectedDrawing.mainNode.setPos(defaultPosBeforeDragging)
+
 
   def dragSelectedDrawing(self, map):
     drawing = map.getSelectedNodeDrawing()
