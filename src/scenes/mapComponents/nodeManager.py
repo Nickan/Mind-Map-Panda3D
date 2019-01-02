@@ -328,22 +328,28 @@ class NodeManager():
 
   def removeChildrenAndGrandChildren(self, data, allData):
     nAllData = copy.deepcopy(allData)
-    
-    nAllData = self.removeChildren2(data, 0, allData, data)
+    nAllData = self.removeChildren2(data, 0, nAllData, data, True)
 
     return nAllData
 
-  def removeChildren2(self, data, index, allData, dataNotToRemove):
-    nAllData = copy.deepcopy(allData)
+  # Have to mutate existing data as cloning it takes a lot of CPU time
+  def removeChildren2(self, data, index, allData, dataNotToRemove,
+    mutateAllData = False):
+
+    nAllData = {}
+    if mutateAllData is False:
+      nAllData = copy.deepcopy(allData)
+    else:
+      nAllData = allData
 
     childrenIds = data.get(NodeManager.CHILDREN_IDS)
     if childrenIds is not None:
       if index < len(childrenIds):
         childData = nAllData.get(childrenIds[index])
         nAllData = self.removeChildren2(data, index + 1, nAllData, 
-          dataNotToRemove)
+          dataNotToRemove, mutateAllData)
         nAllData = self.removeChildren2(childData, 0, nAllData,
-          dataNotToRemove)
+          dataNotToRemove, mutateAllData)
       else:
         if data != dataNotToRemove:
           nAllData.pop(data.get(NodeManager.ID), None)

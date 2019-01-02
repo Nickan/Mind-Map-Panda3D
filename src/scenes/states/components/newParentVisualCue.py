@@ -1,6 +1,7 @@
 from utils.utils import Utils
 
 import copy
+import time
 
 #Have to refactor later on
 class NewParentVisualCue():
@@ -42,7 +43,10 @@ class NewParentVisualCue():
   def getPotentialNewParentData(self, map, selectedNode):
     nm = map.nodeManager
     removedChildren = nm.removeChildren(selectedNode, nm.allData)
+
+    start = time.clock()
     hiddenData = nm.removeHiddenDataByFoldedState(removedChildren, nm.allStateData)
+    print("delay: " + str(time.clock() - start))
     return hiddenData
     
 
