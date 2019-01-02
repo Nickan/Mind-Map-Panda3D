@@ -28,7 +28,6 @@ class StaticMapState(State):
     map = self.map
     map.showBase.accept('escape', sys.exit)
 
-    cameraManager = map.cameraManager
     map.showBase.accept("wheel_up", self.zoomIn)
     map.showBase.accept("wheel_down", self.zoomOut)
 

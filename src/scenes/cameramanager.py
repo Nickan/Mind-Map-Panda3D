@@ -4,11 +4,11 @@ from panda3d.core import LPoint3, LVector3, BitMask32
 from panda3d.core import OrthographicLens
 
 
-from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
+from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3, LVecBase2f
 from direct.task.Task import Task
 
 class CameraManager():
-  ZOOM_SPEED = 5
+  ZOOM_SPEED = 50
 
   def __init__(self, showBase):
     self.showBase = showBase
@@ -21,9 +21,12 @@ class CameraManager():
   
   """ init helpers """
   def setDefaultSettings(self):
-    self.showBase.camera.setPos(50, 0, -180)
-    self.camPos = self.showBase.camera.getPos()
-    self.showBase.camera.setHpr(0, 90, 0)
+    cam = self.showBase.camera
+    cam.setPos(50, 0, -1000)
+    self.camPos = cam.getPos()
+    cam.setHpr(0, 90, 0)
+    # self.showBase.camLens.setFov(LVecBase2f(20, 30))
+    self.showBase.camLens.setFov(10)
     self.dragging = False  
   
   def initMouseRayCollision(self):
