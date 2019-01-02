@@ -198,7 +198,7 @@ class NodeManager():
 
   def removeFoldedState(self, data, allStateData):
     state = allStateData.get(data.get(NodeManager.ID))
-    if state is None:
+    if state is None or bool(state) is False:
       return allStateData
 
     newState = copy.deepcopy(state)
@@ -321,7 +321,37 @@ class NodeManager():
     for dataId, state in allStateData.items():
       if state.get(NodeManager.FOLDED) is not None:
         data = nAllData.get(dataId)
-        nAllData = self.removeChildren(data, nAllData)
+        if data is not None:
+          nAllData = self.removeChildrenAndGrandChildren(data, nAllData)
+        
+    return nAllData
+
+  def removeChildrenAndGrandChildren(self, data, allData):
+    nAllData = copy.deepcopy(allData)
+    
+    nAllData = self.removeChildren2(data, 0, allData, data)
+
+    return nAllData
+
+  def removeChildren2(self, data, index, allData, dataNotToRemove):
+    nAllData = copy.deepcopy(allData)
+
+    childrenIds = data.get(NodeManager.CHILDREN_IDS)
+    if childrenIds is not None:
+      if index < len(childrenIds):
+        childData = nAllData.get(childrenIds[index])
+        nAllData = self.removeChildren2(data, index + 1, nAllData, 
+          dataNotToRemove)
+        nAllData = self.removeChildren2(childData, 0, nAllData,
+          dataNotToRemove)
+      else:
+        if data != dataNotToRemove:
+          nAllData.pop(data.get(NodeManager.ID), None)
+    else:
+      if data != dataNotToRemove:
+        nAllData.pop(data.get(NodeManager.ID), None)
+
+
     return nAllData
 
 
