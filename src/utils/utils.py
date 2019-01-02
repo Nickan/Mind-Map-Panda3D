@@ -155,6 +155,17 @@ class Utils():
     for id in childrenIds:
       children.append(nodeList[id])
     return children
+
+  @staticmethod
+  def getChildrenDict(node, nodeList):
+    childrenIds = node.get("childrenIds")
+    if childrenIds is None:
+      return None
+    
+    children = {}
+    for id in childrenIds:
+      children[id] = nodeList[id]
+    return children
   
   
   @staticmethod
