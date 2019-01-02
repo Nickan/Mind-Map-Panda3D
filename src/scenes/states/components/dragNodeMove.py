@@ -16,7 +16,6 @@ class DragNodeMove():
     defaultPosBeforeDragging = self.defaultPos
 
     currentState = map.state
-    # if newParentDrawing is None:
     if self.parentHasChanged(map, newParentDrawing, selectedDrawing) == False:
       self.restoreDraggedNodePosToDefault(selectedDrawing, 
         defaultPosBeforeDragging)
@@ -55,15 +54,7 @@ class DragNodeMove():
 
 
   def parentHasChanged(self, map, newParentDrawing, selectedDrawing):
-    if newParentDrawing == None:
-      return False;
-    nm = map.nodeManager
-    data = nm.getNodeDataByNodePath(selectedDrawing.mainNode, nm.allDrawingData,
-      nm.allData)
-    parentData = nm.getNodeDataByNodePath(newParentDrawing.mainNode, 
-      nm.allDrawingData, nm.allData)
-    return data.get(NodeManager.PARENT_ID) != parentData.get(NodeManager.ID)
-
+    return newParentDrawing != None
 
   @staticmethod
   def newInstance(map):
