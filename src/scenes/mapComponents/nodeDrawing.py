@@ -31,6 +31,7 @@ class NodeDrawing():
     self.model = loader.loadModel("../models/capsule")
     self.model.setScale(self.scale)
     self.model.reparentTo(nodePath)
+    self.model.setPos(0, 0, 0)
     
     
 
@@ -52,7 +53,6 @@ class NodeDrawing():
     
     self.text3d = NodePath(self.textNode)
     self.text3d.reparentTo(nodePath)
-    self.text3d.setPos(0, 0, -2)
     self.text3d.setHpr(0, 90, 0)
     self.text3d.setTwoSided(True)
 
@@ -78,7 +78,7 @@ class NodeDrawing():
       heightAdj = (textHeight / 2)
     else:
       heightAdj = (oneLineHeight / 1) - (textHeight / 1.5)
-    self.text3d.setPos(0, heightAdj, -2)
+    self.text3d.setPos(0, heightAdj, -1)
     
   """ Calculates text height based on the created tightbounds 
       might not be the accurate height of the text """
