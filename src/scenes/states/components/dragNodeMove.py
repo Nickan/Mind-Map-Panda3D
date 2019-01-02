@@ -1,4 +1,5 @@
 from scenes.states.stateManager import StateManager
+from scenes.mapComponents.nodeManager import NodeManager
 from scenes.states.components.newParentVisualCue import NewParentVisualCue
 from direct.task.Task import Task
 from utils.utils import Utils
@@ -15,7 +16,8 @@ class DragNodeMove():
     defaultPosBeforeDragging = self.defaultPos
 
     currentState = map.state
-    if newParentDrawing is None:
+    # if newParentDrawing is None:
+    if self.parentHasChanged(map, newParentDrawing, selectedDrawing) == False:
       self.restoreDraggedNodePosToDefault(selectedDrawing, 
         defaultPosBeforeDragging)
       StateManager.switchToStaticMapState(currentState)
@@ -51,6 +53,16 @@ class DragNodeMove():
   def resetPosToDefault(self):
     self.nodeDrawing.mainNode.setPos(self.defaultPos)
 
+
+  def parentHasChanged(self, map, newParentDrawing, selectedDrawing):
+    if newParentDrawing == None:
+      return False;
+    nm = map.nodeManager
+    data = nm.getNodeDataByNodePath(selectedDrawing.mainNode, nm.allDrawingData,
+      nm.allData)
+    parentData = nm.getNodeDataByNodePath(newParentDrawing.mainNode, 
+      nm.allDrawingData, nm.allData)
+    return data.get(NodeManager.PARENT_ID) != parentData.get(NodeManager.ID)
 
 
   @staticmethod
