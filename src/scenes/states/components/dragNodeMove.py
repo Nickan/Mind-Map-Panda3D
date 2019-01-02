@@ -25,7 +25,11 @@ class DragNodeMove():
   def changeParentAndLoadMap(self, map, newParentDrawing, currentState):
     nm = map.nodeManager
     allData = nm.switchSelectedNodeDrawingParentTo(newParentDrawing)
-    allStateData = nm.allStateData
+
+    newParentData = nm.getNodeDataByNodePath(newParentDrawing.mainNode, 
+      nm.allDrawingData, allData)
+    allStateData = nm.removeFoldedState(newParentData, nm.allStateData)
+
     StateManager.switchToLoadMapState(currentState, allData, allStateData)
 
 

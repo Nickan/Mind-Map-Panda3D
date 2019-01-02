@@ -116,7 +116,7 @@ class Map():
     if clickedNodePath is not None:
       dDrawing = nm.allDrawingData
       filteredData = nm.allData
-      return nm.getNodeData(clickedNodePath, dDrawing, filteredData)
+      return nm.getNodeDataByNodePath(clickedNodePath, dDrawing, filteredData)
     return None
 
   def getLatestCreatedData(self):
