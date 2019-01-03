@@ -200,7 +200,7 @@ class NodeManager():
 
   def removeFoldedStateWithValidity(self, data, allStateData):
     if NodeData.hasChildren(data):
-      return self.removeDataState(data, removeDataState, 
+      return self.removeDataState(data, allStateData, 
         NodeManager.FOLDED)
     
     return allStateData
