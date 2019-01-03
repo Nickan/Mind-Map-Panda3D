@@ -22,22 +22,11 @@ class CreateNodeState(State):
     map.createNodeData(data.get(NodeManager.ID), "")
 
     map.drawData()
-    KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
+    map.startEditNode(data, self.onKeyDown)
 
     
-  def onKeyDown(self, keyname):
-    nm = self.map.nodeManager
-    dataDrawing, dataId = nm.getLatestDrawingNode(nm.allDrawingData,    
-      nm.allStateData)
-
-    text = dataDrawing.textNode.getText()
-    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, dataId, 
-      self.onEnterDown)
-        
-    textNode = dataDrawing.textNode
-    textNode.setText(text)
-    data = nm.allData.get(dataId)
-    nm.setNodeDrawingHeight(data, dataDrawing)
+  def onKeyDown(self, keyname, extraParams):
+    self.map.onKeyDown(keyname, self.onEnterDown, extraParams)
     
   def onEnterDown(self, dataId, text):
     self.map.editNodeData(dataId, text)
