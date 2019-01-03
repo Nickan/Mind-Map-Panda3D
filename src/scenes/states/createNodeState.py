@@ -18,9 +18,10 @@ class CreateNodeState(State):
     data = map.getActivatedNodeData()
     map.removeFoldedState(data)
     map.createNodeData(data.get(NodeManager.ID), "")
-
     map.drawData()
-    map.startEditNode(data, self.onKeyDown)
+
+    lastCreatedData = map.getLatestCreatedData()
+    map.startEditNode(lastCreatedData, self.onKeyDown)
 
     
   def onKeyDown(self, keyname, extraParams):
