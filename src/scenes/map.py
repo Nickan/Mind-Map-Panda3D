@@ -144,7 +144,7 @@ class Map():
       node = self.getActivatedNodeData()
     return node
 
-    def editNodeData(self, dataId, newText):
+  def editNodeData(self, dataId, newText):
     nm = self.nodeManager
     nm.allData.get(dataId)[NodeManager.NAME] = newText
           
