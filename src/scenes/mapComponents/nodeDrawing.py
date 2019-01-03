@@ -1,12 +1,10 @@
 from direct.showbase.ShowBase import ShowBase
 
-from pandac.PandaModules import ColorAttrib, TransparencyAttrib
-
 from panda3d.core import AntialiasAttrib
 from panda3d.core import NodePath
 from panda3d.core import TextNode
 from panda3d.core import BitMask32
-from panda3d.core import TextProperties, VBase4
+from panda3d.core import TextProperties, VBase4, ColorAttrib, TransparencyAttrib
 
 # from .nodeManager import NodeManager
 from utils.utils import Utils
@@ -37,6 +35,7 @@ class NodeDrawing():
     self.model.setScale(self.scale)
     self.model.reparentTo(nodePath)
     self.model.setPos(0, 0, 0)
+    self.model.setTransparency(TransparencyAttrib.MAlpha)
 
   def addText(self, text, nodePath):
     self.textNode = TextNode("Node 1") # This should be different for every instance?
@@ -100,6 +99,10 @@ class NodeDrawing():
   
   def setSelected(self, stateData, alpha = 1):
     from .nodeManager import NodeManager
+    if stateData is None:
+      self.model.setColor(1, 1, 1, 1)
+      self.model.setAlphaScale(1)
+      return
 
     selected = stateData.get(NodeManager.SELECTED)
     folded = stateData.get(NodeManager.FOLDED)

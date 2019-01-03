@@ -121,7 +121,6 @@ class NewParentVisualCue():
   def setAsPotentialParent(self, stateData, nodeDrawing):
     nodeDrawing.setSelected(stateData, 0.5)
 
-  
   @staticmethod
   def newInstance(map):
     return NewParentVisualCue(map)
