@@ -1,3 +1,4 @@
+#region Imports
 import copy
 
 from scenes.cameramanager import CameraManager
@@ -18,6 +19,7 @@ from utils.keyManager import KeyManager
 from utils.utils import Utils
 from utils.saveManager import SaveManager
 from utils.reingoldTilford import ReingoldTilford
+#endregion
 
 class Map():
   
@@ -26,7 +28,7 @@ class Map():
   def __init__(self, showBase, allData, allStateData):
     self.initializeComponents(showBase, allData, allStateData)
 
-#Initialization
+  #region Initialization
   def initializeComponents(self, showBase, allData, allStateData):
     self.showBase = showBase
     self.initCamera(showBase)
@@ -50,9 +52,9 @@ class Map():
 
   def initReingoldTilford(self):
     self.rTilford = ReingoldTilford()
-
+  #endregion
   
-#Interfaces for States
+  #region Interfaces for States
   # Have to review the purpose of the recheckLastId
   def createNodeData(self, parentId, name, recheckLastId = False):
     # return self.nodeManager.createNodeData(parentId, name, recheckLastId)
@@ -132,9 +134,9 @@ class Map():
     nm = self.nodeManager
     nm.allData = nm.removeData(data, nm.allData)
     return nm.allData
+  #endregion
 
-
-#2nd Level interfaces
+  #region helpers
   # Should be refactored later on
   def getSavedSelectedNodeData(self):
     node = self.getSelectedNodeData()
@@ -142,9 +144,6 @@ class Map():
       node = self.getActivatedNodeData()
     return node
 
-#3rd Level Interfaces
-  
-# Common
   def editNodeData(self, dataId, newText):
     nm = self.nodeManager
     nm.allData.get(dataId)[NodeManager.NAME] = newText
@@ -188,12 +187,13 @@ class Map():
 
   def dataHasChildren(self, data):
     return self.nodeManager.dataHasChildren(data)
-
+  #endregion
+  
   def dispose(self):
     self.nodeManager.clearAllDrawingData()
     self.lineDrawings.clear()
 
-#DragNodeState
+  #region DragNodeState
   def initDragNodeState(self):
     self.dragNodeMove = DragNodeMove.newInstance(self)
     self.newParentVisualCue = NewParentVisualCue.newInstance(self)
@@ -213,8 +213,9 @@ class Map():
     stateData = nm.allStateData.get(dataId)
     self.newParentVisualCue.setAsPotentialParent(stateData,
       newParentDrawing)
+  #endregion
 
-# Create Node and Edit Node States
+  #region Create Node and Edit Node States
   def startEditNode(self, selectedData, onKeyDownFn):
     dataId = selectedData.get(NodeManager.ID)
     KeyManager.setupKeyListener(self.showBase, onKeyDownFn, 
@@ -222,7 +223,7 @@ class Map():
 
   def onKeyDown(self, keyname, onEnterDownFn, extraParams):
     self.nodeManager.onKeyDown(keyname, onEnterDownFn, extraParams)
-  
+  #endregion
 
 
     
