@@ -196,13 +196,17 @@ class NodeManager():
     return newMap
 
   def removeFoldedState(self, data, allStateData):
-    state = allStateData.get(data.get(NodeManager.ID))
+    dataId = data.get(NodeManager.ID)
+    state = allStateData.get(dataId)
     if state is None or bool(state) is False:
       return allStateData
 
+    nAllState = copy.deepcopy(allStateData)
     newState = copy.deepcopy(state)
+    
     newState.pop(NodeManager.FOLDED, None)
-    return newState
+    nAllState[dataId] = newState
+    return nAllState
   #endregion
   
   #region Getter and setter
