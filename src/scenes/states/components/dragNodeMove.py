@@ -19,6 +19,8 @@ class DragNodeMove():
     if self.parentHasChanged(map, newParentDrawing, selectedDrawing) == False:
       self.restoreDraggedNodePosToDefault(selectedDrawing, 
         defaultPosBeforeDragging)
+      self.setAsSelected(selectedDrawing, map)
+      map.drawData()
       StateManager.switchToStaticMapState(currentState)
     else:
       self.changeParentAndLoadMap(map, newParentDrawing, currentState)
@@ -37,6 +39,12 @@ class DragNodeMove():
   def restoreDraggedNodePosToDefault(self, selectedDrawing, 
     defaultPosBeforeDragging):
     selectedDrawing.mainNode.setPos(defaultPosBeforeDragging)
+
+  def setAsSelected(self, drawing, map):
+    nm = map.nodeManager
+    data = nm.getNodeDataByNodePath(drawing.mainNode, nm.allDrawingData,
+      nm.allData)
+    map.setStatusAsSelected(data)
 
 
   def dragSelectedDrawing(self, map):
