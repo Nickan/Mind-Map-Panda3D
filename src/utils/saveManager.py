@@ -9,9 +9,10 @@ from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 
 class SaveManager():
+  CAM = "-cam.json"
   
   @staticmethod
-  def saveData(allData, allStatusData):
+  def saveData(allData, allStatusData, camDict):
     Tk().withdraw()
     fileName = asksaveasfilename()
     if len(fileName) < 1:
@@ -21,6 +22,7 @@ class SaveManager():
       fileName += '.json'
 
     SaveManager.saveSettingJson(fileName, allStatusData)
+    SaveManager.saveToJson(fileName, camDict, SaveManager.CAM)
     with open(fileName, 'w') as fp:
       json.dump(allData, fp)
       
@@ -33,20 +35,21 @@ class SaveManager():
       return
 
     allStatusData = SaveManager.loadSettingJson(fileName)
-    allData = SaveManager.convertKeyTypeToInt(fileName)
-    onLoadFilePathCb(allData, allStatusData)
+    allData = SaveManager.loadAndConvertToDict(fileName)
+    camDict = SaveManager.loadFromJson(fileName, SaveManager.CAM, False)
+    onLoadFilePathCb(allData, allStatusData, camDict)
     
   @staticmethod
-  def convertKeyTypeToInt(fileName):
-    nodeList = json.load(open(fileName))
-    return SaveManager.setKeyAsInt(nodeList)
+  def loadAndConvertToDict(fileName):
+    jsonObj = json.load(open(fileName))
+    return SaveManager.setKeyAsInt(jsonObj)
     
   @staticmethod
-  def setKeyAsInt(nodeList):
+  def setKeyAsInt(json):
     newData = {}
 
-    for key in nodeList:
-      nodeData = nodeList[key]
+    for key in json:
+      nodeData = json[key]
       newData[int(key)] = nodeData
     return newData
       
@@ -77,6 +80,7 @@ class SaveManager():
   mainJson = ""
   settingJson = "-setting.json"
   settingJsonMap = {}
+  
 
   # For loading the settings
   @staticmethod
@@ -85,9 +89,25 @@ class SaveManager():
 
     modFilename = filename.replace(".json", "")
     SaveManager.settingJson = modFilename + "-setting.json"
-    SaveManager.createSettingJsonData(SaveManager.settingJson,
+    SaveManager.createFile(SaveManager.settingJson,
       allStatusData)
 
+  @staticmethod
+  def saveToJson(filename, dataDict, postFix):
+    modFilename = filename.replace(".json", "")
+    nFileName = modFilename + postFix
+    SaveManager.createFile(nFileName, dataDict)
+
+  @staticmethod
+  def loadFromJson(fileName, postFix, convertKeyToInt = True):
+    modFilename = fileName.replace(".json", "")
+    nFileName = modFilename + postFix
+    if os.path.exists(nFileName):
+      if convertKeyToInt:
+        return SaveManager.loadAndConvertToDict(nFileName)
+      return json.load(open(nFileName))
+    else:
+      SaveManager.createFile(nFileName, {})
   
   @staticmethod
   def loadSettingJson(fileName):
@@ -98,16 +118,16 @@ class SaveManager():
     if os.path.exists(SaveManager.settingJson):
       SaveManager.loadSettingJsonData(SaveManager.settingJson)
     else:
-      SaveManager.createSettingJsonData(SaveManager.settingJson,
+      SaveManager.createFile(SaveManager.settingJson,
         SaveManager.settingJsonMap)
     return SaveManager.settingJsonMap
   
 
   @staticmethod
-  def createSettingJsonData(filePath, map):
+  def createFile(filePath, dict):
     with open(filePath, 'w') as fp:
-      json.dump(map, fp)
+      json.dump(dict, fp)
 
   @staticmethod
   def loadSettingJsonData(filePath):
-    SaveManager.settingJsonMap = SaveManager.convertKeyTypeToInt(filePath)
+    SaveManager.settingJsonMap = SaveManager.loadAndConvertToDict(filePath)

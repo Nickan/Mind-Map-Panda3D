@@ -10,23 +10,30 @@ from direct.task.Task import Task
 class CameraManager():
   ZOOM_SPEED = 50
 
-  def __init__(self, showBase):
+  CAM_X = 'camX'
+  CAM_Y = 'camY'
+  CAM_Z = 'camZ'
+
+  def __init__(self, showBase, camDict):
     self.showBase = showBase
     self.showBase.disableMouse()
-    self.setDefaultSettings()
+    self.setSettings(camDict)
     self.initMouseToWorldCoordConversion()
     self.initMouseRayCollision()
     self.savedCollisionPoint = Vec3(0, 0, 0)
   # End
   
   """ init helpers """
-  def setDefaultSettings(self):
+  def setSettings(self, camDict):
     cam = self.showBase.camera
     cam.setPos(50, 0, -1000)
     self.camPos = cam.getPos()
     cam.setHpr(0, 90, 0)
     self.showBase.camLens.setFov(10)
-    self.dragging = False  
+    self.dragging = False
+    self.loadSettings(camDict)
+    
+    
   
   def initMouseRayCollision(self):
     z = 0
@@ -53,6 +60,7 @@ class CameraManager():
     curPos.z += CameraManager.ZOOM_SPEED
 
     camera.setPos(curPos)
+    self.saveSettings(self.camDict)
 
   def zoomOut(self):
     camera = self.showBase.camera
@@ -60,6 +68,7 @@ class CameraManager():
     curPos.z += -CameraManager.ZOOM_SPEED
 
     camera.setPos(curPos)
+    self.saveSettings(self.camDict)
 
   def mouse1Down(self):
     self.savedCollisionPoint = self.getMouseCollisionToPlane(self.plane)
@@ -110,6 +119,8 @@ class CameraManager():
     curPos = camera.getPos()
     camera.setPos(curPos + delta)
 
+    self.saveSettings(self.camDict)
+
   def setViewBasedOnNodePos(self, pos):
     camera = self.showBase.camera
     newPos = Vec3(camera.getPos())
@@ -117,7 +128,6 @@ class CameraManager():
     newPos.y = pos.y
     camera.setPos(newPos)
     
-  
   # NodePath datection is manage internally in Panda3D, NodeManager should have been
   # managing NodePath, but it can be handled by communication with Camera and 
   # Panda3D already, so NodeManager is not needed anymore here
@@ -136,19 +146,38 @@ class CameraManager():
         return self.pq.getEntry(0).getIntoNodePath()
     return None
 
-
-
   def getCoordinates(self):
     mouseWatcherNode = self.showBase.mouseWatcherNode
     mpos = mouseWatcherNode.getMouse()
 
-    self.pickerRay.setFromLens(self.showBase.camNode, mpos.getX(), mpos.getY())
+    self.pickerRay.setFromLens(self.showBase.camNode, 
+      mpos.getX(), mpos.getY())
 
     render = self.showBase.render
     camera = self.showBase.camera
     nearPoint = render.getRelativePoint(camera, self.pickerRay.getOrigin())
 
     return mpos, nearPoint
+
+  def saveSettings(self, camDict):
+    self.camDict = camDict
+    cam = self.showBase.camera
+    pos = cam.getPos()
+
+    camDict[CameraManager.CAM_X] = pos.x
+    camDict[CameraManager.CAM_Y] = pos.y
+    camDict[CameraManager.CAM_Z] = pos.z
+
+  def loadSettings(self, camDict):
+    self.camDict = camDict
+    if camDict is None:
+      self.camDict = {}
+    if camDict.get(CameraManager.CAM_X) is not None:
+      camera = self.showBase.camera
+      camera.setPos(camDict[CameraManager.CAM_X], 
+        camDict[CameraManager.CAM_Y], 
+        camDict[CameraManager.CAM_Z])
+    
 
 
   def showValues(self):

@@ -31,9 +31,10 @@ class DragNodeMove():
 
     newParentData = nm.getNodeDataByNodePath(newParentDrawing.mainNode, 
       nm.allDrawingData, allData)
-    allStateData = nm.removeFoldedState(newParentData, nm.allStateData)
-
-    StateManager.switchToLoadMapState(currentState, allData, allStateData)
+    allStateData = map.removeFoldedState(newParentData)
+    camDict = map.cameraManager.camDict
+    StateManager.switchToLoadMapState(currentState, 
+      allData, allStateData, camDict)
 
 
   def restoreDraggedNodePosToDefault(self, selectedDrawing, 

@@ -48,13 +48,13 @@ class StateManager():
     map.state.enter()
     
   @staticmethod
-  def switchToLoadMapState(currentState, allData, allStateData):
+  def switchToLoadMapState(currentState, allData, allStateData, camDict):
     map = currentState.map
     map.dispose()
     currentState.exit()
-    
+
     from scenes.states.loadMapState import LoadMapState
-    state = LoadMapState(map.showBase, allData, allStateData)
+    state = LoadMapState(map.showBase, allData, allStateData, camDict)
     state.enter()
 
   @staticmethod
@@ -66,6 +66,19 @@ class StateManager():
     map.state = ScrollingMapState(map)
     map.state.enter()
     map.state.mouse1Down()
+
+  
+  # @staticmethod
+  # def saveCameraSettings(map):
+  #   cm = map.cameraManager
+  #   cm.saveSettings(map.nodeManager.allStateData)
+
+  # @staticmethod
+  # def loadCameraSettings(map):
+  #   cm = map.cameraManager
+  #   cm.loadSettings(map.nodeManager.allStateData)
+  
+    
     
     
     
