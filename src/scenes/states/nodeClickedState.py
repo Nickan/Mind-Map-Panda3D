@@ -1,5 +1,8 @@
-from state import State
-from stateManager import StateManager
+from scenes.states.components.dragNodeStartDetector import DragNodeStartDetector
+from .state import State
+from .dragNodeState import DragNodeState
+from .stateManager import StateManager
+from utils.utils import Utils
 
 import sys
 
@@ -10,67 +13,34 @@ class NodeClickedState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, selectedNodeData):
-    nodeManager = self.map.nodeManager
-    nodeManager.selectedNodeData = selectedNodeData
-    nodeManager.setNodeSelected(selectedNodeData)
-    selectedNodeData["selected"] = True
-    self.setupControls()
-  
+  def enter(self):
+    map = self.map
+    data = map.getSelectedNodeData()
+    map.setStatusAsSelected(data)
+    map.drawData()
+    self.setupControls(data)
+
   def exit(self):
     self.map.showBase.ignoreAll()
     self.map.showBase.taskMgr.remove("mouseMove")
     
-    
   """ enter helper """
-  def setupControls(self):
-    map = self.map
-    map.showBase.accept('escape', sys.exit)
+  def setupControls(self, data):
+    self.map.showBase.accept("mouse1-up", self.mouse1Up)
+    self.setupDragNodeDetector(data)
 
-    cameraManager = map.cameraManager
-    map.showBase.accept("mouse1", self.mouse1Down)
-    map.showBase.accept("mouse1-up", self.mouse1Up)
-    
-    map.showBase.accept("tab", self.onTab)
-    map.showBase.accept("delete", self.onDelete)
-  
-  
   """ Events """
-  def mouse1Down(self):
-    nodeManager = self.map.nodeManager
-    selectedNodeData = self.map.getSelectedNodeData()
-    if selectedNodeData is None:
-      self.goToScrollingState()
-      self.map.state.mouse1Down()
-    else:
-      nodeManager.selectedNodeData = selectedNodeData
-      selectedNodeData["selected"] = True
-      nodeManager.setNodeSelected(selectedNodeData)
-      
-    
   def mouse1Up(self):
-    print("NodeClickedState mouse1Up")
-    
-  
-  def onTab(self):
-    selectedNodeData = self.map.nodeManager.selectedNodeData
-    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
-    
-  def onDelete(self):
-    nodeManager = self.map.nodeManager
-    StateManager.switchToDeleteNodeDataState(self, nodeManager.selectedNodeData)
-    
-    
-  """ mouse1Down Helper """
-  def goToScrollingState(self):
-    from scenes.states.scrollingMapState import ScrollingMapState
-    self.map.state.exit()
-    self.map.state = ScrollingMapState(self.map)
-    self.map.state.enter()
-  
-    
-    
-    
+    from scenes.states.staticMapState import StaticMapState
+    self.map.changeState(StaticMapState(self.map))
+
+  def onNodeDrag(self):
+    self.map.changeState(DragNodeState(self.map))
+
+  def setupDragNodeDetector(self, data):
+    nodeDrawing = self.map.nodeManager.getNodeDrawing(data)
+    DragNodeStartDetector(nodeDrawing, self.map, self.onNodeDrag)
+
     
     
     

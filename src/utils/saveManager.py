@@ -1,48 +1,54 @@
-
-
 import json
-from __builtin__ import staticmethod
+import os.path
+import copy
 
-from Tkinter import Tk
-from tkFileDialog import askopenfilename
-from tkFileDialog import asksaveasfilename
+from builtins import staticmethod
+from scenes.mapComponents.dataContainer import DataContainer
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import asksaveasfilename
 
 class SaveManager():
   
   @staticmethod
-  def saveNodeDataList(nodeDataList):
-    SaveManager.clearNodeDataList(nodeDataList)
-    
+  def saveData(allData, allStatusData):
     Tk().withdraw()
-    filename = asksaveasfilename()
-    
-    if len(filename) < 1:
+    fileName = asksaveasfilename()
+    if len(fileName) < 1:
       return
-    with open(filename, 'w') as fp:
-      json.dump(nodeDataList, fp)
+
+    if '.json' not in fileName:
+      fileName += '.json'
+
+    SaveManager.saveSettingJson(fileName, allStatusData)
+    with open(fileName, 'w') as fp:
+      json.dump(allData, fp)
       
   @staticmethod
-  def loadNodeDataList(onLoadFilePathCb):
+  def loadDataContainer(onLoadFilePathCb):
     Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
     fileName = askopenfilename() # show an "Open" dialog box and return the path to the selected file
     
     if len(fileName) < 1:
       return
-    nodeDataList = SaveManager.loadNodeDataListKeyConvertedToInt(fileName)
-    onLoadFilePathCb(nodeDataList)
+
+    allStatusData = SaveManager.loadSettingJson(fileName)
+    allData = SaveManager.convertKeyTypeToInt(fileName)
+    onLoadFilePathCb(allData, allStatusData)
     
   @staticmethod
-  def loadNodeDataListKeyConvertedToInt(fileName):
-    nodeDataList = json.load(open(fileName))
-    return SaveManager.setKeyAsInt(nodeDataList)
+  def convertKeyTypeToInt(fileName):
+    nodeList = json.load(open(fileName))
+    return SaveManager.setKeyAsInt(nodeList)
     
   @staticmethod
-  def setKeyAsInt(nodeDataList):
-    for key in nodeDataList:
-      nodeData = nodeDataList[key]
-      del nodeDataList[key]
-      nodeDataList[int(key)] = nodeData
-    return nodeDataList
+  def setKeyAsInt(nodeList):
+    newData = {}
+
+    for key in nodeList:
+      nodeData = nodeList[key]
+      newData[int(key)] = nodeData
+    return newData
       
       
   @staticmethod
@@ -66,3 +72,42 @@ class SaveManager():
   def getNodeDataList(name):
     jsonPath = '../assets/' + name
     return json.load(open(jsonPath))
+
+
+  mainJson = ""
+  settingJson = "-setting.json"
+  settingJsonMap = {}
+
+  # For loading the settings
+  @staticmethod
+  def saveSettingJson(filename, allStatusData):
+    SaveManager.mainJson = filename
+
+    modFilename = filename.replace(".json", "")
+    SaveManager.settingJson = modFilename + "-setting.json"
+    SaveManager.createSettingJsonData(SaveManager.settingJson,
+      allStatusData)
+
+  
+  @staticmethod
+  def loadSettingJson(fileName):
+    SaveManager.mainJson = fileName
+
+    modFilename = fileName.replace(".json", "")
+    SaveManager.settingJson = modFilename + "-setting.json"
+    if os.path.exists(SaveManager.settingJson):
+      SaveManager.loadSettingJsonData(SaveManager.settingJson)
+    else:
+      SaveManager.createSettingJsonData(SaveManager.settingJson,
+        SaveManager.settingJsonMap)
+    return SaveManager.settingJsonMap
+  
+
+  @staticmethod
+  def createSettingJsonData(filePath, map):
+    with open(filePath, 'w') as fp:
+      json.dump(map, fp)
+
+  @staticmethod
+  def loadSettingJsonData(filePath):
+    SaveManager.settingJsonMap = SaveManager.convertKeyTypeToInt(filePath)

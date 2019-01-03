@@ -1,21 +1,22 @@
-from state import State
-from stateManager import StateManager
+from scenes.map import Map
+from scenes.mapComponents.nodeDataFilter import NodeDataFilter
+from .state import State
+from .stateManager import StateManager
+
+from utils.saveManager import SaveManager
+
 
 
 class LoadMapState(State):
   
-  def __init__(self, map):
+  def __init__(self, showBase, allData, allStateData):
     State.__init__(self)
-    self.map = map
+    self.map = Map(showBase, allData, allStateData)
+    self.map.state = self
     
-  def enter(self, nodeDataList):
-    nodeManager = self.map.nodeManager
-    nodeManager.nodeDataList = nodeDataList
-    nodeManager.tree.getCoordinates(nodeDataList)
-    
-    self.map.drawNodeDataList(nodeDataList)
-    StateManager.switchToStaticMapState(self)
-    
+  def enter(self):
+    self.map.drawData()
+    StateManager.switchToStaticMapState(self)    
     
   def exit(self):
     self.map.showBase.ignoreAll()

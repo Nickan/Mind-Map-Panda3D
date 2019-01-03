@@ -1,8 +1,11 @@
-from state import State
-from stateManager import StateManager
 
-from scrollingMapState import ScrollingMapState
+
+from .state import State
+from .stateManager import StateManager
+
+from .scrollingMapState import ScrollingMapState
 from utils.saveManager import SaveManager
+from utils.utils import Utils
 
 import sys
 
@@ -17,7 +20,6 @@ class StaticMapState(State):
     self.setupControls()
 
   def exit(self):
-    print("exit StaticMapState")
     self.map.showBase.ignoreAll()
     
 
@@ -26,7 +28,6 @@ class StaticMapState(State):
     map = self.map
     map.showBase.accept('escape', sys.exit)
 
-    cameraManager = map.cameraManager
     map.showBase.accept("wheel_up", self.zoomIn)
     map.showBase.accept("wheel_down", self.zoomOut)
 
@@ -38,6 +39,16 @@ class StaticMapState(State):
     
     map.showBase.accept("f1", self.onSave)
     map.showBase.accept("f2", self.onOpenFile)
+    map.showBase.accept("f3", self.onFoldNode)
+
+    # Temporary for fixing bug when folding
+    map.showBase.accept("f5", self.clearAllDrawings)
+
+    map.showBase.accept("delete", self.onDelete)
+
+  def clearAllDrawings(self):
+    map = self.map
+    map.nodeManager.tmpClearNodeDrawings()
   
   """ Events """
   def zoomIn(self):
@@ -56,7 +67,6 @@ class StaticMapState(State):
     else:
       StateManager.switchToNodeClickedState(self, selectedNodeData)
       
-      
   def mouse3Down(self):
     selectedNodeData = self.map.getSelectedNodeData()
     if selectedNodeData is None:
@@ -64,23 +74,37 @@ class StaticMapState(State):
     else:
       StateManager.switchToEditTextState(self, selectedNodeData)
       
-
   def mouse1Up(self):
     print("static move up")
     
   def onTab(self):
-    selectedNodeData = self.map.nodeManager.selectedNodeData
-    StateManager.switchToCreateNodeDataState(self, selectedNodeData)
+    StateManager.switchToCreateNodeDataState(self)
     
   def onSave(self):
-    SaveManager.saveNodeDataList(self.map.nodeManager.nodeDataList)
+    nm = self.map.nodeManager
+    SaveManager.saveData(nm.allData, nm.allStateData)
     
   def onOpenFile(self):
-    SaveManager.loadNodeDataList(self.onNodeDataListLoaded)
+    SaveManager.loadDataContainer(self.onNodeDataListLoaded)
+
+  def onFoldNode(self):
+    map = self.map
+    data = map.getActivatedNodeData()
+    if map.dataHasChildren(data):
+      allData, allStateData = map.toggleFold(data)
+      StateManager.switchToLoadMapState(self, allData, allStateData)
+
+  def onDelete(self):
+    map = self.map
+    data = map.getActivatedNodeData()
+    allData = map.removeData(data)
+    if allData is None:
+      return
+    allStateData = map.nodeManager.allStateData
+    StateManager.switchToLoadMapState(self, allData, allStateData)
     
-    
-  def onNodeDataListLoaded(self, nodeDataList):
-    StateManager.switchToLoadMapState(self, nodeDataList)
+  def onNodeDataListLoaded(self, allData, allStateData):
+    StateManager.switchToLoadMapState(self, allData, allStateData)
   
   
   """ mouse1Down Helper """

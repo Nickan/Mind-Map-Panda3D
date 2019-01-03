@@ -1,4 +1,4 @@
-from utils import Utils
+from .utils import Utils
 
 class ReingoldTilford():
   NODE_SIZE = 1.0
@@ -7,12 +7,13 @@ class ReingoldTilford():
     self.checkedConflictedIds = {}
     self.deltaFn = deltaFn # Will be called when there is a change in mod and x
     
-
+  # REFACTOR: Should not modify the passed nodeList
   # Returns points to represent tree
   def getCoordinates(self, nodeList, enableCheckForConflicts = True):
     mainNode = nodeList.get(1)
     self.firstTraversal(mainNode, nodeList, enableCheckForConflicts)
     self.calcFinalPos(mainNode, nodeList, 0)
+    return nodeList
 
   def firstTraversal(self, mainNode, nodeList, enableCheckForConflicts = False):
     self.setInitialX(mainNode, nodeList, enableCheckForConflicts)
@@ -20,7 +21,7 @@ class ReingoldTilford():
   def calcFinalPos(self, node, nodeList, modSum):
     name = node.get("name")
     node["x"] += modSum
-    if node.has_key("mod") is False:
+    if "mod" not in node:
       node["mod"] = 0
     modSum += node.get("mod")
 
@@ -158,6 +159,7 @@ class ReingoldTilford():
     return children[children.index(node) + 1]
 
 
+  """ Will fix later """
   def centerNodesBetween(self, leftNode, rightNode, nodeList, shiftValue):
     parentId = leftNode.get("parentId")
     parent = nodeList[parentId]
@@ -190,14 +192,15 @@ class ReingoldTilford():
           self.deltaFn(middleNode, "centerNodesBetween")
 
         count += 1
-
-      self.fixConflictingX(rightNode, nodeList)
+        
+#       self.solveConflictingX(rightNode, nodeList, True)
+#       self.fixConflictingX(rightNode, nodeList)
 
   def getLeftContour(self, node, nodeList, modSum, contour):
     y = node.get("depth")
     x = node.get("x")
     # print("y " + str(y))
-    if contour.has_key(y):
+    if y in contour:
       contour[y] = min(contour[y], x + modSum)
     else:
       contour[y] = x + modSum
@@ -213,7 +216,7 @@ class ReingoldTilford():
   def getRightContour(self, node, nodeList, modSum, contour):
     y = node.get("depth")
     x = node.get("x")
-    if contour.has_key(y):
+    if y in contour:
       contour[y] = max(contour[y], x + modSum)
     else:
       contour[y] = x + modSum

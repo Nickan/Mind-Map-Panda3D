@@ -1,13 +1,14 @@
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
 from panda3d.core import LPoint3, LVector3, BitMask32
+from panda3d.core import OrthographicLens
 
 
 from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
 from direct.task.Task import Task
 
 class CameraManager():
-  ZOOM_SPEED = 5
+  ZOOM_SPEED = 50
 
   def __init__(self, showBase):
     self.showBase = showBase
@@ -20,10 +21,11 @@ class CameraManager():
   
   """ init helpers """
   def setDefaultSettings(self):
-    self.showBase.camera.setPos(50, 0, -180)
-    self.camPos = self.showBase.camera.getPos()
-    self.showBase.camera.setHpr(0, 90, 0)
-
+    cam = self.showBase.camera
+    cam.setPos(50, 0, -1000)
+    self.camPos = cam.getPos()
+    cam.setHpr(0, 90, 0)
+    self.showBase.camLens.setFov(10)
     self.dragging = False  
   
   def initMouseRayCollision(self):
@@ -107,11 +109,19 @@ class CameraManager():
     camera = self.showBase.camera
     curPos = camera.getPos()
     camera.setPos(curPos + delta)
+
+  def setViewBasedOnNodePos(self, pos):
+    camera = self.showBase.camera
+    newPos = Vec3(camera.getPos())
+    newPos.x = pos.x
+    newPos.y = pos.y
+    camera.setPos(newPos)
     
   
-  # NodePath datection is manage internally in Panda3D, NodeManager shouod have been
-  # managing NodePath, but it can be handled by communication with Canera and 
+  # NodePath datection is manage internally in Panda3D, NodeManager should have been
+  # managing NodePath, but it can be handled by communication with Camera and 
   # Panda3D already, so NodeManager is not needed anymore here
+  # TODO: Refactor
   def getClickedNodePath(self):
     mouseWatcherNode = self.showBase.mouseWatcherNode
     if mouseWatcherNode.hasMouse():

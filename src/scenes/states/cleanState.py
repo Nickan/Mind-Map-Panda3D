@@ -1,30 +1,32 @@
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
+
+from scenes.map import Map
+from scenes.mapComponents.nodeManager import NodeManager
 from utils.utils import Utils
 
 from scenes.mapComponents.nodeDrawing import NodeDrawing
 
 class CleanState(State):
   
-  def __init__(self, map):
+  def __init__(self, showBase):
     State.__init__(self)
-    self.map = map
+    self.map = Map(showBase, {}, {})
     
+  # Refactor, should start from scratch
   def enter(self):
     map = self.map
-    nodeManager = map.nodeManager
-    nodeData = map.createNodeData(None, "Main")
-    
-    nodeDataList = nodeManager.nodeDataList
-    nodeManager.tree.getCoordinates(nodeDataList)
-    
-    map.drawNodeDataList()
-    self.setNodeDrawingHeight()
+    allData, allStateData = map.createNodeData(None, "Main")
+    map.setStatusAsSelected(allData.get(NodeManager.MAIN_ID))
+    # I don't know why the screen size is different when activating this
+    # StateManager.switchToLoadMapState(self, allData, allStateData)
+
+    map.drawData()
+    map.state = self
     self.initEvents()
     
     
   def exit(self):
-    print("exit clean state")
     self.map.showBase.ignoreAll()
     
     
@@ -32,20 +34,15 @@ class CleanState(State):
   def initEvents(self):
     map = self.map
     map.showBase.accept("mouse1", self.mouse1Down)
-    
     map.showBase.accept("mouse3", self.mouse3Down)
 
-  def setNodeDrawingHeight(self):
-    print("test")
-    nodeManager = self.map.nodeManager
-    nodeDrawing = nodeManager.nodeDrawings[1]
-    NodeDrawing.ONE_LINE_TEXT_HEIGHT = nodeDrawing.getActualTextHeight()
-    nodeDrawing.keepTextCenter()
-
   def mouse1Down(self):
-    selectedNodeData = self.map.getSelectedNodeData()
+    map = self.map
+    
+    selectedNodeData = map.getSelectedNodeData()
     if selectedNodeData is None:
-      self.switchToScrollingState()
+      # self.switchToScrollingState()
+      StateManager.switchToScrollingState(self)
     else:
       self.switchToNodeClickedState(selectedNodeData)
         
@@ -67,15 +64,15 @@ class CleanState(State):
     self.exit()
     from scenes.states.nodeClickedState import NodeClickedState
     map.state = NodeClickedState(self.map)
-    map.state.enter(selectedNodeData)
+    map.state.enter()
     
-  def switchToScrollingState(self):
-    self.map.state.exit()
+  # def switchToScrollingState(self):
+  #   self.map.state.exit()
     
-    from scenes.states.scrollingMapState import ScrollingMapState
-    self.map.state = ScrollingMapState(self.map)
-    self.map.state.enter()
-    self.map.state.mouse1Down()
+  #   from scenes.states.scrollingMapState import ScrollingMapState
+  #   self.map.state = ScrollingMapState(self.map)
+  #   self.map.state.enter()
+  #   self.map.state.mouse1Down()
     
     
     

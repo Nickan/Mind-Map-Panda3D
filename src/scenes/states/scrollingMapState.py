@@ -1,11 +1,10 @@
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 
 import sys
 
 class ScrollingMapState(State):
   
-
   def __init__(self, map):
     State.__init__(self)
     self.map = map
@@ -14,7 +13,6 @@ class ScrollingMapState(State):
     self.setupControls()
 
   def exit(self):
-    print("exit ScrollingMapState")
     map = self.map
     map.showBase.ignoreAll()
     map.showBase.taskMgr.remove("mouseMove")
