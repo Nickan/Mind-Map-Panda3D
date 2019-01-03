@@ -8,6 +8,7 @@ from direct.showbase.ShowBase import Vec3
 from scenes.mapComponents.nodeDrawing import NodeDrawing
 from scenes.mapComponents.dataContainer import DataContainer
 
+from utils.keyManager import KeyManager
 from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
 from platform import node
@@ -164,8 +165,6 @@ class NodeManager():
         return self.allData.get(key)
     return None
 
-
-
 # Setting the status of the data
   def setStatusAsSelected(self, dataId, allStateData):
     
@@ -281,7 +280,7 @@ class NodeManager():
     return self.removeAllFieldFromDataMap(self.allStateData, 
       NodeManager.LATEST_CREATED_DATA)
 
-#DragNodeState
+# DragNodeState
   def switchSelectedNodeDrawingParentTo(self, drawing):
     selData = self.getActivatedNodeData()
     return self.switchSelectedNodeDrawingParentToImpl(drawing, selData, self.allData)
@@ -359,6 +358,21 @@ class NodeManager():
 
 
     return nAllData
+
+# Create Node and Edit Node States
+  def onKeyDown(self, keyname, onEnterDownFn, dataId):
+    data = self.allData.get(dataId)
+    dataDrawing = self.getNodeDrawing(data)
+
+    text = dataDrawing.textNode.getText()
+    dataId = data.get(NodeManager.ID)
+    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, 
+      dataId, onEnterDownFn)
+        
+    textNode = dataDrawing.textNode
+    textNode.setText(text)
+    self.setNodeDrawingHeight(data, dataDrawing)
+
 
 
   

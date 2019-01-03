@@ -2,11 +2,13 @@
 
 class KeyManager():
   ON_KEY_DOWN_FN = None
+  EXTRA_ARGS = None
   
   @staticmethod
-  def setupKeyListener(showBase, onKeyDownFn):
+  def setupKeyListener(showBase, onKeyDownFn, extraArgs = None):
     KeyManager.setupControls(showBase)
     KeyManager.ON_KEY_DOWN_FN = onKeyDownFn
+    KeyManager.EXTRA_ARGS = extraArgs
     
   @staticmethod
   def setupControls(showBase):
@@ -16,7 +18,7 @@ class KeyManager():
     
   @staticmethod
   def onKeyDown(keyname):
-    KeyManager.ON_KEY_DOWN_FN(keyname)
+    KeyManager.ON_KEY_DOWN_FN(keyname, KeyManager.EXTRA_ARGS)
     
   @staticmethod
   def getModifiedKeyFromKeyInput(text, keyname, dataId, onEnterDown):
@@ -34,5 +36,6 @@ class KeyManager():
   @staticmethod
   def clear():
      KeyManager.ON_KEY_DOWN_FN = None
+     KeyManager.EXTRA_ARGS = None
     
   

@@ -14,6 +14,7 @@ from scenes.states.stateManager import StateManager
 from panda3d.core import LVecBase3f
 from panda3d.core import NodePath
 
+from utils.keyManager import KeyManager
 from utils.utils import Utils
 from utils.saveManager import SaveManager
 from utils.reingoldTilford import ReingoldTilford
@@ -205,6 +206,14 @@ class Map():
   def potentialNewParentNode(self, newParentDrawing):
     self.newParentVisualCue.setAsPotentialParent(newParentDrawing)
 
+# Create Node and Edit Node States
+  def startEditNode(self, selectedData, onKeyDownFn):
+    dataId = selectedData.get(NodeManager.ID)
+    KeyManager.setupKeyListener(self.showBase, onKeyDownFn, 
+      dataId)
+
+  def onKeyDown(self, keyname, onEnterDownFn, extraParams):
+    self.nodeManager.onKeyDown(keyname, onEnterDownFn, extraParams)
   
 
 
