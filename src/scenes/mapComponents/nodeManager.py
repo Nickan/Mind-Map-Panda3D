@@ -203,7 +203,7 @@ class NodeManager():
 
     nAllState = copy.deepcopy(allStateData)
     newState = copy.deepcopy(state)
-    
+
     newState.pop(NodeManager.FOLDED, None)
     nAllState[dataId] = newState
     return nAllState
@@ -342,6 +342,8 @@ class NodeManager():
   def removeChildren2(self, data, index, allData, dataNotToRemove,
     mutateAllData = False):
 
+    if data is None:
+      print("error")
     nAllData = {}
     if mutateAllData is False:
       nAllData = copy.deepcopy(allData)
