@@ -16,6 +16,7 @@ from .nodeDataFilter import NodeDataFilter
 
 
 class NodeManager():
+  #region Global Fields
   ID = 'id'
   NAME = 'name'
   PARENT_ID = 'parentId'
@@ -29,6 +30,7 @@ class NodeManager():
 
   # Main ID
   MAIN_ID = 1
+  #endregion
 
   def __init__(self, allData, allStateData):
     # Will be mutated
@@ -38,8 +40,7 @@ class NodeManager():
 
     self.tree = ReingoldTilford()
 
-
-#First level functions
+  #region
   def createNodeData(self, parentId, name, recheckLastId):
     allData = self.allData
     getUniqueIdFn = Utils.getUniqueId
@@ -86,8 +87,9 @@ class NodeManager():
       if nallStatusData.get("selected") is not None:
         nallStatusData.pop("selected", None)
     return nallStatusData
+  #endregion
 
-#createNodeData()
+  #region CreateNodeState
   def addToParentAllData(self, nodeData, parentData, allData):
     if parentData is None:
       return allData
@@ -115,8 +117,9 @@ class NodeManager():
     else:
       nData["depth"] = 1
     return nData
+  #endregion
 
-#Second Level Functions
+  #region Second Level Functions
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
@@ -160,8 +163,9 @@ class NodeManager():
       if setting.get(NodeManager.SELECTED) != None:
         return self.allData.get(key)
     return None
+  #endregion
 
-# Setting the status of the data
+  #region Setting the status of the data
   def setStatusAsSelected(self, dataId, allStateData):
     
     return self.addFieldToDataMap(dataId, allStateData, 
@@ -199,8 +203,9 @@ class NodeManager():
     newState = copy.deepcopy(state)
     newState.pop(NodeManager.FOLDED, None)
     return newState
+  #endregion
   
-#Getter and setter
+  #region Getter and setter
   def getLatestDrawingNode(self, allDrawingData, allStateData):
     for key in allStateData:
       status = allStateData.get(key)
@@ -275,12 +280,12 @@ class NodeManager():
   def removeAllLatestCreatedField(self):
     return self.removeAllFieldFromDataMap(self.allStateData, 
       NodeManager.LATEST_CREATED_DATA)
+  #endregion
 
-# DragNodeState
+  #region DragNodeState
   def switchSelectedNodeDrawingParentTo(self, drawing):
     selData = self.getActivatedNodeData()
     return self.switchSelectedNodeDrawingParentToImpl(drawing, selData, self.allData)
-
 
   def switchSelectedNodeDrawingParentToImpl(self, nearestDrawing, selectedData,
     allData):
@@ -291,8 +296,9 @@ class NodeManager():
     addPData = self.addToParentAllData(selData, parentData, nAllData)
 
     return addPData
+  #endregion
 
-  # Have to convert into recursion
+  #region Have to convert into recursion
   def setDepthAndChildren(self, parentDepth, nodeData, allData):
     currentDepth = parentDepth + 1
     nodeData[NodeManager.DEPTH] = currentDepth
@@ -300,8 +306,9 @@ class NodeManager():
     if children is not None:
       for child in children:
         self.setDepthAndChildren(currentDepth, child, allData)
+  #endregion
 
-# Common
+  #region Common
   def getNodeDataByNodePath(self, nodePath, allDrawingData, filteredData):
     nodePath = nodePath.findNetTag("Node")
     
@@ -358,6 +365,7 @@ class NodeManager():
   def dataHasChildren(self, data):
     childrenIds = data.get(NodeManager.CHILDREN_IDS)
     return childrenIds is not None and len(childrenIds) > 0
+  #endregion
 
 # Create Node and Edit Node States
   def onKeyDown(self, keyname, onEnterDownFn, dataId):
