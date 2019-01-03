@@ -1,11 +1,14 @@
 from direct.showbase.ShowBase import ShowBase
 
+from pandac.PandaModules import ColorAttrib, TransparencyAttrib
+
 from panda3d.core import AntialiasAttrib
 from panda3d.core import NodePath
 from panda3d.core import TextNode
 from panda3d.core import BitMask32
-from panda3d.core import TextProperties
+from panda3d.core import TextProperties, VBase4
 
+# from .nodeManager import NodeManager
 from utils.utils import Utils
 
 class NodeDrawing():
@@ -25,6 +28,8 @@ class NodeDrawing():
     self.mainNode.setCollideMask(BitMask32.bit(1))
     self.keepTextCenter()
     self.id = id
+    # self.mainNode.setColor(1, 1, 1, 0.5)
+    # self.mainNode.setColorOff()
     
     
   def addModel(self, loader, nodePath):
@@ -32,8 +37,6 @@ class NodeDrawing():
     self.model.setScale(self.scale)
     self.model.reparentTo(nodePath)
     self.model.setPos(0, 0, 0)
-    
-    
 
   def addText(self, text, nodePath):
     self.textNode = TextNode("Node 1") # This should be different for every instance?
@@ -44,7 +47,6 @@ class NodeDrawing():
     textNode = self.textNode
     self.textNode.setFont(Map.FONT_UBUNTU)
     self.textNode.setAlign(TextProperties.A_center)
-    # self.textNode.setAlign(TextProperties.A_boxed_center )
     textNode.setWordwrap(Utils.NODE_SCALE.x * 1.4)
     
     self.textNode.setText(text)
@@ -96,14 +98,21 @@ class NodeDrawing():
     return height
   
   
-  def setSelected(self, isSelected = False, asParent = False):
-    if isSelected:
-      self.model.setColor(0, 0, 1, 1)
-    else:
-      self.model.setColor(1, 1, 1, 1)
+  def setSelected(self, stateData, alpha = 1):
+    from .nodeManager import NodeManager
 
-    if asParent:
-      self.model.setColor(1, 0, 0, 1)
+    selected = stateData.get(NodeManager.SELECTED)
+    folded = stateData.get(NodeManager.FOLDED)
+
+    if selected and folded is None:
+      self.model.setColor(0, 0, 1, 1)
+    elif selected and folded:
+      self.model.setColor(0, 0.5, 1, 1)
+    elif selected is None and folded:
+      self.model.setColor(0, 0.25, 0.25, 1)
+
+    self.model.setTransparency(TransparencyAttrib.MAlpha)
+    self.model.setAlphaScale(alpha)
     
     
     

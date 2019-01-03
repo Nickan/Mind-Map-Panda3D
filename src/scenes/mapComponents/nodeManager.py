@@ -5,7 +5,7 @@ from collections import defaultdict
 from pprint import pprint
 
 from direct.showbase.ShowBase import Vec3
-from scenes.mapComponents.nodeDrawing import NodeDrawing
+from .nodeDrawing import NodeDrawing
 from scenes.mapComponents.dataContainer import DataContainer
 
 from utils.keyManager import KeyManager
@@ -120,15 +120,11 @@ class NodeManager():
   def addNodeDrawing(self, nodeData, nodeSettings, loader, mapNode, pos = Vec3()):
     id = nodeData.get('id')
     text = nodeData.get('name')
-    selected = False
-    if nodeSettings is not None:
-      selected = nodeSettings.get('selected')
     
     nodeDrawing = NodeDrawing(text, loader, mapNode, id)
     nodeDrawing.mainNode.setPos(pos)
     
-    if selected is not None:
-      nodeDrawing.setSelected(selected)
+    nodeDrawing.setSelected(nodeSettings)
 
     self.allDrawingData[id] = nodeDrawing
     self.setNodeDrawingHeight(nodeData, nodeDrawing)

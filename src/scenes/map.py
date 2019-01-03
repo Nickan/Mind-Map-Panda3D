@@ -204,7 +204,13 @@ class Map():
     self.dragNodeMove.mouseUp(self)
 
   def potentialNewParentNode(self, newParentDrawing):
-    self.newParentVisualCue.setAsPotentialParent(newParentDrawing)
+    nm = self.nodeManager
+    data = nm.getNodeDataByNodePath(newParentDrawing.mainNode, 
+      nm.allDrawingData, nm.allData)
+    dataId = data.get(NodeManager.ID)
+    stateData = nm.allStateData.get(dataId)
+    self.newParentVisualCue.setAsPotentialParent(stateData,
+      newParentDrawing)
 
 # Create Node and Edit Node States
   def startEditNode(self, selectedData, onKeyDownFn):
