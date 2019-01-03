@@ -90,9 +90,9 @@ class StaticMapState(State):
   def onFoldNode(self):
     map = self.map
     data = map.getActivatedNodeData()
-    allData, allStateData = map.toggleFold(data)
-
-    StateManager.switchToLoadMapState(self, allData, allStateData)
+    if map.dataHasChildren(data):
+      allData, allStateData = map.toggleFold(data)
+      StateManager.switchToLoadMapState(self, allData, allStateData)
 
   def onDelete(self):
     map = self.map

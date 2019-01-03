@@ -355,6 +355,10 @@ class NodeManager():
 
     return nAllData
 
+  def dataHasChildren(self, data):
+    childrenIds = data.get(NodeManager.CHILDREN_IDS)
+    return childrenIds is not None and len(childrenIds) > 0
+
 # Create Node and Edit Node States
   def onKeyDown(self, keyname, onEnterDownFn, dataId):
     data = self.allData.get(dataId)

@@ -144,7 +144,7 @@ class Map():
 
 #3rd Level Interfaces
   
-#Others
+# Common
   def editNodeData(self, dataId, newText):
     nm = self.nodeManager
     nm.allData.get(dataId)[NodeManager.NAME] = newText
@@ -186,6 +186,8 @@ class Map():
     nm = self.nodeManager
     return copy.deepcopy(nm.allData), copy.deepcopy(nm.allStateData)
 
+  def dataHasChildren(self, data):
+    return self.nodeManager.dataHasChildren(data)
 
   def dispose(self):
     self.nodeManager.clearAllDrawingData()
