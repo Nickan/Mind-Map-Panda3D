@@ -1,5 +1,5 @@
-from state import State
-from stateManager import StateManager
+from .state import State
+from .stateManager import StateManager
 
 from utils.keyManager import KeyManager
 from utils.utils import Utils
@@ -11,28 +11,19 @@ class EditTextState(State):
     State.__init__(self)
     self.map = map
     
-  def enter(self, selectedNodeData):
+  def enter(self, selectedData):
     self.setupControls()
-    nodeManager = self.map.nodeManager
-    nodeManager.selectedNodeData = selectedNodeData
+    map = self.map
+    map.setStatusAsSelected(selectedData)
+    map.drawData()
+    map.startEditNode(selectedData, self.onKeyDown)
     
-    self.nodeDrawingToEdit = nodeManager.getNodeDrawing(selectedNodeData)
-    KeyManager.setupKeyListener(self.map.showBase, self.onKeyDown)
+  def onKeyDown(self, keyname, extraParams):
+    self.map.onKeyDown(keyname, self.onEnterDown, extraParams)
     
-  def onKeyDown(self, keyname):
-    text = self.nodeDrawingToEdit.textNode.getText()
-    text = KeyManager.getModifiedKeyFromKeyInput(text, keyname, self.onEnterDown)
-        
-    textNode = self.nodeDrawingToEdit.textNode
-    textNode.setText(text)
-    self.nodeDrawingToEdit.keepTextCenter()
-    
-  def onEnterDown(self, text):
-    nodeData = self.map.nodeManager.getNodeData(self.nodeDrawingToEdit.mainNode)
-    self.map.editNodeData(nodeData, text)
+  def onEnterDown(self, dataId, text):
+    self.map.editNodeData(dataId, text)
     StateManager.switchToStaticMapState(self)
-    
-    
     
   def setupControls(self):
     map = self.map

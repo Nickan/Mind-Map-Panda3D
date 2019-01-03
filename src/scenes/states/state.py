@@ -1,9 +1,9 @@
 
 
 class State():
-
+  
   def __init__(self):
-    print("State init")
+    print("")
 
   def enter(self):
     print("State enter State")

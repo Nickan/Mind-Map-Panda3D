@@ -2,11 +2,13 @@
 
 class KeyManager():
   ON_KEY_DOWN_FN = None
+  EXTRA_ARGS = None
   
   @staticmethod
-  def setupKeyListener(showBase, onKeyDownFn):
+  def setupKeyListener(showBase, onKeyDownFn, extraArgs = None):
     KeyManager.setupControls(showBase)
     KeyManager.ON_KEY_DOWN_FN = onKeyDownFn
+    KeyManager.EXTRA_ARGS = extraArgs
     
   @staticmethod
   def setupControls(showBase):
@@ -16,16 +18,16 @@ class KeyManager():
     
   @staticmethod
   def onKeyDown(keyname):
-    KeyManager.ON_KEY_DOWN_FN(keyname)
+    KeyManager.ON_KEY_DOWN_FN(keyname, KeyManager.EXTRA_ARGS)
     
   @staticmethod
-  def getModifiedKeyFromKeyInput(text, keyname, onEnterDown):
+  def getModifiedKeyFromKeyInput(text, keyname, dataId, onEnterDown):
     if keyname == "\b": # Backspace
       text = text[:-1]
     else:
         
       if keyname == "\r": # Enter
-        onEnterDown(text)
+        onEnterDown(dataId, text)
         
       if keyname != "\t": # As long as keyname is not a tab
         text += keyname
@@ -34,5 +36,6 @@ class KeyManager():
   @staticmethod
   def clear():
      KeyManager.ON_KEY_DOWN_FN = None
+     KeyManager.EXTRA_ARGS = None
     
   

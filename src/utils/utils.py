@@ -1,12 +1,13 @@
-import json
-import os.path as path
+from direct.showbase.ShowBase import Plane, ShowBase, Vec3, Point3
+from gui.textinput import TextInput
+from panda3d.core import CollisionTraverser, CollisionNode
+from panda3d.core import CollisionHandlerQueue, CollisionRay
+from panda3d.core import LVecBase3f, BitMask32, LPoint3
+from .rect import Rect
 
 import copy
-
-from gui.textinput import TextInput
-
-
-from panda3d.core import LVecBase3f
+import json
+import os.path as path
 
 class Utils():
   LAST_ASSIGNED_ID = 0
@@ -28,7 +29,7 @@ class Utils():
   
   @staticmethod
   def convertToNodes(jsonData): # Needed to be able to assign parentId(Proof?)
-#     Utils.test(jsonData)
+    # Utils.test(jsonData)
     nodeList = {}
  
     allNodeJsons = [copy.deepcopy(jsonData)]
@@ -131,7 +132,6 @@ class Utils():
   def dictLen(argDict):
     if argDict is None:
       return 0
-    
     return len(argDict)
   
   
@@ -153,7 +153,18 @@ class Utils():
     
     children = []
     for id in childrenIds:
-      children.append(nodeList[int(id)])
+      children.append(nodeList[id])
+    return children
+
+  @staticmethod
+  def getChildrenDict(node, nodeList):
+    childrenIds = node.get("childrenIds")
+    if childrenIds is None:
+      return None
+    
+    children = {}
+    for id in childrenIds:
+      children[id] = nodeList[id]
     return children
   
   
@@ -185,6 +196,83 @@ class Utils():
     depth = nodeData.get("depth")
     breadth = nodeData.get("x")
     return Utils.getNodePosition(depth, breadth)
+
+
+  # Have to find another way to organize functions
+  @staticmethod
+  def removeSelectedField(nodeId, nodeDataSettings):
+    nodeSettings = nodeDataSettings.get(nodeId)
+    if nodeSettings is not None:
+      nodeDataSettings.pop(nodeId, None)
+    return nodeDataSettings
+
+
+  # Mouse helpers
+  PLANE = Plane(Vec3(0, 0, 1), Point3(0, 0, 0))
+  CT = CollisionTraverser()
+  CHQ = CollisionHandlerQueue()
+  CN = CollisionNode('mouseRay')
+
+  NEW_CN = None
+  CR = CollisionRay()
+
+  @staticmethod
+  def getMousePosition(showBase):
+    Utils.initMouseFields(showBase)
+    return Utils.getMouseCollisionToPlane(showBase, Utils.PLANE)
+
+  @staticmethod
+  def initMouseFields(showBase):
+    if Utils.NEW_CN is None:
+      Utils.NEW_CN = showBase.camera.attachNewNode(Utils.CN)
+      Utils.CN.setFromCollideMask(BitMask32.bit(1))
+
+      Utils.CN.addSolid(Utils.CR)
+      Utils.CT.addCollider(Utils.NEW_CN, Utils.CHQ)
+    
+
+  @staticmethod
+  def getMouseCollisionToPlane(showBase, plane):
+    mouseWatcherNode = showBase.mouseWatcherNode
+    if mouseWatcherNode.hasMouse():
+      mpos = mouseWatcherNode.getMouse()
+
+      pos3d = LPoint3()
+      nearPoint = LPoint3()
+      farPoint = LPoint3()
+      showBase.camLens.extrude(mpos, nearPoint, farPoint)
+
+      render = showBase.render
+      camera = showBase.camera
+      if plane.intersectsLine(pos3d,
+        render.getRelativePoint(camera, nearPoint),
+        render.getRelativePoint(camera, farPoint)):
+        return pos3d
+    return None
+
+  
+  @staticmethod
+  def getDistSqr2D(point3d1, point3d2):
+    dx = point3d2.x - point3d1.x
+    dy = point3d2.y - point3d1.y
+    return (dx * dx) + (dy * dy)
+
+  @staticmethod
+  def isInRange(sqrDist, rangeDist):
+    if sqrDist < (rangeDist * rangeDist):
+      return True
+    return False
+
+  @staticmethod
+  def collidesRect(p1, p2, width, height):
+    r1 = Rect(p1.x, p1.y, width, height)
+    r2 = Rect(p2.x, p2.y, width, height)
+
+    result = r1.collidesWith(r2)
+    # print(str(result))
+    return result
+
+
   
   
   

@@ -18,7 +18,7 @@ class StateManager():
     
     from scenes.states.nodeClickedState import NodeClickedState
     map.state = NodeClickedState(map)
-    map.state.enter(selectedNodeData)
+    map.state.enter()
     
   @staticmethod
   def switchToStaticMapState(currentState):
@@ -39,22 +39,33 @@ class StateManager():
     map.state.enter(selectedNodeData)
     
   @staticmethod
-  def switchToCreateNodeDataState(currentState, selectedNodeData):
+  def switchToCreateNodeDataState(currentState):
     map = currentState.map
     currentState.exit()
-    
-    from scenes.states.createNodeState import CreateNodeState
+
+    from .createNodeState import CreateNodeState
     map.state = CreateNodeState(map)
-    map.state.enter(map.nodeManager.selectedNodeData)
+    map.state.enter()
     
   @staticmethod
-  def switchToLoadMapState(currentState, nodeDataList):
+  def switchToLoadMapState(currentState, allData, allStateData):
     map = currentState.map
+    map.dispose()
     currentState.exit()
     
     from scenes.states.loadMapState import LoadMapState
-    map.state = LoadMapState(map)
-    map.state.enter(nodeDataList)
+    state = LoadMapState(map.showBase, allData, allStateData)
+    state.enter()
+
+  @staticmethod
+  def switchToScrollingState(currentState):
+    map = currentState.map
+    currentState.exit()
+    
+    from scenes.states.scrollingMapState import ScrollingMapState
+    map.state = ScrollingMapState(map)
+    map.state.enter()
+    map.state.mouse1Down()
     
     
     
