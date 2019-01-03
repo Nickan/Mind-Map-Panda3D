@@ -24,11 +24,6 @@ class EditTextState(State):
   def onEnterDown(self, dataId, text):
     self.map.editNodeData(dataId, text)
     StateManager.switchToStaticMapState(self)
-    # nodeData = self.map.nodeManager.getNodeData(self.nodeDrawingToEdit.mainNode)
-    # self.map.editNodeData(nodeData, text)
-    # StateManager.switchToStaticMapState(self)
-    
-    
     
   def setupControls(self):
     map = self.map

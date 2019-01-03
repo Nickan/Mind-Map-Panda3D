@@ -6,6 +6,7 @@ from utils.keyManager import KeyManager
 from utils.saveManager import SaveManager
 from utils.utils import Utils
 
+# Have to refactor to use the same system as EditTextState is using
 class CreateNodeState(State):
   
   def __init__(self, map):
