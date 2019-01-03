@@ -25,20 +25,20 @@ class Map():
   
   FONT_UBUNTU = None
 
-  def __init__(self, showBase, allData, allStateData):
-    self.initializeComponents(showBase, allData, allStateData)
+  def __init__(self, showBase, allData, allStateData, camDict):
+    self.initializeComponents(showBase, allData, allStateData, camDict)
 
   #region Initialization
-  def initializeComponents(self, showBase, allData, allStateData):
+  def initializeComponents(self, showBase, allData, allStateData, camDict):
     self.showBase = showBase
-    self.initCamera(showBase)
+    self.initCamera(showBase, camDict)
     self.initMapNode(showBase)
     self.initNodeManager(allData, allStateData)
     self.initLineDrawings()
     self.initReingoldTilford()
 
-  def initCamera(self, showBase):
-    self.cameraManager = CameraManager(showBase)
+  def initCamera(self, showBase, camDict):
+    self.cameraManager = CameraManager(showBase, camDict)
 
   def initMapNode(self, showBase):
     self.mapNode = NodePath("Map")
@@ -150,6 +150,7 @@ class Map():
   def removeFoldedState(self, data):
     nm = self.nodeManager
     nm.allStateData = nm.removeFoldedStateWithValidity(data, nm.allStateData)
+    return nm.allStateData
 
   def removeLatestCreateDataStateByData(self, data):
     nm = self.nodeManager

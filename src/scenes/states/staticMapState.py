@@ -82,7 +82,8 @@ class StaticMapState(State):
     
   def onSave(self):
     nm = self.map.nodeManager
-    SaveManager.saveData(nm.allData, nm.allStateData)
+    cam = self.map.cameraManager
+    SaveManager.saveData(nm.allData, nm.allStateData, cam.camDict)
     
   def onOpenFile(self):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)
@@ -103,8 +104,8 @@ class StaticMapState(State):
     allStateData = map.nodeManager.allStateData
     StateManager.switchToLoadMapState(self, allData, allStateData)
     
-  def onNodeDataListLoaded(self, allData, allStateData):
-    StateManager.switchToLoadMapState(self, allData, allStateData)
+  def onNodeDataListLoaded(self, allData, allStateData, camDict):
+    StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
   
   
   """ mouse1Down Helper """

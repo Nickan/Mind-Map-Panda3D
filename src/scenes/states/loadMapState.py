@@ -9,9 +9,9 @@ from utils.saveManager import SaveManager
 
 class LoadMapState(State):
   
-  def __init__(self, showBase, allData, allStateData):
+  def __init__(self, showBase, allData, allStateData, camDict):
     State.__init__(self)
-    self.map = Map(showBase, allData, allStateData)
+    self.map = Map(showBase, allData, allStateData, camDict)
     self.map.state = self
     
   def enter(self):

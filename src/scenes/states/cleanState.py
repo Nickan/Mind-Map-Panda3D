@@ -11,7 +11,7 @@ class CleanState(State):
   
   def __init__(self, showBase):
     State.__init__(self)
-    self.map = Map(showBase, {}, {})
+    self.map = Map(showBase, {}, {}, {})
     
   # Refactor, should start from scratch
   def enter(self):
