@@ -13,6 +13,7 @@ class NewParentVisualCue():
     draggedNode = map.getActivatedNodeData()
     draggedDrawing = map.getSelectedNodeDrawing()
     allDrawingData = map.nodeManager.allDrawingData
+    allStateData = map.nodeManager.allStateData
 
     aNode = map.getActivatedNodeData()
     if self.potentialNewParentData is None:
@@ -24,18 +25,20 @@ class NewParentVisualCue():
 
     pNewParentFn = map.potentialNewParentNode
 
-    self.drawImpl(mPos, draggedNode, draggedDrawing, allDrawingData, 
+    self.drawImpl(mPos, draggedNode, draggedDrawing, allStateData, 
+      allDrawingData, 
       self.potentialNewParentData, getDistSql2DFn, collidesRectFn,
       getCoordsFn, pNewParentFn)
 
-  def drawImpl(self, mPos, draggedNode, draggedDrawing, allDrawingData, 
+  def drawImpl(self, mPos, draggedNode, draggedDrawing, allStateData,
+    allDrawingData, 
     potentialNewParentData, getDistSql2DFn, collidesRectFn, getCoordsFn,
     pNewParentFn):
     if mPos is not None:
       nearestNodeDrawing = self.getNearestNodeDrawingImpl(draggedNode, 
         draggedDrawing, allDrawingData, potentialNewParentData, getDistSql2DFn,
         collidesRectFn, getCoordsFn)
-      self.setAllNodeDrawingsNormal(allDrawingData, draggedNode)
+      self.setAllDrawingDefaultState(allStateData, allDrawingData, draggedNode)
       if nearestNodeDrawing is not None:
         pNewParentFn(nearestNodeDrawing)
 
@@ -110,13 +113,13 @@ class NewParentVisualCue():
     del newList[nodeData.get("id")]
     return newList
 
-  def setAllNodeDrawingsNormal(self, drawingsData, draggedNode):
+  def setAllDrawingDefaultState(self, allStateData, drawingsData, draggedNode):
     for key, d in drawingsData.items():
-      if draggedNode != d:
-        d.setSelected(False)
+      state = allStateData.get(key)
+      d.setSelected(state)
 
-  def setAsPotentialParent(self, nodeDrawing):
-    nodeDrawing.setSelected(False, True)
+  def setAsPotentialParent(self, stateData, nodeDrawing):
+    nodeDrawing.setSelected(stateData, 0.25)
 
   
   @staticmethod
