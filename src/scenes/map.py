@@ -55,19 +55,25 @@ class Map():
   #endregion
   
   #region Interfaces for States
-  # Have to review the purpose of the recheckLastId
-  def createNodeData(self, parentId, name, recheckLastId = False):
-    # return self.nodeManager.createNodeData(parentId, name, recheckLastId)
-    nm = self.nodeManager
-    allData, newData = nm.createNodeData(parentId, name, recheckLastId)
 
-    nAllState = nm.removeAllLatestCreatedField()
-    nm.allStateData = nm.setAsLatestCreatedData(newData.get(NodeManager.ID),
-      nAllState)
+  def getCoordinates(self, filteredData):
+    #Have to refactor rTilford.getCoordinates() to return copy of filteredData
+    return copy.deepcopy(self.rTilford.getCoordinates(filteredData))
+  #endregion
+          
+  def setCameraViewToSelectedNode(self):
+    s = self.getActivatedNodeData()
+    if s != None:
+      drawing = self.nodeManager.getNodeDrawing(s)
+      pos = drawing.mainNode.getPos()
+      self.cameraManager.setViewBasedOnNodePos(pos)
     
-    nm.allData = allData
-    return nm.allData, nm.allStateData
+  """ Getters and Setters """
+  def setState(self, state):
+    self.state = state
+    self.state.enter()
 
+  #region Drawing
   def drawData(self):
     loader = self.showBase.loader
     mapNode = self.mapNode
@@ -84,34 +90,51 @@ class Map():
     self.lineDrawings.clear()
     self.lineDrawings.drawLine(filteredDataWithCoords)
 
-  def setStatusAsSelected(self, data):
+  def getSelectedNodeDrawing(self):
+    nodeData = self.getActivatedNodeData()
+    return self.nodeManager.getNodeDrawing(nodeData)
+  #endregion
+  
+  #region Data
+  def createNodeData(self, parentId, name, recheckLastId = False):
+    # Have to review the purpose of the recheckLastId
+    # Need to implement it inside the nodeManager to simplify reading of code
+    # return self.nodeManager.createNodeData(parentId, name, recheckLastId)
     nm = self.nodeManager
-    removedSelected = nm.removeAllFieldFromDataMap(nm.allStateData, NodeManager.SELECTED)
-    nm.allStateData = nm.setStatusAsSelected(data.get('id'), removedSelected)
+    allData, newData = nm.createNodeData(parentId, name, recheckLastId)
 
-
-  def getCoordinates(self, filteredData):
-    #Have to refactor rTilford.getCoordinates() to return copy of filteredData
-    return copy.deepcopy(self.rTilford.getCoordinates(filteredData))
-
-  def toggleFold(self, data):
-    nm = self.nodeManager
-    return copy.deepcopy(nm.allData), nm.toggleFoldState(
-      data.get(NodeManager.ID), nm.allStateData),
-
-  def removeFoldedState(self, data):
-    nm = self.nodeManager
-    newState = nm.removeFoldedState(data, nm.allStateData)
-    nm.allStateData[data.get(NodeManager.ID)] = newState
-      
+    nAllState = nm.removeAllLatestCreatedField()
+    nm.allStateData = nm.setAsLatestCreatedData(newData.get(NodeManager.ID),
+      nAllState)
+    
+    nm.allData = allData
+    return nm.allData, nm.allStateData
 
   def setSelectedNodeData(self):
     selectedN = self.getSavedSelectedNodeData()
     allStateData = self.nodeManager.allStateData
     self.nodeManager.allStateData = self.nodeManager.removeAllSelectedField(allStateData)
 
-  # Has to be refactored later
+  def removeData(self, data):
+    if data.get(NodeManager.ID) == NodeManager.MAIN_ID:
+      return None
+
+    nm = self.nodeManager
+    nm.allData = nm.removeData(data, nm.allData)
+    return nm.allData
+  
+  def getActivatedNodeData(self):
+    return self.nodeManager.getActivatedNodeData()
+  
+  def getSavedSelectedNodeData(self):
+    # Should be refactored later on
+    node = self.getSelectedNodeData()
+    if node is None:
+      node = self.getActivatedNodeData()
+    return node
+
   def getSelectedNodeData(self):
+    # Has to be refactored later
     # Requires interaction between camera and nodemanager, so it is put in map class
     nm = self.nodeManager
 
@@ -121,56 +144,43 @@ class Map():
       filteredData = nm.allData
       return nm.getNodeDataByNodePath(clickedNodePath, dDrawing, filteredData)
     return None
+  #endregion
+
+  #region StateData
+  def removeFoldedState(self, data):
+    nm = self.nodeManager
+    nm.allStateData = nm.removeFoldedStateWithValidity(data, nm.allStateData)
+
+  def removeLatestCreateDataStateByData(self, data):
+    nm = self.nodeManager
+    nm.allStateData = nm.removeDataState(data, nm.allStateData,
+      NodeManager.LATEST_CREATED_DATA)
+    
+  def getModifiedState(self, data, stateDataName):
+    nm = self.nodeManager
+    return nm.getModifiedState(data, stateDataName)
+
+  def editNodeData(self, dataId, newText):
+    nm = self.nodeManager
+    nm.allData.get(dataId)[NodeManager.NAME] = newText
+
+  def toggleFold(self, data):
+    nm = self.nodeManager
+    return copy.deepcopy(nm.allData), nm.toggleFoldState(
+      data.get(NodeManager.ID), nm.allStateData)
+
+  def setStatusAsSelected(self, data):
+    nm = self.nodeManager
+    removedSelected = nm.removeAllFieldFromDataMap(nm.allStateData, NodeManager.SELECTED)
+    nm.allStateData = nm.setStatusAsSelected(data.get('id'), removedSelected)
 
   def getLatestCreatedData(self):
     nm = self.nodeManager
     return nm.getDataWithStatus(NodeManager.LATEST_CREATED_DATA,
       nm.allData, nm.allStateData)
-
-  def removeData(self, data):
-    if data.get(NodeManager.ID) == NodeManager.MAIN_ID:
-      return None
-
-    nm = self.nodeManager
-    nm.allData = nm.removeData(data, nm.allData)
-    return nm.allData
   #endregion
 
-  #region helpers
-  # Should be refactored later on
-  def getSavedSelectedNodeData(self):
-    node = self.getSelectedNodeData()
-    if node is None:
-      node = self.getActivatedNodeData()
-    return node
-
-  def editNodeData(self, dataId, newText):
-    nm = self.nodeManager
-    nm.allData.get(dataId)[NodeManager.NAME] = newText
-          
-  def setCameraViewToSelectedNode(self):
-    s = self.getActivatedNodeData()
-    if s != None:
-      drawing = self.nodeManager.getNodeDrawing(s)
-      pos = drawing.mainNode.getPos()
-      self.cameraManager.setViewBasedOnNodePos(pos)
-    
-    
-  """ Getters and Setters """
-  def setState(self, state):
-    self.state = state
-    self.state.enter()
-
-
-  def getSelectedNodeDrawing(self):
-    nodeData = self.getActivatedNodeData()
-    return self.nodeManager.getNodeDrawing(nodeData)
-
-  def getActivatedNodeData(self):
-    return self.nodeManager.getActivatedNodeData()
-
-  
-  # Utils
+  #region Others
   def clickedOnMapBg(self):
     camManager = self.cameraManager
     return (camManager.getMouseCollisionToPlane(camManager.plane) is None or

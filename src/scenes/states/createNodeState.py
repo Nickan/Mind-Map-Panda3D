@@ -48,6 +48,7 @@ class CreateNodeState(State):
     map = self.map
     lastCreatedData = map.getLatestCreatedData()
     map.removeData(lastCreatedData)
+    map.removeLatestCreateDataStateByData(lastCreatedData)
     map.drawData()
     StateManager.switchToStaticMapState(self)
 

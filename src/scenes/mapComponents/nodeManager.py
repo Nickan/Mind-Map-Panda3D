@@ -12,7 +12,10 @@ from utils.keyManager import KeyManager
 from utils.reingoldTilford import ReingoldTilford
 from utils.utils import Utils
 from platform import node
+
+from .nodeData import NodeData
 from .nodeDataFilter import NodeDataFilter
+
 
 
 class NodeManager():
@@ -195,18 +198,24 @@ class NodeManager():
       data[statusName] = True
     return newMap
 
-  def removeFoldedState(self, data, allStateData):
+  def removeFoldedStateWithValidity(self, data, allStateData):
+    if NodeData.hasChildren(data):
+      return self.removeDataState(data, removeDataState, 
+        NodeManager.FOLDED)
+    
+    return allStateData
+
+  def removeDataState(self, data, allStateData, stateDataName):
     dataId = data.get(NodeManager.ID)
     state = allStateData.get(dataId)
-    if state is None or bool(state) is False:
+    if state is None:
       return allStateData
 
     nAllState = copy.deepcopy(allStateData)
-    newState = copy.deepcopy(state)
-
-    newState.pop(NodeManager.FOLDED, None)
-    nAllState[dataId] = newState
+    newState = nAllState.get(dataId)
+    newState.pop(stateDataName, None)
     return nAllState
+
   #endregion
   
   #region Getter and setter
