@@ -103,7 +103,8 @@ class StaticMapState(State):
     if allData is None:
       return
     allStateData = map.nodeManager.allStateData
-    StateManager.switchToLoadMapState(self, allData, allStateData)
+    camDict = map.cameraManager.camDict
+    StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
     
   def onNodeDataListLoaded(self, allData, allStateData, camDict):
     StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
