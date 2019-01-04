@@ -44,8 +44,9 @@ class NewParentVisualCue():
 
   def getPotentialNewParentData(self, map, selectedNode):
     nm = map.nodeManager
-    removedChildren = nm.removeChildren(selectedNode, nm.allData)
-    hiddenData = nm.removeHiddenDataByFoldedState(removedChildren, nm.allStateData)
+    # removedChildren = nm.removeChildren(selectedNode, nm.allData)
+    # hiddenData = nm.removeHiddenDataByFoldedState(removedChildren, nm.allStateData)
+    hiddenData = nm.removeHiddenDataByFoldedState(nm.allData, nm.allStateData)
     return hiddenData
     
 

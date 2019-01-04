@@ -93,7 +93,8 @@ class StaticMapState(State):
     data = map.getActivatedNodeData()
     if map.dataHasChildren(data):
       allData, allStateData = map.toggleFold(data)
-      StateManager.switchToLoadMapState(self, allData, allStateData)
+      camDict = map.cameraManager.camDict
+      StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
 
   def onDelete(self):
     map = self.map
