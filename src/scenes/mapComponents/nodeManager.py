@@ -353,6 +353,7 @@ class NodeManager():
 
     if data is None:
       print("error")
+      return
     nAllData = {}
     if mutateAllData is False:
       nAllData = copy.deepcopy(allData)
@@ -369,13 +370,25 @@ class NodeManager():
           dataNotToRemove, mutateAllData)
       else:
         if data != dataNotToRemove:
-          nAllData.pop(data.get(NodeManager.ID), None)
+          self.removeDataAndToParent(data, nAllData)
     else:
       if data != dataNotToRemove:
-        nAllData.pop(data.get(NodeManager.ID), None)
+        self.removeDataAndToParent(data, nAllData)
 
 
     return nAllData
+
+  def removeDataAndToParent(self, data, allData):
+    dataId = data.get(NodeManager.ID)
+    allData.pop(dataId, None)
+    parentData = allData.get(data.get(NodeManager.PARENT_ID))
+    if parentData is not None:
+      childrenIds = parentData.get(NodeManager.CHILDREN_IDS)
+      childrenIds.remove(dataId)
+      if len(childrenIds) == 0:
+        parentData.pop(NodeManager.CHILDREN_IDS, None)
+    # return childrenIds
+
 
   def dataHasChildren(self, data):
     childrenIds = data.get(NodeManager.CHILDREN_IDS)
