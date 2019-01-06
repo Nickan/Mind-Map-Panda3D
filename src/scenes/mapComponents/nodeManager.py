@@ -30,6 +30,8 @@ class NodeManager():
   SELECTED = "selected"
   LATEST_CREATED_DATA = "latestCreatedData"
   FOLDED = 'folded'
+  HIDE_ANCESTORS = 'hideAncestors'
+  STARTING_DATA = 'startingData'
 
   # Main ID
   MAIN_ID = 1
@@ -69,7 +71,8 @@ class NodeManager():
     return nAllData, nAllData.get(newData.get(NodeManager.ID))
 
   def getFilteredData(self, allData, allStateData):
-    return NodeDataFilter.getFilteredData(allData, allStateData)
+    startingData = self.getStartingData(allData, allStateData)
+    return NodeDataFilter.getFilteredData(allData, allStateData, startingData)
     
   def drawData(self, filteredData, allStateData, loader, mapNode,
     getNodePosition):
@@ -409,6 +412,33 @@ class NodeManager():
     textNode.setText(text)
     self.setNodeDrawingHeight(data, dataDrawing)
 
+
+  #region StaticMapState
+  def foldAncestors(self, selectedData):
+    self.allStateData = self.addDataState(selectedData, self.allStateData,
+      NodeManager.ID, NodeManager.HIDE_ANCESTORS)
+
+  # def startingData(self, data):
+  #   self.allStateData = self.addDataState(data, self.allStateData,
+  #     NodeManager.ID, NodeManager.STARTING_DATA)
+
+  def getStartingData(self, allData, allStateData):
+    for key, state in allStateData.items():
+      if state.get(NodeManager.STARTING_DATA) is not None:
+        return allData.get(key)
+    return None
+
+  def addDataState(self, state, allDataState, idName, stateName):
+    nAllState = copy.deepcopy(allDataState)
+    nStateId = state.get(idName)
+    nState = nAllState.get(nStateId)
+
+    if nState is None:
+      nAllState[nStateId] = { stateName: True }
+    else:
+      nState[stateName] = True
+    return nAllState
+  #endregion
 
 
   

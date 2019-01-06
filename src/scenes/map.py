@@ -236,7 +236,14 @@ class Map():
     self.nodeManager.onKeyDown(keyname, onEnterDownFn, extraParams)
   #endregion
 
-
+  #region StaticMapState
+  def foldAncestors(self):
+    selectedData = self.getActivatedNodeData()
+    nm = self.nodeManager
+    nm.foldAncestors(selectedData)
+    # nm.startingData(selectedData)
+    self.drawData()
+  #endregion
     
     
     
