@@ -42,9 +42,6 @@ class StaticMapState(State):
     map.showBase.accept("f3", self.onFoldNode)
     map.showBase.accept("f4", self.onFoldAncestors)
 
-    # Temporary for fixing bug when folding
-    map.showBase.accept("f5", self.clearAllDrawings)
-
     map.showBase.accept("delete", self.onDelete)
 
   def clearAllDrawings(self):

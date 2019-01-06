@@ -81,7 +81,7 @@ class Map():
     nm = self.nodeManager
     nm.allDrawingData = nm.clearAllDrawingData()
     filteredData = nm.getFilteredData(nm.allData, nm.allStateData)
-    startingData = nm.getStartingData(filteredData)
+    startingData = nm.getStartingData(filteredData, nm.allStateData)
 
     filteredDataWithCoords = self.rTilford.getCoordinates(startingData, 
       filteredData)

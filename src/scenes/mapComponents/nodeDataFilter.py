@@ -6,15 +6,16 @@ import copy
 class NodeDataFilter():
 
   @staticmethod
-  def getFilteredData(allData, allStateData, startingData):
+  def getFilteredData(allData, allStateData):
     filteredData = copy.deepcopy(allData)
     nFilteredData = copy.deepcopy(allData)
 
-    startingData1 = NodeDataFilter.getStartingData(allData)
+    startingData1 = NodeDataFilter.getStartingData(allData, allStateData)
     removedAncestors = NodeDataFilter.removeAncestors(startingData1, 
       nFilteredData, allStateData)        
 
-    startingData2 = NodeDataFilter.getStartingData(removedAncestors)
+    startingData2 = NodeDataFilter.getStartingData(removedAncestors,
+      allStateData)
     endResultFilteredData = NodeDataFilter.removeChildrenOfFoldedData(
       startingData2, removedAncestors, allStateData)
 
@@ -50,7 +51,15 @@ class NodeDataFilter():
     return allData
     
   @staticmethod
-  def getStartingData(allData):
+  def getStartingData(allData, allStateData):
+    data = NodeDataFilter.getDataWithStatus(NodeData.LATEST_HIDE_ANCESTORS,
+      allData, allStateData)
+    if data is None:
+      return NodeDataFilter.getNoParentData(allData)
+    return data
+
+  @staticmethod
+  def getNoParentData(allData):
     for key, value in allData.items():
       if value.get(NodeData.PARENT_ID) is None:
         return value
@@ -118,8 +127,7 @@ class NodeDataFilter():
 
   @staticmethod
   def removeAncestors(startingData, allData, allStateData):
-    if startingData is None or NodeData.hasState(startingData, allStateData, 
-        NodeData.HIDE_ANCESTORS):
+    if startingData is None:
       return allData
 
     nAllData1 = copy.deepcopy(allData)
@@ -188,9 +196,22 @@ class NodeDataFilter():
       return None
     return allData.get(parentId)
 
-  # @staticmethod
-  # def getSiblings(data, parent, allData, childrenIdsName):
-  #   childrenIds = parent.get(childrenIdsName)
-  #   if childrenIds is None:
-  #     return None
+  
+
+  @staticmethod
+  def removeAllState(allStateData, stateName):
+    nAllStatusData = copy.deepcopy(allStateData)
+    for key in nAllStatusData:
+      state = nAllStatusData.get(key)
+      if state.get(stateName) is not None:
+        state.pop(stateName, None)
+    return nAllStatusData
+
+  @staticmethod
+  def getDataWithStatus(stateName, allData, allStateData):
+    for key in allStateData:
+      status = allStateData.get(key)
+      if status.get(stateName) is not None:
+        return allData.get(key)
+    return None
 

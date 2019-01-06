@@ -11,7 +11,7 @@ class NodeData():
   LATEST_CREATED_DATA = "latestCreatedData"
   FOLDED = 'folded'
   HIDE_ANCESTORS = 'hideAncestors'
-  STARTING_DATA = 'startingData'
+  LATEST_HIDE_ANCESTORS = 'latestHideAncestors'
 
   @staticmethod
   def hasChildren(data):
@@ -32,3 +32,6 @@ class NodeData():
   @staticmethod
   def hasField(data, fieldName):
     return data.get(fieldName) is not None
+
+  
+
