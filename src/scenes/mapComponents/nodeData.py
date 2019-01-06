@@ -16,3 +16,19 @@ class NodeData():
   @staticmethod
   def hasChildren(data):
     return data.get(NodeData.CHILDREN_IDS)
+
+
+  @staticmethod
+  def hasState(data, allStateData, stateName):
+    dataId = data.get(NodeData.ID)
+    return NodeData.hasStateById(dataId, allStateData, stateName)
+
+  @staticmethod
+  def hasStateById(dataId, allStateData, stateName):
+    state = allStateData.get(dataId)
+    return state is not None and state.get(stateName) is not None
+
+
+  @staticmethod
+  def hasField(data, fieldName):
+    return data.get(fieldName) is not None

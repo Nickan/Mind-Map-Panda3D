@@ -9,10 +9,10 @@ class ReingoldTilford():
     
   # REFACTOR: Should not modify the passed nodeList
   # Returns points to represent tree
-  def getCoordinates(self, nodeList, enableCheckForConflicts = True):
-    mainNode = nodeList.get(1)
-    self.firstTraversal(mainNode, nodeList, enableCheckForConflicts)
-    self.calcFinalPos(mainNode, nodeList, 0)
+  def getCoordinates(self, startingData, nodeList, 
+    enableCheckForConflicts = True):
+    self.firstTraversal(startingData, nodeList, enableCheckForConflicts)
+    self.calcFinalPos(startingData, nodeList, 0)
     return nodeList
 
   def firstTraversal(self, mainNode, nodeList, enableCheckForConflicts = False):
@@ -31,8 +31,6 @@ class ReingoldTilford():
         self.calcFinalPos(child, nodeList, modSum)
         
         
-        
-
   def setInitialX(self, node, nodeList, enableCheckForConflicts = False):
     self.setInitialXRelativeToChildren(node, nodeList, enableCheckForConflicts)
     self.solveConflictingX(node, nodeList, enableCheckForConflicts)

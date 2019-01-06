@@ -10,11 +10,12 @@ class NodeDataFilter():
     filteredData = copy.deepcopy(allData)
     nFilteredData = copy.deepcopy(allData)
 
-    # removedAncestors = NodeDataFilter.removeAncestors(startingData, 
-    #   nFilteredData, allStateData)        
+    startingData = NodeDataFilter.getStartingData(allData)
+    removedAncestors = NodeDataFilter.removeAncestors(startingData, 
+      nFilteredData, allStateData)        
 
     endResultFilteredData = NodeDataFilter.removeChildrenOfFoldedData(
-      filteredData, allStateData)
+      removedAncestors, allStateData)
 
     if endResultFilteredData is None:
       return filteredData
@@ -49,8 +50,6 @@ class NodeDataFilter():
           return rAll2
     return allData
     
-
-
   @staticmethod
   def getStartingData(allData):
     for key, value in allData.items():
@@ -58,10 +57,9 @@ class NodeDataFilter():
         return value
     return None
   
-    
-
   @staticmethod
-  def removeChildrenIds(allData, nodeId, mutateData = True):
+  def removeChildrenIds(allData, nodeId, dataNotToRemove = None, 
+    mutateData = True):
     data = allData.get(nodeId)
     if data is None:
       return allData
@@ -71,7 +69,7 @@ class NodeDataFilter():
       nAlldata = allData
       
     from scenes.mapComponents.nodeManager import NodeManager
-    return NodeDataFilter.removeChildren(data, 0, nAllData, data,
+    return NodeDataFilter.removeChildren(data, 0, nAllData, dataNotToRemove,
       NodeManager.ID, NodeManager.PARENT_ID, NodeManager.CHILDREN_IDS,
       True)
 
@@ -120,37 +118,68 @@ class NodeDataFilter():
     return allData
 
   @staticmethod
-  def removeAncestors(data, allData, allDataState):
-    from scenes.mapComponents.nodeManager import NodeManager
-    nAllData = copy.deepcopy(allData)
+  def removeAncestors(startingData, allData, allStateData):
+    if startingData is None or NodeData.hasState(startingData, allStateData, 
+        NodeData.HIDE_ANCESTORS):
+      return allData
 
-    if data is not None:
-      nAllData = NodeDataFilter.removeDataAndToParent(data, nAllData, 
-        NodeManager.ID, NodeManager.PARENT_ID, NodeManager.CHILDREN_IDS)
+    nAllData1 = copy.deepcopy(allData)
 
-      nAllData = NodeDataFilter.removeAncestorsImpl(data, nAllData,
-        allDataState,
-        NodeManager.ID, NodeManager.PARENT_ID, NodeManager.CHILDREN_IDS)
-
-      data.pop(NodeManager.PARENT_ID, None)
-      nAllData[data.get(NodeManager.ID)] = data
-    return nAllData
+    nAllData2 = NodeDataFilter.removeAncestorsImpl(startingData, 0, 
+      nAllData1, allStateData, NodeData.ID, NodeData.PARENT_ID,
+      NodeData.CHILDREN_IDS)
+    return nAllData2
 
   @staticmethod
-  def removeAncestorsImpl(data, allData, allDataState, idName, parentIdName,
-    childrenIdsName):
+  def removeAncestorsImpl(data, childIndex, allData, allStateData, idName,
+    parentIdName, childrenIdsName):
+    if data is None:
+      return allData
 
-    # data will be the starting point
-    # It will be considered as the Main data
-    parent = NodeDataFilter.getParent(data, allData, parentIdName)
-    if parent != None:
-      allData = NodeDataFilter.removeChildrenIds(allData, parent.get(idName))
-
-      return NodeDataFilter.removeAncestorsImpl(parent, allData, allDataState,
-        idName, parentIdName, childrenIdsName)
+    if NodeData.hasState(data, allStateData, NodeData.HIDE_ANCESTORS):
+      return NodeDataFilter.removeAllAncestors(data, allData)
     else:
-      allData.pop(data.get(idName), None)
+      childrenIds = data.get(childrenIdsName)
+      if childrenIds is not None and childIndex < len(childrenIds):
+        childId = childrenIds[childIndex]
+        childData = allData.get(childId)
+        allData1 = NodeDataFilter.removeAncestorsImpl(data, childIndex + 1, 
+          allData, allStateData, idName, parentIdName, childrenIdsName)
+        allData2 = NodeDataFilter.removeAncestorsImpl(childData, 
+          0, allData1, allStateData, idName, parentIdName, 
+          childrenIdsName)
+        return allData2
+      return allData
+
+  @staticmethod
+  def removeAllAncestors(data, allData):
+    if data is None:
+      return allData
+
+    allData1 = copy.deepcopy(allData)
+
+    allData2 = NodeDataFilter.removeDataAndToParent(data, allData1,
+      NodeData.ID, NodeData.PARENT_ID, NodeData.CHILDREN_IDS)
+
+    allData3 = NodeDataFilter.removeAllAncestorsRecursion(data, allData2)
+
+    newData = copy.deepcopy(data)
+    dataId = newData.get(NodeData.ID)
+    newData.pop(NodeData.PARENT_ID, None)
+    allData3[dataId] = newData
+    return allData3
+    
+
+  @staticmethod
+  def removeAllAncestorsRecursion(data, allData):
+    parent = NodeDataFilter.getParent(data, allData, NodeData.PARENT_ID)
+    if parent != None:
+      allData1 = NodeDataFilter.removeChildrenIds(allData, 
+        parent.get(NodeData.ID))
+      return NodeDataFilter.removeAllAncestorsRecursion(parent, allData1)
+      
     return allData
+
 
 
   @staticmethod

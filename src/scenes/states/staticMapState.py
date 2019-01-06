@@ -99,7 +99,7 @@ class StaticMapState(State):
 
   def onFoldAncestors(self):
     map = self.map
-    map.foldAncestors()
+    map.toggleAncestorShowHide()
     
 
   def onDelete(self):

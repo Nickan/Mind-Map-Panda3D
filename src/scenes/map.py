@@ -81,8 +81,10 @@ class Map():
     nm = self.nodeManager
     nm.allDrawingData = nm.clearAllDrawingData()
     filteredData = nm.getFilteredData(nm.allData, nm.allStateData)
+    startingData = nm.getStartingData(filteredData)
 
-    filteredDataWithCoords = self.rTilford.getCoordinates(filteredData)
+    filteredDataWithCoords = self.rTilford.getCoordinates(startingData, 
+      filteredData)
 
     nm.drawData(filteredDataWithCoords, nm.allStateData, 
       loader, mapNode, Utils.getNodePosition)
@@ -237,11 +239,10 @@ class Map():
   #endregion
 
   #region StaticMapState
-  def foldAncestors(self):
+  def toggleAncestorShowHide(self):
     selectedData = self.getActivatedNodeData()
     nm = self.nodeManager
-    nm.foldAncestors(selectedData)
-    # nm.startingData(selectedData)
+    nm.toggleAncestorShowHide(selectedData)
     self.drawData()
   #endregion
     
