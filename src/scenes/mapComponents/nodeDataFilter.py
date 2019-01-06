@@ -10,21 +10,20 @@ class NodeDataFilter():
     filteredData = copy.deepcopy(allData)
     nFilteredData = copy.deepcopy(allData)
 
-    startingData = NodeDataFilter.getStartingData(allData)
-    removedAncestors = NodeDataFilter.removeAncestors(startingData, 
+    startingData1 = NodeDataFilter.getStartingData(allData)
+    removedAncestors = NodeDataFilter.removeAncestors(startingData1, 
       nFilteredData, allStateData)        
 
+    startingData2 = NodeDataFilter.getStartingData(removedAncestors)
     endResultFilteredData = NodeDataFilter.removeChildrenOfFoldedData(
-      removedAncestors, allStateData)
+      startingData2, removedAncestors, allStateData)
 
     if endResultFilteredData is None:
       return filteredData
     return endResultFilteredData
   
   @staticmethod
-  def removeChildrenOfFoldedData(allData, allStateData):
-    startingData = NodeDataFilter.getStartingData(allData)
-
+  def removeChildrenOfFoldedData(startingData, allData, allStateData):
     return NodeDataFilter.removeChildrenOfFoldedDataImpl(startingData,
       0, allData, allStateData)
 
@@ -36,7 +35,7 @@ class NodeDataFilter():
     if state is not None and state.get(NodeData.FOLDED) is not None:
       childrenIds = data.get(NodeData.CHILDREN_IDS)
       if childrenIds is not None:
-        return NodeDataFilter.removeChildrenIds(allData, dataId)
+        return NodeDataFilter.removeChildrenIds(allData, dataId, data)
     else:
       childrenIds = data.get(NodeData.CHILDREN_IDS)
       if childrenIds is not None: 
