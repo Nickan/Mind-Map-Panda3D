@@ -40,6 +40,7 @@ class StaticMapState(State):
     map.showBase.accept("f1", self.onSave)
     map.showBase.accept("f2", self.onOpenFile)
     map.showBase.accept("f3", self.onFoldNode)
+    map.showBase.accept("f4", self.onFoldAncestors)
 
     # Temporary for fixing bug when folding
     map.showBase.accept("f5", self.clearAllDrawings)
@@ -95,6 +96,11 @@ class StaticMapState(State):
       allData, allStateData = map.toggleFold(data)
       camDict = map.cameraManager.camDict
       StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
+
+  def onFoldAncestors(self):
+    map = self.map
+    map.foldAncestors()
+    
 
   def onDelete(self):
     map = self.map
