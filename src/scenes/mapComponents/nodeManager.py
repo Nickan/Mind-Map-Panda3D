@@ -71,8 +71,7 @@ class NodeManager():
     return nAllData, nAllData.get(newData.get(NodeManager.ID))
 
   def getFilteredData(self, allData, allStateData):
-    startingData = NodeDataFilter.getStartingData(allData)
-    return NodeDataFilter.getFilteredData(allData, allStateData, startingData)
+    return NodeDataFilter.getFilteredData(allData, allStateData)
     
   def drawData(self, filteredData, allStateData, loader, mapNode,
     getNodePosition):
@@ -415,17 +414,22 @@ class NodeManager():
 
   #region StaticMapState
   def toggleAncestorShowHide(self, selectedData):
-    allStateData = self.allStateData
+    rAllState = NodeDataFilter.removeAllState(self.allStateData
+      , NodeData.LATEST_HIDE_ANCESTORS)
 
-    if NodeData.hasState(selectedData, allStateData, NodeData.HIDE_ANCESTORS):
-      self.allStateData = self.removeDataState(selectedData, allStateData
+    if NodeData.hasState(selectedData, self.allStateData, NodeData.HIDE_ANCESTORS):
+      rAllState1 = self.removeDataState(selectedData, rAllState
         , NodeData.HIDE_ANCESTORS)
+      self.allStateData = rAllState1
     else:
-      self.allStateData = self.addDataState(selectedData, allStateData,
-        NodeManager.ID, NodeManager.HIDE_ANCESTORS)
+      allState2 = self.addDataState(selectedData, rAllState,
+        NodeData.ID, NodeData.HIDE_ANCESTORS)
+      allState3 = self.addDataState(selectedData, allState2,
+        NodeData.ID, NodeData.LATEST_HIDE_ANCESTORS)
+      self.allStateData = allState3
 
-  def getStartingData(self, allData):
-    return NodeDataFilter.getStartingData(allData)
+  def getStartingData(self, allData, allStateData):
+    return NodeDataFilter.getStartingData(allData, allStateData)
 
   def addDataState(self, state, allDataState, idName, stateName):
     nAllState = copy.deepcopy(allDataState)
@@ -436,6 +440,7 @@ class NodeManager():
       nAllState[nStateId] = { stateName: True }
     else:
       nState[stateName] = True
+      nAllState[nStateId] = nState
     return nAllState
   #endregion
 
