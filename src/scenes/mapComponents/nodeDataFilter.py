@@ -72,12 +72,12 @@ class NodeDataFilter():
     if data is None:
       return allData
 
-    nAllData = copy.deepcopy(allData)
-    if mutateData:
-      nAlldata = allData
+    nAllData = allData
+    if mutateData is False:
+      nAllData = copy.deepcopy(allData)
       
     from scenes.mapComponents.nodeManager import NodeManager
-    return NodeDataFilter.removeChildren(data, 0, nAllData, dataNotToRemove,
+    return NodeDataFilter.removeChildren(data, 0, nAllData, data,
       NodeManager.ID, NodeManager.PARENT_ID, NodeManager.CHILDREN_IDS,
       True)
 
@@ -176,7 +176,6 @@ class NodeDataFilter():
     allData3[dataId] = newData
     return allData3
     
-
   @staticmethod
   def removeAllAncestorsRecursion(data, allData):
     parent = NodeDataFilter.getParent(data, allData, NodeData.PARENT_ID)
@@ -184,10 +183,9 @@ class NodeDataFilter():
       allData1 = NodeDataFilter.removeChildrenIds(allData, 
         parent.get(NodeData.ID))
       return NodeDataFilter.removeAllAncestorsRecursion(parent, allData1)
-      
+
+    allData.pop(data.get(NodeData.ID), None)
     return allData
-
-
 
   @staticmethod
   def getParent(data, allData, parentIdName):
@@ -195,8 +193,6 @@ class NodeDataFilter():
     if parentId == None:
       return None
     return allData.get(parentId)
-
-  
 
   @staticmethod
   def removeAllState(allStateData, stateName):
@@ -214,4 +210,31 @@ class NodeDataFilter():
       if status.get(stateName) is not None:
         return allData.get(key)
     return None
+
+  @staticmethod
+  def removeData(self, data, allData):
+    nData = copy.deepcopy(allData)
+    # removed = self.removeChildren2(data, 0, nData)
+    dataId = data.get(NodeData.ID)
+    removed = self.removeChildren2(nData, dataId)
+    removed.pop(data.get(NodeData.ID), None)
+    return NodeDataFilter.removeIdFromParent(data, removed)
+
+  def removeIdFromParent(self, data, allData):
+    # detachedToParent = copy.deepcopy(allData)
+    detachedToParent = allData
+
+    parentId = data.get(NodeData.PARENT_ID)
+    parentData = detachedToParent.get(parentId)
+
+    childrenIds = parentData.get(NodeData.CHILDREN_IDS)
+    indexInChildList = childrenIds.index(data.get(NodeData.ID))
+
+    del childrenIds[indexInChildList]
+    if len(childrenIds) == 0:
+      parentData.pop(NodeData.CHILDREN_IDS, None)
+    else:
+      parentData[NodeData.CHILDREN_IDS] = childrenIds
+
+    return detachedToParent
 
