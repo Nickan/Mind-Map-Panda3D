@@ -180,18 +180,23 @@ class NodeManager():
     return self.addFieldToDataMap(dataId, allStateData, 
       NodeManager.LATEST_CREATED_DATA)
 
-  def toggleFoldState(self, dataId, allStateData):
-    state = allStateData.get(dataId)
+  def toggleFoldState(self, dataId, allStateData, newCopy = False):
+    nAllStateData = allStateData
+    if newCopy:
+      nAllStateData = copy.deepcopy(allStateData)
+      
+    state = nAllStateData.get(dataId)
     if state.get(NodeManager.FOLDED) is None:
-      return self.addFieldToDataMap(dataId, allStateData, NodeManager.FOLDED)
+      return self.addFieldToDataMap(dataId, nAllStateData, NodeManager.FOLDED)
     else:
-      newStateData = copy.deepcopy(allStateData)
-      newState = newStateData.get(dataId)
-      newState.pop(NodeManager.FOLDED, None)
-      return newStateData
+      state1 = nAllStateData.get(dataId)
+      state1.pop(NodeManager.FOLDED, None)
+      return nAllStateData
 
-  def addFieldToDataMap(self, dataId, dataMap, statusName):
-    newMap = copy.deepcopy(dataMap)
+  def addFieldToDataMap(self, dataId, dataMap, statusName, newCopy = False):
+    newMap = dataMap
+    if newCopy:
+      newMap = copy.deepcopy(dataMap)
     data = newMap.get(dataId)
 
     if data is None:
@@ -414,6 +419,13 @@ class NodeManager():
       allState3 = self.addDataState(selectedData, allState2,
         NodeData.ID, NodeData.LATEST_HIDE_ANCESTORS)
       self.allStateData = allState3
+
+  def toggleChildrenShowHide(self, selectedData):
+    if self.dataHasChildren(selectedData):
+      self.toggleFoldState(selectedData.get(NodeData.ID), self.allStateData)
+      return True
+    return False
+
 
   def getStartingData(self, allData, allStateData):
     return NodeDataFilter.getStartingData(allData, allStateData)

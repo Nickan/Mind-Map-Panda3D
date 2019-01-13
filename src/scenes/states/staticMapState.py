@@ -40,7 +40,7 @@ class StaticMapState(State):
     # map.showBase.accept("f1", self.onSave)
     map.showBase.accept("control-s", self.onSave)
     map.showBase.accept("f2", self.onOpenFile)
-    map.showBase.accept("f3", self.onFoldNode)
+    map.showBase.accept("f3", self.onFoldChildren)
     map.showBase.accept("f4", self.onFoldAncestors)
 
     map.showBase.accept("delete", self.onDelete)
@@ -87,19 +87,19 @@ class StaticMapState(State):
   def onOpenFile(self):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)
 
-  def onFoldNode(self):
+  def onFoldChildren(self):
     map = self.map
-    data = map.getActivatedNodeData()
-    if map.dataHasChildren(data):
-      allData, allStateData = map.toggleFold(data)
-      camDict = map.cameraManager.camDict
-      StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
+    map.toggleChildrenShowHide()
+    # data = map.getActivatedNodeData()
+    # if map.dataHasChildren(data):
+    #   allData, allStateData = map.toggleFold(data)
+    #   camDict = map.cameraManager.camDict
+    #   StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
 
   def onFoldAncestors(self):
     map = self.map
     map.toggleAncestorShowHide()
     
-
   def onDelete(self):
     map = self.map
     data = map.getActivatedNodeData()
@@ -113,7 +113,6 @@ class StaticMapState(State):
   def onNodeDataListLoaded(self, allData, allStateData, camDict):
     StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
   
-  
   """ mouse1Down Helper """
   def switchToClickedNodeState(self, clickedNode):
     self.exit()
@@ -121,7 +120,6 @@ class StaticMapState(State):
     from scenes.states.nodeClickedState import NodeClickedState
     self.map.state = NodeClickedState(self.map)
     self.map.state.enter(clickedNode)
-    
     
   """ mouse1Up Helper """
   def goToScrollingState(self):

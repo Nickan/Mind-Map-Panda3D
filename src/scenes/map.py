@@ -244,6 +244,12 @@ class Map():
     nm = self.nodeManager
     nm.toggleAncestorShowHide(selectedData)
     self.drawData()
+
+  def toggleChildrenShowHide(self):
+    selectedData = self.getActivatedNodeData()
+    nm = self.nodeManager
+    if nm.toggleChildrenShowHide(selectedData):
+      self.drawData()
   #endregion
     
     
