@@ -37,7 +37,8 @@ class StaticMapState(State):
     
     map.showBase.accept("tab", self.onTab)
     
-    map.showBase.accept("f1", self.onSave)
+    # map.showBase.accept("f1", self.onSave)
+    map.showBase.accept("control-s", self.onSave)
     map.showBase.accept("f2", self.onOpenFile)
     map.showBase.accept("f3", self.onFoldNode)
     map.showBase.accept("f4", self.onFoldAncestors)
