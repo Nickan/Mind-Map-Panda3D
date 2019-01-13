@@ -46,7 +46,16 @@ class StateManager():
     from .createNodeState import CreateNodeState
     map.state = CreateNodeState(map)
     map.state.enter()
-    
+  
+  @staticmethod
+  def switchToCreateSiblingState(currentState):
+    map = currentState.map
+    currentState.exit()
+
+    from .createSibling import CreateSibling
+    map.state = CreateSibling(map)
+    map.state.enter()
+
   @staticmethod
   def switchToLoadMapState(currentState, allData, allStateData, camDict):
     map = currentState.map

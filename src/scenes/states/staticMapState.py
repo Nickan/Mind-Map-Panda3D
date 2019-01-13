@@ -36,6 +36,7 @@ class StaticMapState(State):
     map.showBase.accept("mouse3", self.mouse3Down)
     
     map.showBase.accept("tab", self.onTab)
+    map.showBase.accept("enter", self.onEnter)
     
     # map.showBase.accept("f1", self.onSave)
     map.showBase.accept("control-s", self.onSave)
@@ -44,10 +45,6 @@ class StaticMapState(State):
     map.showBase.accept("f4", self.onFoldAncestors)
 
     map.showBase.accept("delete", self.onDelete)
-
-  def clearAllDrawings(self):
-    map = self.map
-    map.nodeManager.tmpClearNodeDrawings()
   
   """ Events """
   def zoomIn(self):
@@ -78,6 +75,9 @@ class StaticMapState(State):
     
   def onTab(self):
     StateManager.switchToCreateNodeDataState(self)
+
+  def onEnter(self):
+    StateManager.switchToCreateSiblingState(self)
     
   def onSave(self):
     nm = self.map.nodeManager
@@ -88,17 +88,10 @@ class StaticMapState(State):
     SaveManager.loadDataContainer(self.onNodeDataListLoaded)
 
   def onFoldChildren(self):
-    map = self.map
-    map.toggleChildrenShowHide()
-    # data = map.getActivatedNodeData()
-    # if map.dataHasChildren(data):
-    #   allData, allStateData = map.toggleFold(data)
-    #   camDict = map.cameraManager.camDict
-    #   StateManager.switchToLoadMapState(self, allData, allStateData, camDict)
+    self.map.toggleChildrenShowHide()
 
   def onFoldAncestors(self):
-    map = self.map
-    map.toggleAncestorShowHide()
+    self.map.toggleAncestorShowHide()
     
   def onDelete(self):
     map = self.map

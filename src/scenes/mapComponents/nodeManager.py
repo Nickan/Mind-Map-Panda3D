@@ -443,6 +443,12 @@ class NodeManager():
     return nAllState
   #endregion
 
+  #region CreateSibling
+  def getParent(self, data):
+    parentId = data.get(NodeData.PARENT_ID)
+    return self.allData.get(parentId)
+  #endregion
+
 
   
         

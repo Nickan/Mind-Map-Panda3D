@@ -3,6 +3,7 @@ import copy
 
 from scenes.cameramanager import CameraManager
 from scenes.mapComponents.lineDrawings import LineDrawings
+from scenes.mapComponents.nodeData import NodeData
 from scenes.mapComponents.nodeDrawing import NodeDrawing
 from scenes.mapComponents.nodeManager import NodeManager
 from scenes.mapComponents.dataContainer import DataContainer
@@ -173,9 +174,12 @@ class Map():
       data.get(NodeManager.ID), nm.allStateData)
 
   def setStatusAsSelected(self, data):
+    self.setStatusAsSelectedById(data.get(NodeData.ID))
+
+  def setStatusAsSelectedById(self, dataId):
     nm = self.nodeManager
     removedSelected = nm.removeAllFieldFromDataMap(nm.allStateData, NodeManager.SELECTED)
-    nm.allStateData = nm.setStatusAsSelected(data.get('id'), removedSelected)
+    nm.allStateData = nm.setStatusAsSelected(dataId, removedSelected)
 
   def getLatestCreatedData(self):
     nm = self.nodeManager
@@ -250,6 +254,11 @@ class Map():
     nm = self.nodeManager
     if nm.toggleChildrenShowHide(selectedData):
       self.drawData()
+  #endregion
+
+  #region CreateSibling
+  def getParent(self, data):
+    return self.nodeManager.getParent(data);
   #endregion
     
     
