@@ -96,6 +96,8 @@ class StaticMapState(State):
   def onDelete(self):
     map = self.map
     data = map.getActivatedNodeData()
+    if data is None:
+      return
     allData = map.removeData(data)
     if allData is None:
       return
