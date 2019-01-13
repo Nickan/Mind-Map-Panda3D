@@ -33,17 +33,15 @@ class StaticMapState(State):
 
     map.showBase.accept("mouse1", self.mouse1Down)
     map.showBase.accept("mouse1-up", self.mouse1Up)
-    map.showBase.accept("mouse3", self.mouse3Down)
-    
     map.showBase.accept("tab", self.onTab)
     map.showBase.accept("enter", self.onEnter)
     
-    # map.showBase.accept("f1", self.onSave)
     map.showBase.accept("control-s", self.onSave)
-    map.showBase.accept("f2", self.onOpenFile)
-    map.showBase.accept("f3", self.onFoldChildren)
-    map.showBase.accept("f4", self.onFoldAncestors)
-
+    map.showBase.accept("f1", self.onOpenFile)
+    map.showBase.accept("f2", self.onEdit)
+    map.showBase.accept("f3", self.onFoldAncestors)
+    map.showBase.accept("f4", self.onFoldChildren)
+    
     map.showBase.accept("delete", self.onDelete)
   
   """ Events """
@@ -63,12 +61,12 @@ class StaticMapState(State):
     else:
       StateManager.switchToNodeClickedState(self, selectedNodeData)
       
-  def mouse3Down(self):
-    selectedNodeData = self.map.getSelectedNodeData()
-    if selectedNodeData is None:
+  def onEdit(self):
+    selectedData = self.map.getActivatedNodeData()
+    if selectedData is None:
       print("None selected")
     else:
-      StateManager.switchToEditTextState(self, selectedNodeData)
+      StateManager.switchToEditTextState(self, selectedData)
       
   def mouse1Up(self):
     print("static move up")
