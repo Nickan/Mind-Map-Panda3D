@@ -252,21 +252,8 @@ class NodeManager():
     return self.removeIdFromParent(data, removed)
 
   def removeChildren(self, data, allData, mutateData = False):
-    nAllData = allData
-    if mutateData is False:
-      nAllData = copy.deepcopy(allData)
-
-    nData = nAllData.get(data.get(NodeManager.ID))
-    if nData is None:
-      return
-
-    childrenIds = nData.get(NodeManager.CHILDREN_IDS)
-    if childrenIds is not None:
-      for id in childrenIds:
-        childData = nAllData.get(id)
-        nAllData.pop(id, None)
-        self.removeChildren(childData, nAllData)
-    return nAllData
+    return NodeDataFilter.removeChildrenIds(allData, data.get(NodeData.ID),
+      data)
 
   def removeIdFromParent(self, data, allData):
     detachedToParent = copy.deepcopy(allData)
