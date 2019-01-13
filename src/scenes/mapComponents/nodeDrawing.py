@@ -26,8 +26,6 @@ class NodeDrawing():
     self.mainNode.setCollideMask(BitMask32.bit(1))
     self.keepTextCenter()
     self.id = id
-    # self.mainNode.setColor(1, 1, 1, 0.5)
-    # self.mainNode.setColorOff()
     
     
   def addModel(self, loader, nodePath):

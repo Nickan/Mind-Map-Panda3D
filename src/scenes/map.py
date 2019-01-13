@@ -259,6 +259,13 @@ class Map():
   #region CreateSibling
   def getParent(self, data):
     return self.nodeManager.getParent(data);
+
+  def focusOnActivatedData(self):
+    nm = self.nodeManager
+    cam = self.cameraManager
+
+    drawing = nm.getNodeDrawing(nm.getActivatedNodeData())
+    cam.setViewBasedOnNodePos(drawing.mainNode.getPos())
   #endregion
     
     

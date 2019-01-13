@@ -87,9 +87,11 @@ class StaticMapState(State):
 
   def onFoldChildren(self):
     self.map.toggleChildrenShowHide()
+    self.map.focusOnActivatedData()
 
   def onFoldAncestors(self):
     self.map.toggleAncestorShowHide()
+    self.map.focusOnActivatedData()
     
   def onDelete(self):
     map = self.map
