@@ -23,8 +23,7 @@ class SaveManager():
 
     SaveManager.saveSettingJson(fileName, allStatusData)
     SaveManager.saveToJson(fileName, camDict, SaveManager.CAM)
-    with open(fileName, 'w') as fp:
-      json.dump(allData, fp)
+    SaveManager.createFile(fileName, allData)
       
   @staticmethod
   def loadDataContainer(onLoadFilePathCb):
@@ -126,7 +125,7 @@ class SaveManager():
   @staticmethod
   def createFile(filePath, dict):
     with open(filePath, 'w') as fp:
-      json.dump(dict, fp)
+      json.dump(dict, fp, indent=2)
 
   @staticmethod
   def loadSettingJsonData(filePath):
