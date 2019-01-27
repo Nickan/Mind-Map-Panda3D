@@ -238,3 +238,16 @@ class NodeDataFilter():
 
     return detachedToParent
 
+  @staticmethod
+  def getDataWithFoldedAncestorNearestTo(startingData, allData,
+    allStateData):
+    parentId = startingData.get(NodeData.PARENT_ID)
+    if parentId is None:
+      return startingData
+
+    state = allStateData.get(parentId)
+    if state is None or state.get(NodeData.HIDE_ANCESTORS) is None:
+      return NodeDataFilter.getDataWithFoldedAncestorNearestTo(
+        allData.get(parentId), allData, allStateData)
+    else:
+      return allData.get(parentId)

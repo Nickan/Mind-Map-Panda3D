@@ -31,6 +31,9 @@ class Epiphany(ShowBase):
 #     Map.FONT_UBUNTU.setNativeAntialias(0)
 #     Map.FONT_UBUNTU.setRenderMode(TextFont.RMSolid)
     Map.FONT_UBUNTU.setPageSize(256,256)
+
+    self.color = (0.09, 0.13, 0.16, 1)
+    self.setBackgroundColor(self.color)
     self.setScreenSize()
     
   def setScreenSize(self):
