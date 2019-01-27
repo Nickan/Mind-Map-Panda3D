@@ -326,14 +326,26 @@ class NodeManager():
     return None
 
   def removeHiddenDataByFoldedState(self, allData, allStateData):
-    nAllData = copy.deepcopy(allData)
-    for dataId, state in allStateData.items():
-      if state.get(NodeManager.FOLDED) is not None:
-        data = nAllData.get(dataId)
-        if data is not None:
-          nAllData = self.removeChildrenAndGrandChildren(data, nAllData)
-        
-    return nAllData
+    startingData = self.getActivatedNodeData()
+    nAllData1 = copy.deepcopy(allData)
+    nAllData2 = NodeDataFilter.removeChildrenIds(nAllData1, 
+      startingData.get(NodeData.ID), startingData)
+    
+    foldedAncestorData = NodeDataFilter.getDataWithFoldedAncestorNearestTo(
+      startingData, nAllData2, allStateData)
+    nAllData3 = NodeDataFilter.removeChildrenOfFoldedData(
+      foldedAncestorData, nAllData2, allStateData)
+    return nAllData3
+    
+
+  def removedAncestors(self, allData, allStateData):
+    selectedData = self.getActivatedNodeData()
+    foldedAncestorData = NodeDataFilter.getDataWithFoldedAncestorNearestTo(
+      selectedData, allData, allStateData)
+    return NodeDataFilter.removeAncestors(foldedAncestorData, allData, allStateData)
+
+  
+
 
   def removeChildrenAndGrandChildren(self, data, allData):
     nAllData = copy.deepcopy(allData)

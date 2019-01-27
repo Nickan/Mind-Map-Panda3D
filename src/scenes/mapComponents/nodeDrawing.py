@@ -106,11 +106,11 @@ class NodeDrawing():
     folded = stateData.get(NodeManager.FOLDED)
 
     if selected and folded is None:
-      self.model.setColor(0, 0, 1, 1)
+      self.model.setColor(1, 0.84, 0, 1)
     elif selected and folded:
       self.model.setColor(0, 0.5, 1, 1)
     elif selected is None and folded:
-      self.model.setColor(0, 0.25, 0.25, 1)
+      self.model.setColor(0.84, 0.85, 0.86, 1)
 
     self.model.setTransparency(TransparencyAttrib.MAlpha)
     self.model.setAlphaScale(alpha)
