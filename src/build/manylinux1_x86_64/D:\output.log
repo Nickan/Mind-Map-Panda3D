@@ -1,0 +1,5 @@
+Known pipe types:
+  glxGraphicsPipe
+(all display modules loaded.)
+:device(error): Error adding inotify watch on /dev/input: No space left on device
+
